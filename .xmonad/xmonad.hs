@@ -40,6 +40,7 @@ import XMonad.Layout.DragPane
 import XMonad.Layout.Drawer
 import XMonad.Layout.Hidden
 import XMonad.Layout.IndependentScreens
+import XMonad.Layout.NoBorders
 import XMonad.Layout.MultiToggle
 import XMonad.Layout.MultiToggle.Instances
 import XMonad.Layout.NoBorders
@@ -50,6 +51,7 @@ import XMonad.Layout.ResizableTile
 import XMonad.Layout.SubLayouts
 import XMonad.Layout.ShowWName
 import XMonad.Layout.Simplest
+import XMonad.Layout.SimpleFloat
 import XMonad.Layout.Spacing
 import XMonad.Layout.StateFull
 
@@ -99,8 +101,8 @@ sGapsR = 45
 sGapsL = 45
 
 -- gaps (for window)
-wGapsT = 15
-wGapsB = 15
+wGapsT = 6
+wGapsB = 6
 wGapsR = 10
 wGapsL = 10
 
@@ -186,7 +188,7 @@ main = do
         , logHook = myLogHook -- wsLogfile-- wsbar
         , startupHook = myStartupHook
         -- , mouseBindings = myMouseBindings
-        , manageHook = insertPosition Below Newer <+> manageDocks <+> myManageHook
+        , manageHook = insertPosition Above Newer <+> manageDocks <+> myManageHook
         , handleEventHook = fullscreenEventHook <+> docksEventHook <+> ewmhDesktopsEventHook
         , focusFollowsMouse = False
         , clickJustFocuses = True
@@ -277,6 +279,7 @@ myManageHook = composeAll
     , className =? "krita"                                      --> doShift (marshall 0 "4:Full")
     , className =? "Gimp"                                       --> doShift (marshall 0 "4:Full")
     , className =? "Slack"                                      --> doShift (marshall 0 "5:SNS")
+    , className =? "Spotify"                                    --> doShift (marshall 0 "5:SNS")
     , stringProperty "WM_WINDOW_ROLE" =? "pop-up"               --> doShift (marshall 0 "5:SNS")
     , className =? "Light-locker-settings.py"                   --> doCenterFloat
     , className =? "Lxappearance"                               --> doCenterFloat
@@ -290,13 +293,14 @@ spaces = spacingRaw False (Border sGapsT sGapsB sGapsR sGapsL) True (Border wGap
 
 named w = renamed [(XMonad.Layout.Renamed.Replace w)]
 
-wsLayout l = sideBar `onRight` l
+wsLayout l = sideBar `onBottom` l
 
 myLayout = windowNavigation
          $ avoidStruts
+         $ lessBorders OnlyScreenFloat 
          $ onWorkspaces ["0_1:Code", "1_1:Code"] (wsLayout (tall ||| comboTall))
          $ onWorkspaces ["0_2:Browse", "1_2:Browse", "0_3:Paper", "1_3:Paper"] (wsLayout twoPane)
-         $ onWorkspaces ["0_4:Full", "1_4:Full"] (wsLayout fullWindow)
+         $ onWorkspaces ["0_4:Full", "1_4:Full"] (wsLayout fullWindow ||| floatWindow)
          $ onWorkspaces ["0_5:SNS", "1_5:SNS"] (wsLayout threeCol)
          $ tall
 
@@ -327,7 +331,16 @@ twoPane = named "Browsing"
 
 fullWindow = named "Full"
            $ hiddenWindows
-           $ StateFull
+           $ noBorders StateFull
+--data AllFloats = AllFloats deriving (Read, Show)
+
+--instance SetsAmbiguous AllFloats
+--    where
+--        hiddens _ wset _ _ = M.keys $ W.floating wset
+
+floatWindow = named "Float"
+            $ hiddenWindows
+            $ noBorders simpleFloat
 
 threeCol = named "SNS"
          $ hiddenWindows
@@ -339,20 +352,20 @@ sideBar = drawer 0.005 0.3 (ClassName "Blueman-manager" `Or` ClassName "Pavucont
 keys' = [ -- forcus keys
           ((modm,                  xK_Tab), windows W.focusUp)
         , ((modm .|. shiftMask,    xK_Tab), windows W.focusDown)
-        , ((modm,                  xK_j), focusUp)
-        , ((modm,                  xK_k), focusDown)
+        , ((modm,                  xK_k), focusUp)
+        , ((modm,                  xK_j), focusDown)
         , ((modm,                  xK_Return), focusMaster)
         , ((modm,                  xK_h), withFocused hideWindow)
         , ((modm .|. shiftMask,    xK_space), popNewestHiddenWindow) -- pop up latest hidden window
         , ((modm,                  xK_l), onGroup W.focusUp')
 
         -- swap keys
-        , ((modm .|. shiftMask,    xK_j), windows W.swapUp)
-        , ((modm .|. shiftMask,    xK_k), windows W.swapDown)
+        , ((modm .|. shiftMask,    xK_k), windows W.swapUp)
+        , ((modm .|. shiftMask,    xK_j), windows W.swapDown)
         , ((modm .|. controlMask,  xK_Return), windows W.swapMaster)
         -- tabbed keys
-        , ((modm .|. controlMask,  xK_j), sendMessage $ pullGroup U)
-        , ((modm .|. controlMask,  xK_k), sendMessage $ pullGroup D)
+        , ((modm .|. controlMask,  xK_k), sendMessage $ pullGroup U)
+        , ((modm .|. controlMask,  xK_j), sendMessage $ pullGroup D)
 
         , ((modm,                  xK_m), withFocused (sendMessage . MergeAll))
         , ((modm .|. shiftMask,    xK_m), withFocused (sendMessage . UnMergeAll))
@@ -360,8 +373,8 @@ keys' = [ -- forcus keys
         -- move keys (for combo mode)
         , ((modm,                  xK_u), sendMessage $ Move U)
         , ((modm,                  xK_i), sendMessage $ Move D)
-        , ((modm,                  xK_y), sendMessage $ Move R)
-        , ((modm,                  xK_o), sendMessage $ Move L)
+        , ((modm,                  xK_y), sendMessage $ Move L)
+        , ((modm,                  xK_o), sendMessage $ Move R)
 
         -- workspace keys
         , ((modm .|. controlMask,    xK_h), moveTo Prev spacesOnCurrentScreen)
@@ -382,6 +395,7 @@ keys' = [ -- forcus keys
         , ((modm,                  xK_f), sendMessage $ Toggle NBFULL)
 
         -- for float
+        --, ((modm,                  xK_Up), withFocused (toggleFloat U))
         , ((modm,                  xK_Right), withFocused (toggleFloat R))
         , ((modm,                  xK_Left), withFocused (toggleFloat L))
         -- dual monitor swicher

@@ -1,0 +1,24 @@
+[[plugins]]
+repo = 'godlygeek/tabular'
+on_ft = ['markdown']
+
+[[plugins]]
+repo = 'plasticboy/vim-markdown'
+on_ft = ['markdown']
+
+[[plugins]]
+repo = 'previm/previm'
+hook_add = '''
+    nnoremap <silent> <C-p> :PrevimOpen<CR>
+    let g:vim_markdown_folding_disabled=1
+    let g:previm_enable_realtime=1
+    let g:previm_disable_default_css=1
+    let g:previm_custom_css_path='~/dotfiles/.config/previm/markdown.css'
+	let g:previm_disable_default_html=1
+	let g:previm_custom_html_path='~/dotfiles/.config/previm/index.html'
+	'''
+on_source = ['vim-markdown']
+
+[[plugins]]
+repo = 'tyru/open-browser.vim'
+on_source = ['vim-markdown']

@@ -1,8 +1,10 @@
-export LANG=ja_JP.UTF-8
 export GTK_IM_MODULE=fcitx
 export QT_IM_MODULE=fcitx
 export XMODIFIERS=@im=fcitx
 export WWW_HOME="http://example.com/"
 export QT_STYLE_OVERRIDE=gtk2
+export XDG_CONFIG_HOME=~/.config
+alias termite='termite -e /usr/bin/zsh'
 fcitx-autostart &
-picom -b -d :0 &
+picom -b &
+xhost si:localuser:$USER
