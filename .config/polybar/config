@@ -267,7 +267,7 @@ label-disconnected = 睊
 ;Desktop
 [module/ethernet]
 type = internal/network
-interface = enp34s0
+interface = enp3s0
 interval = 1.0
 format-connected = <label-connected>
 ;format-connected-background = ${colors.shade2}
