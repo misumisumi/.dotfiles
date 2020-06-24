@@ -198,7 +198,7 @@ main = do
         `additionalKeysP` keysP'
 
 myStartupHook = do
-    spawn "feh --bg-scale ~/Picutures/wallpapers/main.jpg"
+    spawn "feh --bg-scale ~/Pictures/wallpapers/main.jpg"
     spawn "bash .config/polybar/launch.sh"
     spawn "light-locker"
     spawn "nm-applet"
