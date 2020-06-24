@@ -73,8 +73,8 @@ load-module module-esound-protocol-unix
 .endif
 #load-module module-native-protocol-unix
 load-module module-native-protocol-unix auth-anonymous=1 socket=/tmp/pulpul
-#load-module module-native-protocol-unix auth-anonymous=1 socket=/tmp/pulse-socket
 load-module module-native-protocol-unix auth-anonymous=1 socket=/tmp/pulse-socket
+#load-module module-native-protocol-unix auth-anonymous=1 socket=/tmp/pulse-socket
 
 ### Network access (may be configured with paprefs, so leave this commented
 ### here if you plan to use paprefs)
