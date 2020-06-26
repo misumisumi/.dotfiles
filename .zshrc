@@ -57,15 +57,15 @@ zinit snippet PZT::modules/helper/init.zsh
 
 zinit ice depth=1; zinit light romkatv/powerlevel10k
 
-zinit snippet PZT::modules/pacman
-zinit snippet PZT::modules/history
-zinit snippet PZT::modules/environment
-zinit snippet PZT::modules/terminal
-zinit snippet PZT::modules/editor
-zinit snippet PZT::modules/directory
-zinit snippet PZT::modules/spectrum
-zinit snippet PZT::modules/utility
-zinit snippet PZT::modules/completion
+zinit ice silent wait "!1"; zinit snippet PZT::modules/pacman
+zinit ice silent wait "!1"; zinit snippet PZT::modules/history
+zinit ice silent wait "!1"; zinit snippet PZT::modules/environment
+zinit ice silent wait "!1"; zinit snippet PZT::modules/terminal
+zinit ice silent wait "!1"; zinit snippet PZT::modules/editor
+zinit ice silent wait "!1"; zinit snippet PZT::modules/directory
+zinit ice silent wait "!1"; zinit snippet PZT::modules/spectrum
+zinit ice silent wait "!1"; zinit snippet PZT::modules/utility
+zinit ice silent wait "!1"; zinit snippet PZT::modules/completion
 # zinit snippet PZT::modules/prompt
 #zinit ice svn pick"init.zsh"
 # zinit snippet PZT::modules/git
