@@ -2,7 +2,7 @@
 TODO: IndependentScreensに対応させたワークスペースごとの壁紙の設定
 TODO: Polubarへの現在ウィンドウが開かれているワークスペースの通知
 -}
-
+{-# LANGUAGE LambdaCase #-}
 import Control.Monad
 import Data.List
 import Data.Ratio
@@ -31,6 +31,7 @@ import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.InsertPosition -- set turn tile
 import XMonad.Hooks.PositionStoreHooks
+import XMonad.Hooks.WallpaperSetter
 
 import XMonad.Layout.Accordion
 import XMonad.Layout.BoringWindows --(boringWindows, focusUp, focusDown, focusMaster)
@@ -108,7 +109,34 @@ wGapsL = 10
 
 borderSize = 2
 
-myWorkspaces =["1:Code", "2:Browse", "3:Paper", "4:Full", "5:SNS"]
+myWorkspaces = ["1:Code", "2:Browse", "3:Paper", "4:Full", "5:SNS"]
+
+
+myWallpaperDir :: IO FilePath
+myWallpaperDir = (++ "/Pictures/wallpapers/") <$> getHomeDirectory
+
+myWallpaper :: FilePath
+myWallpaper = "main.jpg"
+
+spWallpapers :: [FilePath]
+spWallpapers = map (++ ".jpg") myWorkspaces
+
+getWallpaper :: FilePath -> IO Wallpaper
+getWallpaper spwPath = do
+      (doesFileExist <$> (++ spwPath) =<< myWallpaperDir) >>= \case
+         True  -> return $ WallpaperFix spwPath
+         False -> return $ WallpaperFix myWallpaper
+
+setWallpaper :: X ()
+setWallpaper = do
+    nScreens <- countScreens
+    wp  <- io $ traverse getWallpaper spWallpapers
+    wallpaperDir <- io $ myWallpaperDir
+    let wallpapers' = concat $ map (\(x,y) -> [x,y]) (zip wp wp)
+        ws = withScreens nScreens myWorkspaces
+        wplist = WallpaperList $ zip ws wallpapers'
+        wpconf = (WallpaperConf wallpaperDir) wplist
+    wallpaperSetter wpconf
 
 capturePath = "~/Picutures/screenshot/"
 
@@ -166,16 +194,6 @@ spacesOnCurrentScreen = WSIs (isOnScreen <$> currentScreen)
 main :: IO ()
 main = do 
     nScreens <- countScreens
-    -- wsbar <- spawnPipe myWsBar
-    wsLogfile <- return "/tmp/.xmonad-workspace-log"
-    de <- doesFileExist wsLogfile
-
-    forM_ [".xmonad-workspace-log", ".xmonad-title-log"] $ \file -> do
-    safeSpawn "mkfifo" ["/tmp/" ++ file]
-
-    case de of
-        True -> return ()
-        _    -> createNamedPipe wsLogfile stdFileMode
 
     xmonad $ ewmh def
         { borderWidth = borderSize
@@ -198,69 +216,15 @@ main = do
         `additionalKeysP` keysP'
 
 myStartupHook = do
-    spawn "feh --bg-scale ~/Pictures/wallpapers/main.jpg"
+    -- spawn "feh --bg-scale ~/Pictures/wallpapers/main.jpg"
     spawn "bash .config/polybar/launch.sh"
     spawn "light-locker"
     spawn "nm-applet"
     spawn "blueman-applet"
 
-{-
-getWsLog :: X String
-getWsLog = do
-      winset <- gets windowset
-      let currWs = W.currentTag winset
-          wss    = W.workspaces winset
-          (wsIds, wins) = sortById (map W.tag wss) (map W.stack wss)
-      return . join . map (fmt currWs wins) $ wsIds
-      where
-         idx          = flip (-) 1 . read
-         sortById ids = unzip . sortOn fst . zip ids
-         fmt cw ws wi
-            | wi == cw              = "a" -- Current
-            | isJust $ ws !! idx wi = "b" -- Not Empty
-            | otherwise             = "c" -- Empty
--}
-{-
-eventLogHook = do
-    winset <- gets windowset
-    let currWs = W.currentTag winset
-    let wss = map W.tag $ W.workspaces winset
-    let wsStr = join $ map (fmt currWs) $ sort' wss
-
-    io $ appendFile "/tmp/.xmonad-workspace-log" (wsStr ++ "\n")
-
-    where fmt currWs ws
-            | currWs == ws = "[" ++ ws ++ "]"
-            | otherwise    = " " ++ ws ++ ""
-          sort' = sortBy (compare `on` (!! 0))
--}
-{-
-eventLogHook = do
-    winset <- gets windowset
-    let currWs = W.currentTag winset
-        wss =  W.workspaces winset
-        (wsIds, wins) = sortById (map W.tag wss) (map W.stack wss)
-
-    -- wsIds = map W.tag wss
-    -- let wins = map W.stack wss
-    
-    let wsStr = join $ map (fmt currWs wins) $ wsIds
-    io $ appendFile "/tmp/.xmonad-workspace-log" (wsStr ++ "\n")
-
-    where 
-        fmt cws ws wi
-            | cws == wi = "● " -- Current Workspace
-            -- | head wi `elem` (W.integrate' ws) = "綠 "
-            -- | wi `elem` (ls ws) = "綠 "
-            | otherwise = "祿 " -- Empty
-          -- sort' = sortBy (compare `on` (!! 0))
-        idx x = read x
-        ls x = map W.integrate' x
-        sortById ids = unzip . sortOn fst . zip ids
--}
-
 myLogHook = do
     ewmhDesktopsLogHook
+    setWallpaper
     -- io . appendFile h . (++ "\n") =<< getWsLog
     -- eventLogHook
     {-
