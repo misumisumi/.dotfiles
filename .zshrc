@@ -48,24 +48,23 @@ zinit light-mode for \
 
 ### End of Zinit's installer chunk
 # Basic plugin
+zinit ice wait"0"; zinit load zdharma/history-search-multi-word
 zinit ice wait"!0"; zinit light zsh-users/zsh-autosuggestions
 zinit ice wait"!0"; zinit light zdharma/fast-syntax-highlighting
-zinit ice wait"!0"; zinit light zdharma/history-search-multi-word
 zinit ice wait"!0"; zinit load momo-lab/zsh-abbrev-alias
 
 zinit snippet PZT::modules/helper/init.zsh
-
 zinit ice depth=1; zinit light romkatv/powerlevel10k
 
-zinit ice silent wait "!1"; zinit snippet PZT::modules/pacman
-zinit ice silent wait "!1"; zinit snippet PZT::modules/history
-zinit ice silent wait "!1"; zinit snippet PZT::modules/environment
-zinit ice silent wait "!1"; zinit snippet PZT::modules/terminal
-zinit ice silent wait "!1"; zinit snippet PZT::modules/editor
-zinit ice silent wait "!1"; zinit snippet PZT::modules/directory
-zinit ice silent wait "!1"; zinit snippet PZT::modules/spectrum
-zinit ice silent wait "!1"; zinit snippet PZT::modules/utility
-zinit ice silent wait "!1"; zinit snippet PZT::modules/completion
+zinit ice silent; zinit snippet PZT::modules/history
+zinit ice silent; zinit snippet PZT::modules/pacman
+zinit ice silent; zinit snippet PZT::modules/environment
+zinit ice silent; zinit snippet PZT::modules/terminal
+zinit ice silent; zinit snippet PZT::modules/editor
+zinit ice silent; zinit snippet PZT::modules/directory
+zinit ice silent; zinit snippet PZT::modules/spectrum
+zinit ice silent; zinit snippet PZT::modules/utility
+zinit ice silent; zinit snippet PZT::modules/completion
 # zinit snippet PZT::modules/prompt
 #zinit ice svn pick"init.zsh"
 # zinit snippet PZT::modules/git
@@ -73,3 +72,4 @@ zinit ice silent wait "!1"; zinit snippet PZT::modules/completion
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 ### End of Zinit's installer chunk
+#set -v
