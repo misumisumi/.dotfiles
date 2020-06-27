@@ -22,3 +22,6 @@ on_source = ['vim-markdown']
 [[plugins]]
 repo = 'tyru/open-browser.vim'
 on_source = ['vim-markdown']
+
+# [[plugins]]
+# repo = 'mattn/webapi-vim'
