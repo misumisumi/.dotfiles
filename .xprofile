@@ -8,3 +8,4 @@ alias termite='termite -e /usr/bin/zsh'
 fcitx-autostart &
 picom -b &
 xhost si:localuser:$USER
+flameshot &

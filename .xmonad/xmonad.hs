@@ -350,7 +350,7 @@ keys' = [ -- forcus keys
         , ((modm,                  xK_p), spawn "env LANG=en_US.UTF-8 rofi -modi combi -show combi -combi-modi window,drun -show-icons")
         , ((modm .|. shiftMask,    xK_p), spawn "rofi -show run")
         , ((0,                     xK_Print), spawn $ "flameshot full -p " ++ capturePath)
-        , ((sModm,                 xK_Print), spawn $ "flameshot screen -p " ++ capturePath)
+        , ((sModm,                 xK_Print), spawn $ "flameshot screen screen -p " ++ capturePath)
         , ((sModm,                 xK_l), spawn "light-locker-command -l")
 
         -- instead function + f1(f7)
