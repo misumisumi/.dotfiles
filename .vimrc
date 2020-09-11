@@ -29,6 +29,8 @@ autocmd BufRead,BufNewFile *.md  setfiletype markdown
 set number
 set clipboard+=unnamedplus
 set title
-set tabstop=4
 set smartindent
+set expandtab
+set tabstop=4
+set shiftwidth=4
 

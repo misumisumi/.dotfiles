@@ -62,6 +62,7 @@ import XMonad.Layout.TwoPanePersistent
 import XMonad.Layout.WindowNavigation
 
 import XMonad.Util.EZConfig
+-- import XMonad.Util.Replace
 import XMonad.Util.Run
 import XMonad.Util.Run (spawnPipe) 
 import XMonad.Util.WindowProperties
@@ -138,7 +139,7 @@ setWallpaper = do
         wpconf = (WallpaperConf wallpaperDir) wplist
     wallpaperSetter wpconf
 
-capturePath = "~/Picutures/screenshot/"
+capturePath = "~/Pictures/screenshot/"
 
 -- myWsBar = "xmobar $HOME/.xmonad/.xmobarrc"
 
@@ -194,7 +195,7 @@ spacesOnCurrentScreen = WSIs (isOnScreen <$> currentScreen)
 main :: IO ()
 main = do 
     nScreens <- countScreens
-
+--    replace
     xmonad $ ewmh def
         { borderWidth = borderSize
         , workspaces = withScreens nScreens myWorkspaces -- デュアルモニターでの使用
@@ -244,7 +245,9 @@ myManageHook = composeAll
     , className =? "Gimp"                                       --> doShift (marshall 0 "4:Full")
     , className =? "Slack"                                      --> doShift (marshall 0 "5:SNS")
     , className =? "Spotify"                                    --> doShift (marshall 0 "5:SNS")
-    , stringProperty "WM_WINDOW_ROLE" =? "pop-up"               --> doShift (marshall 0 "5:SNS")
+    , stringProperty "WM_NAME" =? "LINE - Vivaldi"              --> doCenterFloat
+    , stringProperty "WM_NAME" =? "LINE"                        --> doCenterFloat
+    -- , stringProperty "WM_WINDOW_ROLE" =? "pop-up"               --> doShift (marshall 0 "5:SNS")
     , className =? "Light-locker-settings.py"                   --> doCenterFloat
     , className =? "Lxappearance"                               --> doCenterFloat
     , className =? "Font-manager"                               --> doCenterFloat
@@ -362,6 +365,8 @@ keys' = [ -- forcus keys
         --, ((modm,                  xK_Up), withFocused (toggleFloat U))
         , ((modm,                  xK_Right), withFocused (toggleFloat R))
         , ((modm,                  xK_Left), withFocused (toggleFloat L))
+		-- Launch openbox
+		-- , ((sModm .|. shiftMask,   xK_o), restart "/home/sumi/bin/obtoxmd" True)
         -- dual monitor swicher
         , ((modm,                  xK_n), onNextNeighbour def W.view)
         , ((modm .|. shiftMask,    xK_n), onNextNeighbour def W.shift)

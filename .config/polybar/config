@@ -63,7 +63,7 @@ tray-padding = 2
 ;====Module settings+======================================
 modules-left = ewmh0 ewmh1 memory cpu-value
 modules-center = date
-modules-right = ethernet pkg pulseaudio powermenu systemtray
+modules-right = ethernet pkg pulseaudio powermenu 
 ;==========================================================
 
 [module/workspaces-xmonad]
