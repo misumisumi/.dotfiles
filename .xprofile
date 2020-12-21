@@ -4,8 +4,12 @@ export XMODIFIERS=@im=fcitx
 export WWW_HOME="http://example.com/"
 export QT_STYLE_OVERRIDE=gtk2
 export XDG_CONFIG_HOME=~/.config
-alias termite='termite -e /usr/bin/zsh'
 fcitx-autostart &
-picom -b --experimental-backends &
+picom --experimental-backends -b &
 xhost si:localuser:$USER &
 flameshot &
+copyq &
+alias termite='termite -e /usr/bin/zsh'
+/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
+thunar --daemon &
+source /etc/profile.d/vte.sh

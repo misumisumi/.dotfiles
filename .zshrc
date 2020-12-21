@@ -21,6 +21,10 @@ if [ -n "${DOCKER_CONTAINER}" ]; then
   PROMPT="(${DOCKER_CONTAINER})%# "
 fi
 
+if [ -n "${DOCKER_CONTAINER}" ]; then
+  PROMPT="(${DOCKER_CONTAINER})%# "
+fi
+
 # Source Prezto.
 if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
@@ -73,3 +77,8 @@ zinit ice silent; zinit snippet PZT::modules/completion
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 ### End of Zinit's installer chunk
 #set -v
+
+# Connect libvirt root system
+alias ls="ls --color=auto"
+
+export LIBVIRT_DEFAULT_URI="qemu:///system"

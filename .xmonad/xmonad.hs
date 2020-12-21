@@ -99,12 +99,12 @@ smartSpace ==> no Border when there fewer than 2 windows.
 -- gaps (for screen)
 sGapsT = 3
 sGapsB = 2
-sGapsR = 45
-sGapsL = 45
+sGapsR = 40
+sGapsL = 40
 
 -- gaps (for window)
-wGapsT = 6
-wGapsB = 6
+wGapsT = 4
+wGapsB = 4
 wGapsR = 10
 wGapsL = 10
 
@@ -219,7 +219,7 @@ main = do
 myStartupHook = do
     -- spawn "feh --bg-scale ~/Pictures/wallpapers/main.jpg"
     spawn "bash .config/polybar/launch.sh"
-    spawn "light-locker"
+    spawn "light-locker --lock-after-screensaver=0"
     spawn "nm-applet"
     spawn "blueman-applet"
 
@@ -235,18 +235,18 @@ myLogHook = do
                         }
     -}
 
-myTerminal = "alacritty"
+myTerminal = "termite"
+-- myTerminal = "alacritty"
 modm = mod4Mask
-sModm = mod1Mask --sub mod mask
+-- sModm = mod4Mask --sub mod mask
 myManageHook = composeAll 
     [ 
       className =? "Code"                                       --> doShift (marshall 0 "1:Code")
     , className =? "krita"                                      --> doShift (marshall 0 "4:Full")
     , className =? "Gimp"                                       --> doShift (marshall 0 "4:Full")
     , className =? "Slack"                                      --> doShift (marshall 0 "5:SNS")
+    , className =? "discord"                                    --> doShift (marshall 0 "5:SNS")
     , className =? "Spotify"                                    --> doShift (marshall 0 "5:SNS")
-    , stringProperty "WM_NAME" =? "LINE - Vivaldi"              --> doCenterFloat
-    , stringProperty "WM_NAME" =? "LINE"                        --> doCenterFloat
     -- , stringProperty "WM_WINDOW_ROLE" =? "pop-up"               --> doShift (marshall 0 "5:SNS")
     , className =? "Light-locker-settings.py"                   --> doCenterFloat
     , className =? "Lxappearance"                               --> doCenterFloat
@@ -254,6 +254,7 @@ myManageHook = composeAll
     , stringProperty "WM_WINDOW_ROLE" =? "GtkFileChooserDialog" --> doCenterFloat
     , stringProperty "WM_ICON_NAME" =? "Visual Studio Code"     --> doCenterFloat
     , stringProperty "WM_ICON_NAME" =? "Launch Application"     --> doCenterFloat
+    , stringProperty "WM_NAME" =? "WaveSurfer 1.8.8p5"          --> doCenterFloat
     ]
 
 spaces = spacingRaw False (Border sGapsT sGapsB sGapsR sGapsL) True (Border wGapsT wGapsB wGapsR wGapsL) True
@@ -265,7 +266,7 @@ wsLayout l = sideBar `onBottom` l
 myLayout = windowNavigation
          $ avoidStruts
          $ lessBorders OnlyScreenFloat 
-         $ onWorkspaces ["0_1:Code", "1_1:Code"] (wsLayout (tall ||| comboTall))
+         $ onWorkspaces ["0_1:Code", "1_1:Code"] (wsLayout tall)
          $ onWorkspaces ["0_2:Browse", "1_2:Browse", "0_3:Paper", "1_3:Paper"] (wsLayout twoPane)
          $ onWorkspaces ["0_4:Full", "1_4:Full"] (wsLayout fullWindow ||| floatWindow)
          $ onWorkspaces ["0_5:SNS", "1_5:SNS"] (wsLayout threeCol)
@@ -274,7 +275,7 @@ myLayout = windowNavigation
 base = addTabs shrinkText myTabTheme
      $ subLayout [] (Simplest)
      $ boringWindows
-     $ ResizableTall 1 0.05 0.619 [1, 0.79]
+     $ ResizableTall 1 (5/100) (62/100) [1, 1]
 
 comboTall = named "Media&Coding"
           $ mkToggle (single NBFULL)
@@ -353,13 +354,14 @@ keys' = [ -- forcus keys
         , ((modm,                  xK_p), spawn "env LANG=en_US.UTF-8 rofi -modi combi -show combi -combi-modi window,drun -show-icons")
         , ((modm .|. shiftMask,    xK_p), spawn "rofi -show run")
         , ((0,                     xK_Print), spawn $ "flameshot full -p " ++ capturePath)
-        , ((sModm,                 xK_Print), spawn $ "flameshot screen screen -p " ++ capturePath)
-        , ((sModm,                 xK_l), spawn "light-locker-command -l")
+        , ((modm,                  xK_Print), spawn $ "flameshot screen -p " ++ capturePath)
+        , ((modm .|. shiftMask,    xK_Print), spawn $ "flameshot screen -c ")
+        , ((modm,                 xK_b), spawn "i3lock -i /home/sumi/Pictures/archlinux_resize.png -t")
 
         -- instead function + f1(f7)
         , ((modm,                  xK_F1), spawn $ "lock-touchpad")
         -- , ((modm,                  xK_F7), spawn $ )
-        , ((modm,                  xK_f), sendMessage $ Toggle NBFULL)
+        , ((modm,                  xK_space), sendMessage $ Toggle NBFULL)
 
         -- for float
         --, ((modm,                  xK_Up), withFocused (toggleFloat U))
@@ -370,10 +372,11 @@ keys' = [ -- forcus keys
         -- dual monitor swicher
         , ((modm,                  xK_n), onNextNeighbour def W.view)
         , ((modm .|. shiftMask,    xK_n), onNextNeighbour def W.shift)
-        , ((modm,                  xK_b), onPrevNeighbour def W.view)
-        , ((modm .|. shiftMask,    xK_b), onPrevNeighbour def W.shift)
+        -- , ((modm,                  xK_p), onPrevNeighbour def W.view)
+        -- , ((modm .|. shiftMask,    xK_p), onPrevNeighbour def W.shift)
 
-        , ((modm,                  xK_s), windowPrompt myXPConfig Goto wsWindows)
+        , ((modm,                  xK_f), windowPrompt myXPConfig Goto wsWindows)
+        , ((modm,                  xK_s), windowPrompt myXPConfig Goto allWindows)
         , ((modm .|. shiftMask,    xK_s), windowPrompt myXPConfig Bring allWindows)
 
         -- , ((modm, xK_q), restart "xmonad" True)
@@ -401,7 +404,9 @@ removekeys' = [(m .|. modm, n) | n <- [xK_1 .. xK_9], m <- [0, shiftMask]]
               , (modm,             xK_question)
               , (modm,             xK_comma)
               , (modm,             xK_period)
+              , (modm,             xK_b)
               ]
+
 
 {-
 withScreen :: ScreenId -- ^ ID of the target screen.  If such doesn't exist, this operation is NOOP

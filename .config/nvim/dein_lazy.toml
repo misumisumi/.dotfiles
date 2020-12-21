@@ -1,0 +1,23 @@
+[[plugins]]
+repo = 'godlygeek/tabular'
+on_ft = ['markdown']
+
+[[plugins]]
+repo = 'plasticboy/vim-markdown'
+on_ft = ['markdown']
+
+[[plugins]]
+repo = 'iamcco/markdown-preview.nvim'
+on_ft = ['markdown', 'pandoc.markdown', 'rmd']
+build = 'sh -c "cd app && yarn install"'
+book_add = '''
+    let g:mkdp_markdown_css = '~/github-markdown.css'
+'''
+
+[[plugins]]
+repo = 'tyru/open-browser.vim'
+on_ft = ['markdown']
+
+[[plugins]]
+repo = 'cespare/vim-toml'
+on_ft = ['toml']
