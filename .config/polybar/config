@@ -290,7 +290,8 @@ format-prefix = " "
 format-underline = ${colors.cyan}
 format-margin = ${margin.for-modules}
 format-padding = 1
-label = %percentage-cores%
+; label = %percentage-cores%
+label = %percentage%%
 
 [module/memory]
 type = internal/memory

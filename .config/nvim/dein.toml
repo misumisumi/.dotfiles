@@ -15,6 +15,12 @@ hook_add = '''
 repo = 'vim-jp/vimdoc-ja'
 
 [[plugins]]
+repo = 'vimlab/split-term.vim'
+
+[[plugins]]
+repo = 'lambdalisue/suda.vim'
+
+[[plugins]]
 repo = 'easymotion/vim-easymotion'
 hook_add = '''
     " <Leader>f{char} to move to {char}

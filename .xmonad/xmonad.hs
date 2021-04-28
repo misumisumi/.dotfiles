@@ -219,7 +219,6 @@ main = do
 myStartupHook = do
     -- spawn "feh --bg-scale ~/Pictures/wallpapers/main.jpg"
     spawn "bash .config/polybar/launch.sh"
-    spawn "light-locker --lock-after-screensaver=0"
     spawn "nm-applet"
     spawn "blueman-applet"
 
@@ -244,6 +243,8 @@ myManageHook = composeAll
       className =? "Code"                                       --> doShift (marshall 0 "1:Code")
     , className =? "krita"                                      --> doShift (marshall 0 "4:Full")
     , className =? "Gimp"                                       --> doShift (marshall 0 "4:Full")
+    , className =? "Steam"                                      --> doShift (marshall 0 "4:Full")
+    , stringProperty "WM_CLIENT_MACHINE" =? "steam"             --> doShift (marshall 0 "4:Full")
     , className =? "Slack"                                      --> doShift (marshall 0 "5:SNS")
     , className =? "discord"                                    --> doShift (marshall 0 "5:SNS")
     , className =? "Spotify"                                    --> doShift (marshall 0 "5:SNS")
@@ -255,6 +256,7 @@ myManageHook = composeAll
     , stringProperty "WM_ICON_NAME" =? "Visual Studio Code"     --> doCenterFloat
     , stringProperty "WM_ICON_NAME" =? "Launch Application"     --> doCenterFloat
     , stringProperty "WM_NAME" =? "WaveSurfer 1.8.8p5"          --> doCenterFloat
+    , stringProperty "WM_NAME" =? "Hold on..."                  --> doCenterFloat
     ]
 
 spaces = spacingRaw False (Border sGapsT sGapsB sGapsR sGapsL) True (Border wGapsT wGapsB wGapsR wGapsL) True
@@ -269,13 +271,13 @@ myLayout = windowNavigation
          $ onWorkspaces ["0_1:Code", "1_1:Code"] (wsLayout tall)
          $ onWorkspaces ["0_2:Browse", "1_2:Browse", "0_3:Paper", "1_3:Paper"] (wsLayout twoPane)
          $ onWorkspaces ["0_4:Full", "1_4:Full"] (wsLayout fullWindow ||| floatWindow)
-         $ onWorkspaces ["0_5:SNS", "1_5:SNS"] (wsLayout threeCol)
+         $ onWorkspaces ["0_5:SNS", "1_5:SNS"] (wsLayout twoPane4SNS)
          $ tall
 
 base = addTabs shrinkText myTabTheme
      $ subLayout [] (Simplest)
      $ boringWindows
-     $ ResizableTall 1 (5/100) (62/100) [1, 1]
+     $ ResizableTall 1 (5/100) (1/2) [1, 1]
 
 comboTall = named "Media&Coding"
           $ mkToggle (single NBFULL)
@@ -309,6 +311,14 @@ fullWindow = named "Full"
 floatWindow = named "Float"
             $ hiddenWindows
             $ noBorders simpleFloat
+
+twoPane4SNS = named "SNS"
+        $ mkToggle (single NBFULL)
+        $ boringWindows
+        $ hiddenWindows
+        $ spaces
+        $ reflectHoriz
+        $ combineTwo (TwoPanePersistent Nothing 0.05 0.5) (tabbed shrinkText myTabTheme) (tabbed shrinkText myTabTheme)
 
 threeCol = named "SNS"
          $ hiddenWindows

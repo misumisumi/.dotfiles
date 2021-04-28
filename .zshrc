@@ -80,5 +80,12 @@ zinit ice silent; zinit snippet PZT::modules/completion
 
 # Connect libvirt root system
 alias ls="ls --color=auto"
+alias gpus='NVIDIA_VISIBLE_DEVICE'
 
 export LIBVIRT_DEFAULT_URI="qemu:///system"
+export FrameworkPathOverride=/lib/mono/4.8-api/
+eval "$(pyenv init -)"
+
+if [ -n "${SSH_CLIENT}" ]; then
+    export PULSE_SERVER=$SSH_CLIENT
+fi

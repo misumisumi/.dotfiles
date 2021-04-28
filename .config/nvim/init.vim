@@ -69,10 +69,20 @@ set wildmode=full "exコマンドの補完キー操作をzshライクにする
 set splitbelow "下側にsplit
 set splitright "右側にsplit
 set smartcase
-set incsearch
+"文字コードの自動判別
+set encoding=utf-8
+set fileencodings=iso-2022-jp,euc-jp,sjis,utf-8set incsearch
+"改行コードの自動判別
+set fileformats=unix,dos,mac
 nnoremap <silent> <C-l> :<C-u>nohlsearch<CR><C-l>
 cnoremap <C-p> <Up>
 cnoremap <C-n> <Down>
 "sudo(これは消す)
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h') . '/' : '%%'
 cmap w!! w !sudo tee > /dev/null %
+"括弧の補完
+inoremap { {}<LEFT>
+inoremap [ []<LEFT>
+inoremap ( ()<LEFT>
+inoremap " ""<LEFT>
+inoremap ' ''<LEFT>
