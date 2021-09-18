@@ -234,7 +234,7 @@ myLogHook = do
                         }
     -}
 
-myTerminal = "termite"
+myTerminal = "kitty"
 -- myTerminal = "alacritty"
 modm = mod4Mask
 -- sModm = mod4Mask --sub mod mask

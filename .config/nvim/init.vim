@@ -41,6 +41,11 @@ if dein#check_install()
     call dein#install()
 endif
 
+"クリップボードへのヤンク
+if has("clipboard")
+  set clipboard=unnamed
+endif
+
 set helplang=ja,en "helpの日本語表示
 filetype plugin indent on
 syntax enable

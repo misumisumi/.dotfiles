@@ -1,11 +1,12 @@
 export GTK_IM_MODULE=fcitx
 export QT_IM_MODULE=fcitx
 export XMODIFIERS=@im=fcitx
+export GLFW_IM_MODULE=ibus
 export WWW_HOME="http://example.com/"
 export QT_STYLE_OVERRIDE=gtk2
 export XDG_CONFIG_HOME=~/.config
 devmon &
-fcitx-autostart &
+fcitx5 &
 picom --experimental-backends -b &
 xhost si:localuser:$USER &
 flameshot &

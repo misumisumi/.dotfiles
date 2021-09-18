@@ -1,6 +1,12 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhistcnt =4
-let g:netrw_dirhist_4='/home/podman/GANBaseVC-PyTorch/scripts/RENSEI_old'
-let g:netrw_dirhist_3='/home/docker/GANBaseVC-PyTorch/ganbase_vc/bin'
-let g:netrw_dirhist_2='/etc/modprobe.d'
-let g:netrw_dirhist_1='/home/sumi/u-touhoku/GANBaseVC-PyTorch/scripts'
+let g:netrw_dirhistcnt =6
+let g:netrw_dirhist_6='/workspace/espnet/egs/arctic/vc1/conf'
+let g:netrw_dirhist_5='/workspace/espnet/egs/arctic/vc1'
+let g:netrw_dirhist_4='/home/podman/GANBaseVC-PyTorch/scripts/RENSEI/utils'
+let g:netrw_dirhist_3='/home/podman/GANBaseVC-PyTorch/scripts'
+let g:netrw_dirhist_2='/workspace/espnet/egs/arctic/vc1/dump/clb_slt_dev_judy'
+let g:netrw_dirhist_1='/workspace/espnet/egs/arctic/vc1/data'
+let g:netrw_dirhist_0='/home/podman/GANBaseVC-PyTorch/scripts'
+let g:netrw_dirhist_9='/home/podman/vol4scyclone/kanagaki/config'
+let g:netrw_dirhist_8='/home/sumi/u-touhoku/RTsample/realtime'
+let g:netrw_dirhist_7='/home/sumi/u-touhoku/RTsample'
