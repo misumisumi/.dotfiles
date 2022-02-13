@@ -79,6 +79,7 @@ set encoding=utf-8
 set fileencodings=iso-2022-jp,euc-jp,sjis,utf-8set incsearch
 "改行コードの自動判別
 set fileformats=unix,dos,mac
+let s:fontsize = 12
 nnoremap <silent> <C-l> :<C-u>nohlsearch<CR><C-l>
 cnoremap <C-p> <Up>
 cnoremap <C-n> <Down>
