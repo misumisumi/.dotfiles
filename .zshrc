@@ -80,6 +80,9 @@ zinit ice silent; zinit snippet PZT::modules/completion
 
 # Connect libvirt root system
 alias ls="ls --color=auto"
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
 alias gpus='NVIDIA_VISIBLE_DEVICE'
 alias ssh='kitty +kitten ssh'
 alias tty-clock='tty-clock -s -c -C 6'
@@ -104,3 +107,4 @@ setopt append_history        # 履歴を追加 (毎回 .zsh_history を作るの
 setopt inc_append_history    # 履歴をインクリメンタルに追加
 setopt hist_no_store         # historyコマンドは履歴に登録しない
 setopt hist_reduce_blanks    # 余分な空白は詰めて記録
+typeset -g POWERLEVEL9k_INSTANT_PROMPT=quiet

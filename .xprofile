@@ -7,11 +7,13 @@ export QT_STYLE_OVERRIDE=gtk2
 export XDG_CONFIG_HOME=~/.config
 devmon &
 fcitx5 &
-picom --experimental-backends -b &
 xhost si:localuser:$USER &
 flameshot &
 copyq &
+picom --experimental-backends -b &
 alias termite='termite -e /usr/bin/zsh'
 /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
 thunar --daemon &
 source /etc/profile.d/vte.sh
+xss-lock -- i3lock -n -i ./Pictures/archlinux_resize.png -t &
+blueman-applet &
