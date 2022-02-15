@@ -41,10 +41,36 @@ if dein#check_install()
     call dein#install()
 endif
 
+"sudo write
+function! s:sudo_write_current_buffer() abort
+    if has('nvim')
+        let s:askpass_path = '/tmp/askpass'
+        let s:password     = inputsecret("Enter Password: ")
+        let $SUDO_ASKPASS  = s:askpass_path
+
+        try
+            call delete(s:askpass_path)
+            call writefile(['#!/bin/sh'],                 s:askpass_path, 'a')
+            call writefile(["echo '" . s:password . "'"], s:askpass_path, 'a')
+            call setfperm(s:askpass_path, "rwx------")
+            write ! sudo -A tee % > /dev/null
+        finally
+            unlet s:password
+            call delete(s:askpass_path)
+        endtry
+    else
+        write ! sudo tee % > /dev/null
+    endif
+endfunction
+command! SudoWrite call s:sudo_write_current_buffer()
+
 "クリップボードへのヤンク
 if has("clipboard")
   set clipboard=unnamed
 endif
+
+"deinの自動更新
+let g:dein#auto_recache = 1
 
 set helplang=ja,en "helpの日本語表示
 filetype plugin indent on
@@ -87,8 +113,9 @@ cnoremap <C-n> <Down>
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h') . '/' : '%%'
 cmap w!! w !sudo tee > /dev/null %
 "括弧の補完
-inoremap { {}<LEFT>
-inoremap [ []<LEFT>
-inoremap ( ()<LEFT>
-inoremap " ""<LEFT>
-inoremap ' ''<LEFT>
+""inoremap { {}<LEFT>
+""inoremap [ []<LEFT>
+""inoremap ( ()<LEFT>
+""inoremap " ""<LEFT>
+""inoremap ' ''<LEFT>
+nnoremap <C-n> :Fern . -reveal=% -drawer -toggle<CR>
