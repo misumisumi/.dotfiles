@@ -67,10 +67,13 @@ def change_wallpaper():
         
 # 擬似的に各スクリーンにグループが割り当てられるようにするための初期化
 def init_screen_and_group():
+    time.sleep(0.05)
     qtile.cmd_to_screen(0)
-    qtile.current_screen.setgroup('0-code')
+    logger.warning(qtile.groups)
+    qtile.current_screen.set_group(qtile.groups[0])
+    time.sleep(0.05)
     qtile.cmd_to_screen(1)
-    qtile.current_screen.setgroup('1-code')
+    qtile.current_screen.set_group(qtile.groups[7])
 
 # StartUp
 @hook.subscribe.startup_once
@@ -474,8 +477,9 @@ match_full = [Match(wm_class='Steam'), Match(wm_class='krita'),
               Match(wm_class='unityhub'), Match(wm_class='Unity'),
               Match(wm_class='obs'), Match(wm_class='audacity'),
               Match(wm_class='looking-glass')]
-match_sns = [Match(wm_class='slack'), Match(wm_class='discord')]
-match_media = [Match(wm_class='pavucontrol')]
+match_sns = [Match(wm_class='slack'), Match(wm_class='discord'),
+             Match(wm_class='zoom')]
+match_media = [Match(wm_class='pavucontrol'), Match(wm_class='blueman-manager')]
 
 groups = list()
 _groups = {'code': ('', layouts2, match_code),
