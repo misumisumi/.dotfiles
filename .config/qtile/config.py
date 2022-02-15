@@ -65,12 +65,18 @@ def change_wallpaper():
             monitor2 = gidx
         subprocess.run('feh --bg-fill {} --bg-fill {}'.format(str(wallpapers[monitor1]), str(wallpapers[monitor2])), shell=True)
         
+# 擬似的に各スクリーンにグループが割り当てられるようにするための初期化
+def init_screen_and_group():
+    qtile.cmd_to_screen(0)
+    qtile.current_screen.setgroup('0-code')
+    qtile.cmd_to_screen(1)
+    qtile.current_screen.setgroup('1-code')
 
 # StartUp
 @hook.subscribe.startup_once
 def autostart():
     subprocess.run('feh --bg-fill {} --bg-fill {}'.format(str(wallpapers[0]), str(wallpapers[0])), shell=True)
-    subprocess.run([str(home.joinpath('.config', 'qtile', 'autostart.sh'))])
+    init_screen_and_group()
 
 
 # spotifyは起動直後はwindow nameを出さないため数msのdelayを設ける
@@ -89,6 +95,8 @@ async def move_spotify(window):
             _pinp_pos[0] += screan_size[0]
         window.cmd_place(*_pinp_pos, *pinp_size, borderwidth=2,
                          bordercolor=colors['cyan'], above=False, margin=None)
+    elif window.name == 'WaveSurfer 1.8.8p5':
+        window.togroup('0-analyze')
     else:
         pass
 
@@ -747,4 +755,4 @@ auto_minimize = True
 # We choose LG3D to maximize irony: it is a 3D non-reparenting WM written in
 # java that happens to be on java's whitelist.
 # wmname = 'LG3D'
-wmname = 'Qtile'
+wmname = 'qtile'
