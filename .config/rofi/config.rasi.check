@@ -1,11 +1,11 @@
 configuration {
 /*	modi: "window,run,ssh";*/
-font: "Ricty Diminished 18";
+	font: "Ricty Diminished 18";
 /*	location: 0;*/
 /*	yoffset: 0;*/
 /*	xoffset: 0;*/
-fixed-num-lines: true;
-show-icons: true;
+/*	fixed-num-lines: true;*/
+	show-icons: true;
 /*	terminal: "rofi-sensible-terminal";*/
 /*	ssh-client: "ssh";*/
 /*	ssh-command: "{terminal} -e {ssh-client} {host} [-p {port}]";*/
@@ -14,10 +14,10 @@ show-icons: true;
 /*	run-shell-command: "{terminal} -e {cmd}";*/
 /*	window-command: "wmctrl -i -R {window}";*/
 /*	window-match-fields: "all";*/
-icon-theme: "Papirus-Dark";
+	icon-theme: "Papirus-Dark";
 /*	drun-match-fields: "name,generic,exec,categories,keywords";*/
 /*	drun-categories: ;*/
-drun-show-actions: true;
+	drun-show-actions: true;
 /*	drun-display-format: "{name} [<span weight='light' size='small'><i>({generic})</i></span>]";*/
 /*	drun-url-launcher: "xdg-open";*/
 /*	disable-history: false;*/
@@ -69,32 +69,29 @@ drun-show-actions: true;
 /*	kb-move-end: "Control+e";*/
 /*	kb-move-word-back: "Alt+b,Control+Left";*/
 /*	kb-move-word-forward: "Alt+f,Control+Right";*/
-kb-move-char-back: "Left,Control+Alt+b";
-kb-move-char-forward: "Right,Control+Alt+f";
+	kb-move-char-back: "Left,Control+Alt+b";
+	kb-move-char-forward: "Right,Control+Alt+f";
 /*	kb-remove-word-back: "Control+Alt+h,Control+BackSpace";*/
 /*	kb-remove-word-forward: "Control+Alt+d";*/
 /*	kb-remove-char-forward: "Delete,Control+d";*/
-kb-remove-char-back: "BackSpace,Shift+BackSpace,Control+q";
-/*	kb-remove-char-back: "BackSpace,Shift+BackSpace,Control+h";*/
-kb-remove-to-eol: "Control+Alt+k";
-kb-remove-to-sol: "Control+Alt+j";
-kb-accept-entry: "Control+m,Return,KP_Enter";
+	kb-remove-char-back: "BackSpace,Shift+BackSpace,Control+q";
+/*	kb-remove-to-eol: "Control+k";*/
+/*	kb-remove-to-sol: "Control+u";*/
+	kb-accept-entry: "Control+m,Return,KP_Enter";
 /*	kb-accept-custom: "Control+Return";*/
 /*	kb-accept-custom-alt: "Control+Shift+Return";*/
 /*	kb-accept-alt: "Shift+Return";*/
 /*	kb-delete-entry: "Shift+Delete";*/
 /*	kb-mode-next: "Shift+Right,Control+Tab";*/
-kb-mode-previous: "Control+n";
-kb-mode-complete: "Control+p";
-/*	kb-row-left: "Control+Page_Up";*/
-/*	kb-row-right: "Control+Page_Down";*/
-kb-row-up: "Up,Control+k,ISO_Left_Tab";
-kb-row-down: "Down,Control+j";
-kb-row-left: "Control+h";
-kb-row-right: "Control+l";
+	kb-mode-previous: "Control+n";
+	kb-mode-complete: "Control+p";
+	kb-row-left: "Control+h";
+	kb-row-right: "Control+l";
+	kb-row-up: "Up,Control+k,ISO_Left_Tab";
+	kb-row-down: "Down,Control+j";
 /*	kb-row-tab: "Tab";*/
-kb-page-prev: "Control+b";
-kb-page-next: "Control+f";
+	kb-page-prev: "Control+b";
+	kb-page-next: "Control+f";
 /*	kb-row-first: "Home,KP_Home";*/
 /*	kb-row-last: "End,KP_End";*/
 /*	kb-row-select: "Control+space";*/
@@ -147,13 +144,4 @@ kb-page-next: "Control+f";
       directories-first: true;
       sorting-method:    "name";
   }
-}
-@theme "/usr/share/rofi/themes/Adapta-Nokto.rasi"
-listview {
-	lines: 15;
-	columns: 1;
-}
-
-window {
-	width: 65%;
 }

@@ -5,6 +5,8 @@ export GLFW_IM_MODULE=ibus
 export WWW_HOME="http://example.com/"
 export QT_STYLE_OVERRIDE=gtk2
 export XDG_CONFIG_HOME=~/.config
+export NEXTGRAPHICS=$(asusctl graphics -g | awk '{print $4}')
+libinput-gestures &
 devmon &
 fcitx5 &
 picom --experimental-backends -b &
@@ -14,4 +16,5 @@ copyq &
 alias termite='termite -e /usr/bin/zsh'
 /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
 thunar --daemon &
+xmodmap $HOME $HOME.Xmodmap
 source /etc/profile.d/vte.sh

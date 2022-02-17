@@ -87,7 +87,7 @@ alias tty-clock='tty-clock -s -c -C 6'
 export LIBVIRT_DEFAULT_URI="qemu:///system"
 export FrameworkPathOverride=/lib/mono/4.8-api/
 export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
+export PATH="$PYENV_ROOT/bin:/opt/Ryzen Controller:$PATH"
 eval "$(pyenv init --path)"
 eval "$(pyenv init -)"
 

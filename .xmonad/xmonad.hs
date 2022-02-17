@@ -99,8 +99,8 @@ smartSpace ==> no Border when there fewer than 2 windows.
 -- gaps (for screen)
 sGapsT = 3
 sGapsB = 2
-sGapsR = 40
-sGapsL = 40
+sGapsR = 10
+sGapsL = 10
 
 -- gaps (for window)
 wGapsT = 4
@@ -110,7 +110,7 @@ wGapsL = 10
 
 borderSize = 2
 
-myWorkspaces = ["1:Code", "2:Browse", "3:Paper", "4:Full", "5:SNS"]
+myWorkspaces = ["1:Code", "2:Browse", "3:Paper", "4:Full", "5:SNS", "6:Media"]
 
 
 myWallpaperDir :: IO FilePath
@@ -269,10 +269,11 @@ myLayout = windowNavigation
          $ avoidStruts
          $ lessBorders OnlyScreenFloat 
          $ onWorkspaces ["0_1:Code", "1_1:Code"] (wsLayout tall)
-         $ onWorkspaces ["0_2:Browse", "1_2:Browse", "0_3:Paper", "1_3:Paper"] (wsLayout twoPane)
+         -- $ onWorkspaces ["0_2:Browse", "1_2:Browse", "0_3:Paper", "1_3:Paper"] (wsLayout twoPane)
          $ onWorkspaces ["0_4:Full", "1_4:Full"] (wsLayout fullWindow ||| floatWindow)
-         $ onWorkspaces ["0_5:SNS", "1_5:SNS"] (wsLayout twoPane4SNS)
-         $ tall
+         $ wsLayout twoPane
+         -- $ onWorkspaces ["0_5:SNS", "1_5:SNS"] (wsLayout twoPane4SNS)
+         -- $ tall
 
 base = addTabs shrinkText myTabTheme
      $ subLayout [] (Simplest)
@@ -311,14 +312,6 @@ fullWindow = named "Full"
 floatWindow = named "Float"
             $ hiddenWindows
             $ noBorders simpleFloat
-
-twoPane4SNS = named "SNS"
-        $ mkToggle (single NBFULL)
-        $ boringWindows
-        $ hiddenWindows
-        $ spaces
-        $ reflectHoriz
-        $ combineTwo (TwoPanePersistent Nothing 0.05 0.5) (tabbed shrinkText myTabTheme) (tabbed shrinkText myTabTheme)
 
 threeCol = named "SNS"
          $ hiddenWindows
@@ -369,7 +362,7 @@ keys' = [ -- forcus keys
         , ((modm,                 xK_b), spawn "i3lock -i /home/sumi/Pictures/archlinux_resize.png -t")
 
         -- instead function + f1(f7)
-        , ((modm,                  xK_F1), spawn $ "lock-touchpad")
+        -- , ((modm,                  xK_F1), spawn $ "pactl set-sink-volume @DEFAULT_SINK@ toggle")
         -- , ((modm,                  xK_F7), spawn $ )
         , ((modm,                  xK_space), sendMessage $ Toggle NBFULL)
 
@@ -401,9 +394,14 @@ keys' = [ -- forcus keys
 -- Control PC
 keysP' = [ ("<XF86AudioRaiseVolume>", spawn "pactl set-sink-volume @DEFAULT_SINK@ +5%")
          , ("<XF86AudioLowerVolume>", spawn "pactl set-sink-volume @DEFAULT_SINK@ -5%")
+         , ("<XF86AudioMicMute>", spawn "pactl set-source-mute @DEFAULT_SOURCE@ toggle")
          , ("<XF86AudioMute>", spawn "pactl set-sink-mute @DEFAULT_SINK@ toggle")
          , ("<XF86MonBrightnessUp>", spawn "light -A 5")
          , ("<XF86MonBrightnessDown>", spawn "light -U 5")
+         , ("<XF86KbdBrightnessUp>", spawn "light -Ars 'sysfs/leds/asus::kbd_backlight' 1")
+         , ("<XF86KbdBrightnessDown>", spawn "light -Urs 'sysfs/leds/asus::kbd_backlight' 1")
+         , ("<XF86Launch1>", spawn "~/scripts/chgraphics.sh")
+         , ("<XF86Launch4>", spawn "asusctl profile -n")
          ]
 
 removekeys' = [(m .|. modm, n) | n <- [xK_1 .. xK_9], m <- [0, shiftMask]]

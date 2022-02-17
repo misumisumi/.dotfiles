@@ -61,9 +61,9 @@ tray-padding = 2
 ;==========================================================
 
 ;====Module settings+======================================
-modules-left = ewmh0 ewmh1 memory cpu-value
+modules-left = ewmh0 ewmh1 memory cpu-value wlan
 modules-center = date
-modules-right = ethernet pkg pulseaudio powermenu 
+modules-right = pkg pulseaudio backlight battery powermenu 
 ;==========================================================
 
 [module/workspaces-xmonad]
@@ -106,7 +106,7 @@ label = %percentage%%
 
 ; Use the following command to list available cards:
 ; $ ls -1 /sys/class/backlight/
-card = intel_backlight
+card = amdgpu_bl0
 
 ramp-0 = 
 ramp-1 = 
@@ -125,6 +125,7 @@ icon-1 = 0_2:Browse;
 icon-2 = 0_3:Paper;
 icon-3 = 0_4:Full;
 icon-4 = 0_5:SNS;
+icon-5 = 0_6:Media;
 
 format = <label-monitor> <label-state>
 label-monitor = %name%
@@ -166,6 +167,7 @@ icon-1 = 1_2:Browse;
 icon-2 = 1_3:Paper;
 icon-3 = 1_4:Full;
 icon-4 = 1_5:SNS;
+icon-5 = 1_6:Media;
 
 format =|<label-state>
 label-monitor = %name%
@@ -249,7 +251,7 @@ format-volume-margin = ${margin.for-modules}
 
 [module/wlan]
 type = internal/network
-interface = wlp5s0
+interface = wlp2s0
 interval = 1.0
 format-connected = <label-connected>
 ;format-connected-background = ${colors.shade2}
@@ -305,8 +307,8 @@ label = %percentage_used:2%%
 [module/battery]
 type = internal/battery
 full-at = 99
-battery = BAT1
-adapter = ADP1
+battery = BAT0
+adapter = AC0
 format-charging = <animation-charging> <label-charging>
 ;format-charging-background = ${colors.shade2}
 format-charging-underline = ${colors.cyan}
