@@ -9,12 +9,14 @@ export NEXTGRAPHICS=$(asusctl graphics -g | awk '{print $4}')
 libinput-gestures &
 devmon &
 fcitx5 &
-picom --experimental-backends -b &
 xhost si:localuser:$USER &
 flameshot &
 copyq &
+picom --experimental-backends -b &
 alias termite='termite -e /usr/bin/zsh'
 /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
 thunar --daemon &
 xmodmap $HOME $HOME.Xmodmap
 source /etc/profile.d/vte.sh
+xss-lock -- i3lock -n -i ./Pictures/archlinux_resize.png -t &
+blueman-applet &

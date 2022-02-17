@@ -1,2 +1,5 @@
 export LANG=ja_JP.UTF-8
-exec dbus-launch xmonad
+xrandr --setprovideroutputsource modesetting NVIDIA-1
+xrandr --auto
+exec dbus-launch qtile
+

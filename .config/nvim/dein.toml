@@ -1,9 +1,5 @@
-[[plugins]]
+[[plugins]] # Plugin Manager
 repo = 'Shougo/dein.vim'
-
-[[plugins]]
-repo = 'wsdjeg/dein-ui.vim'
-on_source = 'Shougo/dein.vim'
 
 [[plugins]]
 repo = 'joshdick/onedark.vim'
@@ -19,6 +15,7 @@ repo = 'vimlab/split-term.vim'
 
 [[plugins]]
 repo = 'lambdalisue/suda.vim'
+
 
 [[plugins]]
 repo = 'easymotion/vim-easymotion'
@@ -38,6 +35,31 @@ hook_add = '''
 
 [[plugins]]
 repo = 'tpope/vim-surround'
+
+[[plugins]]
+repo = 'lambdalisue/fern.vim'
+hook_add = '''
+    let g:fern#renderer = 'nerdfont'
+'''
+
+[[plugins]]
+repo = 'lambdalisue/fern-renderer-nerdfont.vim'
+
+[[plugins]]
+repo= 'lambdalisue/nerdfont.vim'
+
+[[plugins]] # Fernの色変え
+repo = 'lambdalisue/glyph-palette.vim'
+hook_add = '''
+    augroup my-glyph-palette
+        autocmd! *
+        autocmd FileType fern call glyph_palette#apply()
+        autocmd FileType nerdtree,startify call glyph_palette#apply()
+    augroup END
+'''
+
+[[plugins]] # Fernにgit statusを表示
+repo = 'lambdalisue/fern-git-status.vim'
 
 [[plugins]]
 repo = 'neoclide/coc.nvim'
@@ -206,19 +228,3 @@ rev = 'release'
 #     " Resume latest coc list.
 #     nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 # """
-
-[[plugins]]
-repo = 'lambdalisue/fern.vim'
-hook_add = '''
-    let g:fern#renderer = 'nerdfont'
-'''
-
-[[plugins]]
-repo = 'lambdalisue/fern-renderer-nerdfont.vim'
-
-[[plugins]]
-repo= 'lambdalisue/nerdfont.vim'
-
-[[plugins]]
-repo = 'lambdalisue/glyph-palette.vim'
-

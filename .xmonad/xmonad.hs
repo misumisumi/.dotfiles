@@ -218,7 +218,7 @@ main = do
 
 myStartupHook = do
     -- spawn "feh --bg-scale ~/Pictures/wallpapers/main.jpg"
-    spawn "bash .config/polybar/launch.sh"
+    -- spawn "bash .config/polybar/launch.sh"
     spawn "nm-applet"
     spawn "blueman-applet"
 
@@ -396,6 +396,9 @@ keysP' = [ ("<XF86AudioRaiseVolume>", spawn "pactl set-sink-volume @DEFAULT_SINK
          , ("<XF86AudioLowerVolume>", spawn "pactl set-sink-volume @DEFAULT_SINK@ -5%")
          , ("<XF86AudioMicMute>", spawn "pactl set-source-mute @DEFAULT_SOURCE@ toggle")
          , ("<XF86AudioMute>", spawn "pactl set-sink-mute @DEFAULT_SINK@ toggle")
+         , ("<XF86AudioPlay>", spawn "playerctl play-pause")
+         , ("<XF86AudioNext>", spawn "playerctl next")
+         , ("<XF86AudioPrev>", spawn "playerctl previous")
          , ("<XF86MonBrightnessUp>", spawn "light -A 5")
          , ("<XF86MonBrightnessDown>", spawn "light -U 5")
          , ("<XF86KbdBrightnessUp>", spawn "light -Ars 'sysfs/leds/asus::kbd_backlight' 1")
