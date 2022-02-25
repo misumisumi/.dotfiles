@@ -26,8 +26,8 @@ colors2 = {
         'bblue': "#c9c30e", 'bmagenta': "#9c0082",
         'bcyan': "#02b7c7", 'bwhite': "#a7b0b5"
         }
-screan_size = [2560-5, 1440]
-pinp_size = [800, 450]
+screan_size = [1920-5, 1080]
+pinp_size = [640, 360]
 pinp_pos = [s-p for s, p in zip(screan_size, pinp_size)]
 
 mod = 'mod4' # super key
@@ -39,8 +39,7 @@ wallpapers = list(home.joinpath('Pictures', 'wallpapers').glob('*.jpg'))
 wallpapers.sort()
 
 
-num_screen = 2
-laptop = False
+num_screen = 1
 
 pinp_window = None
 
@@ -517,12 +516,17 @@ for n, i in enumerate(groups, 1):
 
 @hook.subscribe.screen_change
 def attach_screen(notify):
-    out = subprocess.check_output('xrandr --listmonitors', shell=True)
-    n_monitor = int(out.decode('utf-8').split('\n')[0].split(' ')[-1])
-    time.sleep(0.1)
-    subprocess.run('xrandr --output eDP --auto --output HDMI-A-0 --auto --right-of eDP', shell=True)
-    for k, (label, layouts, matches) in _groups.items():
-        qtile.add_group('{}-{}'.format(1, k), layouts=layouts, label=label)
+    global num_screen
+    if num_screen == 1:
+        subprocess.run('xrandr --output eDP --auto --output HDMI-A-0 --auto --right-of eDP', shell=True)
+        time.sleep(0.1)
+        num_screen = 2
+        # for k, (label, layouts, matches) in _groups.items():
+        #     qtile.add_group('{}-{}'.format(1, k), layouts=layouts, label=label)
+    else:
+        subprocess.run('xrandr --output HDMI-A-0 --off', shell=True)
+        time.sleep(0.1)
+        num_screen = 1
 
 
 widget_defaults = dict(
@@ -537,6 +541,7 @@ colorset3 = {'background': colors['blue'], 'foreground': colors['BGbase']}
 colorset4 = {'background': colors['BGbase'], 'foreground': colors['blue']}
 colorset5 = {'background': colors['clear'], 'foreground': colors['BGbase']}
 colorset6 = {'background': colors['BGbase'], 'foreground': colors['white']}
+colorset7 = {'background': colors['clear'], 'foreground': colors['cyan']}
 
 def left_corner(background, foreground):
     return widget.TextBox(
@@ -582,36 +587,26 @@ screens = [
                 widget.GroupBox(this_current_screen_border=colors['cyan'], borderwidth=2, **colorset3,
                                 active=colors['white']),
                 right_corner(**colorset4),
-                separator(),
-                left_corner(**colorset1),
-                widget.CPU(format=' {load_percent}%', **colorset2),
-                right_corner(**colorset1),
-                widget.Memory(format=' {MemUsed: .1f}{mm}/{MemTotal: .1f}{mm}',
-                              measure_mem='G', measure_swap='G', **colorset1),
-                right_corner(**colorset2),
-                widget.DF(format = " {f} GB ({r:.0f}%)", visible_on_warn=False,
-                          partition='/home', **colorset2),
-                right_corner(**colorset1),
                 widget.Spacer(),
                 left_corner(**colorset1),
                 widget.Clock(format='%Y-%m-%d %a %I:%M:%S %p', **colorset2),
                 right_corner(**colorset1),
-                separator(),
-                separator(),
-                left_corner(**colorset4),
-                widget.TaskList(border=colors['BGbase'], borderwidth=2, max_title_width=120, **colorset3),
-                right_corner(**colorset4),
-                separator(),
+                widget.Spacer(),
+                # separator(),
+                # left_corner(**colorset4),
+                # widget.TaskList(border=colors['BGbase'], borderwidth=2, max_title_width=120, **colorset3),
+                # right_corner(**colorset4),
+                # separator(),
                 left_corner(**colorset1),
                 widget.Net(format='{down} ↓↑ {up}', **colorset2),
                 right_corner(**colorset1),
                 widget.PulseVolume(fmt=' {}', limit_max_volume=True, volume_app='pavucontrol',
                                    update_interval=0.1, **colorset1),
                 right_corner(**colorset2),
-                # widget.Backlight(fmt=' {}', backlight_name='amdgpu_bl0', **colorset2),
-                # right_corner(**colorset1),
-                # widget.Battery(format=' {percent:2.0%}', **colorset1),
-                # right_corner(**colorset2),
+                widget.Backlight(fmt=' {}', backlight_name='amdgpu_bl0', **colorset2),
+                right_corner(**colorset1),
+                widget.Battery(format=' {percent:2.0%}', **colorset1),
+                right_corner(**colorset2),
                 widget.CheckUpdates(display_format=' {updates}', distro='Arch_paru',
                                     colour_have_updates=colors['magenta'], colour_no_updates=colors['BGbase'],
                                     update_interval=60*60, no_update_string='  0', **colorset2),
@@ -631,17 +626,28 @@ screens = [
         ),
         # right=bar.Gap(gaps),
         # left=bar.Gap(gaps)
-        # bottom=bar.Bar(
-        #     [widget.Spacer(),
-        #      left_corner(**colorset5),
-        #      widget.TaskList(border=colors['cyan'], borderwidth=2, max_title_width=120, **colorset6),
-        #      right_corner(**colorset5),
-        #      widget.Spacer()],
-        #     32,
-        #     background=colors['clear'],
-        #     border_color=colors['cyan'],
-        #     opacity=1,
-        #         )
+        bottom=bar.Bar(
+            [
+             separator(),
+             left_corner(**colorset7),
+             widget.CPU(format=' {load_percent}%', **colorset2),
+             right_corner(**colorset1),
+             widget.Memory(format=' {MemUsed: .1f}{mm}/{MemTotal: .1f}{mm}',
+                           measure_mem='G', measure_swap='G', **colorset1),
+             right_corner(**colorset2),
+             widget.DF(format = " {f} GB ({r:.0f}%)", visible_on_warn=False,
+                       partition='/home', **colorset2),
+             right_corner(**colorset7),
+             widget.Spacer(),
+             left_corner(**colorset5),
+             widget.TaskList(border=colors['cyan'], borderwidth=2, max_title_width=120, **colorset6),
+             right_corner(**colorset5),
+             widget.Spacer()],
+            32,
+            background=colors['clear'],
+            border_color=colors['cyan'],
+            opacity=1,
+        )
     ),
     Screen(
         top=bar.Bar(
