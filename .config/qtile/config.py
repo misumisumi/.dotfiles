@@ -5,7 +5,7 @@ import asyncio
 import time
 
 from libqtile import bar, layout, widget, hook
-from libqtile.config import Click, Drag, Group, Key, Match, Screen
+from libqtile.config import Click, Drag, Group, Key, KeyChord, Match, Screen
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
 from libqtile.log_utils import logger
@@ -26,7 +26,8 @@ colors2 = {
         'bblue': "#c9c30e", 'bmagenta': "#9c0082",
         'bcyan': "#02b7c7", 'bwhite': "#a7b0b5"
         }
-screan_size = [1920-5, 1080]
+pinp_margin = 5
+screan_size = [1920-pinp_margin, 1080]
 pinp_size = [640, 360]
 pinp_pos = [s-p for s, p in zip(screan_size, pinp_size)]
 
@@ -38,37 +39,34 @@ capture_path = home.joinpath('Pictures', 'screenshot')
 wallpapers = list(home.joinpath('Pictures', 'wallpapers').glob('*.jpg'))
 wallpapers.sort()
 
-
 num_screen = 1
 
 pinp_window = None
 
-
 monitor1=0
 monitor2=0
 
-@hook.subscribe.setgroup
-def change_wallpaper():
-    global monitor1
-    global monitor2
-    group = qtile.current_screen.group
-    gidx = qtile.groups.index(group)
-    if qtile.current_screen in qtile.screens:
-        idx = qtile.screens.index(qtile.current_screen)
-        n_groups = len(qtile.groups) // len(qtile.screens)
-        if gidx >= n_groups:
-            gidx -= n_groups
-        if idx == 0:
-            monitor1 = gidx
-        else:
-            monitor2 = gidx
-        subprocess.run('feh --bg-fill {} --bg-fill {}'.format(str(wallpapers[monitor1]), str(wallpapers[monitor2])), shell=True)
+# @hook.subscribe.setgroup
+# def change_wallpaper():
+#     global monitor1
+#     global monitor2
+#     group = qtile.current_screen.group
+#     gidx = qtile.groups.index(group)
+#     if qtile.current_screen in qtile.screens:
+#         idx = qtile.screens.index(qtile.current_screen)
+#         n_groups = len(qtile.groups) // len(qtile.screens)
+#         if gidx >= n_groups:
+#             gidx -= n_groups
+#         if idx == 0:
+#             monitor1 = gidx
+#         else:
+#             monitor2 = gidx
+#         subprocess.run('feh --bg-fill {} --bg-fill {}'.format(str(wallpapers[monitor1]), str(wallpapers[monitor2])), shell=True)
         
 # 擬似的に各スクリーンにグループが割り当てられるようにするための初期化
 def init_screen_and_group():
     time.sleep(0.05)
     qtile.cmd_to_screen(0)
-    logger.warning(qtile.groups)
     qtile.current_screen.set_group(qtile.groups[0])
     time.sleep(0.05)
     qtile.cmd_to_screen(1)
@@ -77,7 +75,7 @@ def init_screen_and_group():
 # StartUp
 @hook.subscribe.startup_once
 def autostart():
-    subprocess.run('feh --bg-fill {} --bg-fill {}'.format(str(wallpapers[0]), str(wallpapers[0])), shell=True)
+    subprocess.run('feh --bg-fill {}'.format(home.joinpath('Pictures', 'wallpapers', 'main01.jpg')), shell=True)
     init_screen_and_group()
 
 
@@ -85,7 +83,6 @@ def autostart():
 @hook.subscribe.client_new
 async def move_spotify(window):
     await asyncio.sleep(0.005)
-    # logger.warning(window)
     if window.name == 'Spotify':
         window.togroup('0-media')
     elif window.name == 'ピクチャー イン ピクチャー':
@@ -163,6 +160,28 @@ def keep_pinp(qtile):
                 if not window.floating:
                     break
             window.cmd_focus(warp=True)
+
+
+@lazy.function
+def move_pinp(qtile, pos):
+    idx = qtile.screens.index(qtile.current_screen)
+    n_screen = len(qtile.screens)
+    now_pinp_screen = qtile.groups.index(pinp_window.group) // (len(qtile.groups) // n_screen)
+    if pinp_window is not None and idx == now_pinp_screen:
+        # logger.warning('move')
+        _pinp_pos = [pinp_window.float_x, pinp_window.float_y]
+        if idx == 1:
+            _pinp_pos[0] += screan_size[0]
+        if pos == 'up':
+            _pinp_pos[1] = 0
+        elif pos == 'down':
+            _pinp_pos[1] = pinp_pos[1]
+        elif pos == 'left':
+            _pinp_pos[0] = pinp_margin
+        else:
+            _pinp_pos[0] = pinp_pos[0]
+        pinp_window.cmd_place(*_pinp_pos, *pinp_size, borderwidth=2,
+                         bordercolor=colors['cyan'], above=False, margin=None)
 
 
 def check_screen(idx, min_idx, max_idx):
@@ -315,6 +334,23 @@ def window_to_next_screen(qtile):
         qtile.current_window.togroup(group)
 
 
+@lazy.function
+def attach_screen(notify):
+    global num_screen
+    if num_screen == 1:
+        subprocess.run('xrandr --output eDP --auto --output HDMI-A-0 --auto --right-of eDP', shell=True)
+        for k, (label, layouts, matches) in _groups.items():
+            qtile.add_group('{}-{}'.format(1, k), layouts=layouts, label=label)
+        subprocess.run('feh --bg-fill {} --bg-fill {}'.format(home.joinpath('Pictures', 'wallpapers', 'main01.jpg'),
+                                                              home.joinpath('Pictures', 'wallpapers', 'main02.jpg')), shell=True)
+        num_screen = 2
+    else:
+        subprocess.run('xrandr --output HDMI-A-0 --off', shell=True)
+        for k, (label, layouts, matches) in _groups.items():
+            qtile.delete_group('{}-{}'.format(1, k))
+        num_screen = 1
+        # qtile.cmd_reload_config()
+
 keys = [
     # Switch between windows
     Key([mod], 'h', lazy.layout.left(), desc='Move focus to left'),
@@ -371,6 +407,9 @@ keys = [
     Key([mod], 'f', lazy.window.toggle_fullscreen()),
     Key([mod, 'shift'], 'f', lazy.window.toggle_floating()),
 
+    # Attach Screen
+    Key([mod, 'control'], 'a', attach_screen()),
+
     # Change other layout
     Key([mod], 'Tab', lazy.next_layout(),
         desc='Move window focus to other window'),
@@ -413,14 +452,24 @@ keys = [
     Key([], 'XF86MonBrightnessDown', lazy.spawn('light -U 5')),
     Key([], 'XF86KbdBrightnessUp', lazy.spawn('light -Ars {} 1'.format('sysfs/leds/asus::kbd_backlight'))),
     Key([], 'XF86KbdBrightnessDown', lazy.spawn('light -Urs {} 1'.format('sysfs/leds/asus::kbd_backlight'))),
-    Key([], 'XF86Launch4', lazy.spawn('asusctl profile -n'))
+    Key([], 'XF86Launch4', lazy.spawn('asusctl profile -n')),
+
+    # PinP operationes
+    KeyChord([mod], 'v', [
+        Key([], 'k', move_pinp('up')),
+        Key([], 'j', move_pinp('down')),
+        Key([], 'l', move_pinp('right')),
+        Key([], 'h', move_pinp('left')),
+        ],
+        mode='pinp'
+    )
 
 ]
 
 default_settings = {'border_width': 2,
                   'border_focus': colors['blue'],
                   'border_normal': colors['BGbase']}
-margin = 14
+margin = 10
 # for default
 layouts = [
     layout.Columns(**default_settings,
@@ -489,13 +538,9 @@ _groups = {'code': ('', layouts2, match_code),
            'sns': ('', layouts, match_sns),
            'media': ('', layouts4, match_media)}
 
-if laptop:
+for n in range(num_screen):
     for k, (label, layouts, matches) in _groups.items():
-        groups.append(Group('{}-{}'.format(0, k), layouts=layouts, matches=matches, label=label))
-else:
-    for n in range(num_screen):
-        for k, (label, layouts, matches) in _groups.items():
-            groups.append(Group('{}-{}'.format(n, k), layouts=layouts, matches=matches, label=label))
+        groups.append(Group('{}-{}'.format(n, k), layouts=layouts, matches=matches, label=label))
 
 for n, i in enumerate(groups, 1):
     keys.extend([
@@ -514,20 +559,6 @@ for n, i in enumerate(groups, 1):
         break
 
 
-@hook.subscribe.screen_change
-def attach_screen(notify):
-    global num_screen
-    if num_screen == 1:
-        subprocess.run('xrandr --output eDP --auto --output HDMI-A-0 --auto --right-of eDP', shell=True)
-        time.sleep(0.1)
-        num_screen = 2
-        # for k, (label, layouts, matches) in _groups.items():
-        #     qtile.add_group('{}-{}'.format(1, k), layouts=layouts, label=label)
-    else:
-        subprocess.run('xrandr --output HDMI-A-0 --off', shell=True)
-        time.sleep(0.1)
-        num_screen = 1
-
 
 widget_defaults = dict(
     font='Noto Sans CJK JP',
@@ -543,12 +574,14 @@ colorset5 = {'background': colors['clear'], 'foreground': colors['BGbase']}
 colorset6 = {'background': colors['BGbase'], 'foreground': colors['white']}
 colorset7 = {'background': colors['clear'], 'foreground': colors['cyan']}
 
+font_size = 28
+
 def left_corner(background, foreground):
     return widget.TextBox(
         foreground = foreground,
         background = background,
         text = "\ue0b6",
-        fontsize = 36,
+        fontsize = font_size+3,
         padding=0
     )
 
@@ -557,7 +590,7 @@ def right_corner(background, foreground):
         foreground = foreground,
         background = background,
         text = "\ue0b4",
-        fontsize = 36,
+        fontsize = font_size+3,
         padding=0
     )
 
@@ -605,7 +638,7 @@ screens = [
                 right_corner(**colorset2),
                 widget.Backlight(fmt=' {}', backlight_name='amdgpu_bl0', **colorset2),
                 right_corner(**colorset1),
-                widget.Battery(format=' {percent:2.0%}', **colorset1),
+                widget.Battery(format='{char} {percent:2.0%}', charge_char='', discharge_char='', empty_char='', **colorset1),
                 right_corner(**colorset2),
                 widget.CheckUpdates(display_format=' {updates}', distro='Arch_paru',
                                     colour_have_updates=colors['magenta'], colour_no_updates=colors['BGbase'],
@@ -618,7 +651,7 @@ screens = [
                 separator(),
                      
             ],
-            32,
+            font_size,
             background=colors['BGbase'],
             border_color=colors['cyan']
             # border_width=[2, 0, 2, 0],  # Draw top and bottom borders
@@ -643,7 +676,7 @@ screens = [
              widget.TaskList(border=colors['cyan'], borderwidth=2, max_title_width=120, **colorset6),
              right_corner(**colorset5),
              widget.Spacer()],
-            32,
+            font_size,
             background=colors['clear'],
             border_color=colors['cyan'],
             opacity=1,
@@ -652,10 +685,11 @@ screens = [
     Screen(
         top=bar.Bar(
             [
+                # widget.Wallpaper(random_selection=True),
                 left_corner(**colorset1),
                 widget.CurrentScreen(active_color=colors['magenta'],
-                                     inactive_color=colors['BGbase'], 
-                                     inactive_text='N',**colorset2),
+                                     inactive_color=colors['BGbase'],
+                                     inactive_text='N', **colorset2),
                 right_corner(**colorset1),
                 separator(),
                 left_corner(**colorset1),
@@ -666,43 +700,33 @@ screens = [
                 widget.GroupBox(this_current_screen_border=colors['cyan'], borderwidth=2, **colorset3,
                                 active=colors['white']),
                 right_corner(**colorset4),
-                separator(),
-                left_corner(**colorset1),
-                widget.CPU(format=' {load_percent}%', **colorset2),
-                right_corner(**colorset1),
-                widget.Memory(format=' {MemUsed: .1f}{mm}/{MemTotal: .1f}{mm}',
-                              measure_mem='G', measure_swap='G', **colorset1),
-                right_corner(**colorset2),
-                widget.DF(format = " {f} GB ({r:.0f}%)", visible_on_warn=False,
-                          partition='/home', **colorset2),
-                right_corner(**colorset1),
                 widget.Spacer(),
                 left_corner(**colorset1),
                 widget.Clock(format='%Y-%m-%d %a %I:%M:%S %p', **colorset2),
                 right_corner(**colorset1),
-                separator(),
-                separator(),
-                left_corner(**colorset4),
-                widget.TaskList(border=colors['BGbase'], borderwidth=2, max_title_width=120, **colorset3),
-                right_corner(**colorset4),
-                separator(),
+                widget.Spacer(),
+                # separator(),
+                # left_corner(**colorset4),
+                # widget.TaskList(border=colors['BGbase'], borderwidth=2, max_title_width=120, **colorset3),
+                # right_corner(**colorset4),
+                # separator(),
                 left_corner(**colorset1),
                 widget.Net(format='{down} ↓↑ {up}', **colorset2),
                 right_corner(**colorset1),
                 widget.PulseVolume(fmt=' {}', limit_max_volume=True, volume_app='pavucontrol',
                                    update_interval=0.1, **colorset1),
                 right_corner(**colorset2),
-                # widget.Backlight(fmt=' {}', backlight_name='amdgpu_bl0', **colorset2),
-                # right_corner(**colorset1),
-                # widget.Battery(format=' {percent:2.0%}', **colorset1),
-                # right_corner(**colorset2),
+                widget.Backlight(fmt=' {}', backlight_name='amdgpu_bl0', **colorset2),
+                right_corner(**colorset1),
+                widget.Battery(format=' {percent:2.0%}', **colorset1),
+                right_corner(**colorset2),
                 widget.CheckUpdates(display_format=' {updates}', distro='Arch_paru',
                                     colour_have_updates=colors['magenta'], colour_no_updates=colors['BGbase'],
                                     update_interval=60*60, no_update_string='  0', **colorset2),
                 right_corner(**colorset1),
                      
             ],
-            32,
+            font_size,
             background=colors['BGbase'],
             border_color=colors['cyan']
             # border_width=[2, 0, 2, 0],  # Draw top and bottom borders
@@ -710,17 +734,28 @@ screens = [
         ),
         # right=bar.Gap(gaps),
         # left=bar.Gap(gaps)
-        # bottom=bar.Bar(
-        #     [widget.Spacer(),
-        #      left_corner(**colorset5),
-        #      widget.TaskList(border=colors['cyan'], borderwidth=2, max_title_width=120, **colorset6),
-        #      right_corner(**colorset5),
-        #      widget.Spacer()],
-        #     32,
-        #     background=colors['clear'],
-        #     border_color=colors['cyan'],
-        #     opacity=1,
-        #         )
+        bottom=bar.Bar(
+            [
+             separator(),
+             left_corner(**colorset7),
+             widget.CPU(format=' {load_percent}%', **colorset2),
+             right_corner(**colorset1),
+             widget.Memory(format=' {MemUsed: .1f}{mm}/{MemTotal: .1f}{mm}',
+                           measure_mem='G', measure_swap='G', **colorset1),
+             right_corner(**colorset2),
+             widget.DF(format = " {f} GB ({r:.0f}%)", visible_on_warn=False,
+                       partition='/home', **colorset2),
+             right_corner(**colorset7),
+             widget.Spacer(),
+             left_corner(**colorset5),
+             widget.TaskList(border=colors['cyan'], borderwidth=2, max_title_width=120, **colorset6),
+             right_corner(**colorset5),
+             widget.Spacer()],
+            font_size,
+            background=colors['clear'],
+            border_color=colors['cyan'],
+            opacity=1,
+        )
     ),
 ]
 
