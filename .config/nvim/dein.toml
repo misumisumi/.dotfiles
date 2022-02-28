@@ -61,6 +61,33 @@ hook_add = '''
 [[plugins]] # Fernにgit statusを表示
 repo = 'lambdalisue/fern-git-status.vim'
 
+[[plugins]] # Fernをデフォルトファイラーにする
+repo = 'lambdalisue/fern-hijack.vim'
+
+[[plugins]] # Fernでプレビュー表示させる
+repo = 'yuki-yano/fern-preview.vim'
+hook_add = '''
+function! s:fern_settings() abort
+  nmap <silent> <buffer> p     <Plug>(fern-action-preview:toggle)
+  nmap <silent> <buffer> <C-p> <Plug>(fern-action-preview:auto:toggle)
+  nmap <silent> <buffer> <C-d> <Plug>(fern-action-preview:scroll:down:half)
+  nmap <silent> <buffer> <C-u> <Plug>(fern-action-preview:scroll:up:half)
+endfunction
+
+augroup fern-settings
+  autocmd!
+  autocmd FileType fern call s:fern_settings()
+augroup END
+'''
+
+[[plugins]]
+repo = 'junegunn/fzf.vim'
+hook_add = '''
+    " Preview window on the upper side of the window with 40% height,
+    " hidden by default, ctrl-/ to toggle
+    let g:fzf_preview_window = ['up:40%:hidden', 'ctrl-/']
+'''
+
 [[plugins]]
 repo = 'neoclide/coc.nvim'
 merge = 0
