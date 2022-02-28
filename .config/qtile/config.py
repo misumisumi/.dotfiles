@@ -4,6 +4,7 @@ import subprocess
 import asyncio
 import time
 import os
+import copy
 
 from libqtile import bar, layout, widget, hook
 from libqtile.config import Click, Drag, Group, Key, KeyChord, Match, Screen
@@ -632,97 +633,108 @@ def separator():
     )
 
 gaps = 15
-top_widgets = [
-    left_corner(**colorset1),
-    widget.CurrentScreen(active_color=colors['magenta'],
-                         inactive_color=colors['BGbase'],
-                         inactive_text='N', **colorset2),
-    right_corner(**colorset1),
-    separator(),
-    left_corner(**colorset1),
-    widget.CurrentLayout(fmt='{:.3}', **colorset2),
-    right_corner(**colorset1),
-    separator(),
-    left_corner(**colorset4),
-    widget.GroupBox(this_current_screen_border=colors['cyan'], borderwidth=2, **colorset3,
-                    active=colors['white']),
-    right_corner(**colorset4),
-    separator(),
-    widget.Chord(**colorset6)
-    ]
-if not laptop:
+
+def make_widgets():
+    top_widgets = [
+        left_corner(**colorset1),
+        widget.CurrentScreen(active_color=colors['magenta'],
+                             inactive_color=colors['BGbase'],
+                             inactive_text='N', **colorset2),
+        right_corner(**colorset1),
+        separator(),
+        left_corner(**colorset1),
+        widget.CurrentLayout(fmt='{:.3}', **colorset2),
+        right_corner(**colorset1),
+        separator(),
+        left_corner(**colorset4),
+        widget.GroupBox(this_current_screen_border=colors['cyan'], borderwidth=2, **colorset3,
+                        active=colors['white']),
+        right_corner(**colorset4),
+        ]
+    if not laptop:
+        top_widgets += [
+            separator(),
+            left_corner(**colorset1),
+            widget.CPU(format=' {load_percent}%', **colorset2),
+            right_corner(**colorset1),
+            widget.Memory(format=' {MemUsed: .1f}{mm}/{MemTotal: .1f}{mm}',
+                          measure_mem='G', measure_swap='G', **colorset1),
+            right_corner(**colorset2),
+            widget.DF(format = " {f} GB ({r:.0f}%)", visible_on_warn=False,
+                      partition='/home', **colorset2),
+            right_corner(**colorset1),
+        ]
     top_widgets += [
         separator(),
-        left_corner(**colorset7),
-        widget.CPU(format=' {load_percent}%', **colorset2),
+        widget.Chord(**colorset6),
+        widget.Spacer(),
+        left_corner(**colorset1),
+        widget.Clock(format='%Y-%m-%d %a %I:%M:%S %p', **colorset2),
         right_corner(**colorset1),
-        widget.Memory(format=' {MemUsed: .1f}{mm}/{MemTotal: .1f}{mm}',
-                      measure_mem='G', measure_swap='G', **colorset1),
-        right_corner(**colorset2),
-        widget.DF(format = " {f} GB ({r:.0f}%)", visible_on_warn=False,
-                  partition='/home', **colorset2),
-        right_corner(**colorset7),
-    ]
-top_widgets += [
-    widget.Spacer(),
-    left_corner(**colorset1),
-    widget.Clock(format='%Y-%m-%d %a %I:%M:%S %p', **colorset2),
-    right_corner(**colorset1),
-    widget.Spacer()
-    ]
-if not laptop:
+        ]
+    if laptop:
+        top_widgets += [
+            widget.Spacer()
+        ]
+    else:
+        top_widgets += [
+            separator(),
+            left_corner(**colorset4),
+            widget.TaskList(border=colors['BGbase'], borderwidth=2, max_title_width=80, **colorset3),
+            right_corner(**colorset4),
+            separator()
+        ]
     top_widgets += [
-        left_corner(**colorset4),
-        widget.TaskList(border=colors['BGbase'], borderwidth=2, max_title_width=120, **colorset3),
-        right_corner(**colorset4),
-        separator()
-    ]
-top_widgets += [
-    left_corner(**colorset1),
-    widget.Net(format='{down} ↓↑ {up}', **colorset2),
-    right_corner(**colorset1),
-    widget.PulseVolume(fmt=' {}', limit_max_volume=True, volume_app='pavucontrol',
-                       update_interval=0.1, **colorset1),
-    right_corner(**colorset2),
-    ]
-if laptop:
-    top_widgets += [
-        widget.Backlight(fmt=' {}', backlight_name='amdgpu_bl0', **colorset2),
+        left_corner(**colorset1),
+        widget.Net(format='{down} ↓↑ {up}', **colorset2),
         right_corner(**colorset1),
-        widget.Battery(format='{char} {percent:2.0%}', charge_char='', discharge_char='', empty_char='', **colorset1),
+        widget.PulseVolume(fmt=' {}', limit_max_volume=True, volume_app='pavucontrol',
+                           update_interval=0.1, **colorset1),
         right_corner(**colorset2),
-    ]
-top_widgets += [ widget.CheckUpdates(display_format=' {updates}', distro='Arch_paru',
+        ]
+    if laptop:
+        top_widgets += [
+            widget.Backlight(fmt=' {}', backlight_name='amdgpu_bl0', **colorset2),
+            right_corner(**colorset1),
+            widget.Battery(format='{char} {percent:2.0%}', charge_char='', discharge_char='', empty_char='', **colorset1),
+            right_corner(**colorset2),
+        ]
+    top_widgets += [widget.CheckUpdates(display_format=' {updates}', distro='Arch_paru',
                         colour_have_updates=colors['magenta'], colour_no_updates=colors['BGbase'],
                         update_interval=60*60, no_update_string='  0', **colorset2),
-    right_corner(**colorset1)
-    ]
+        right_corner(**colorset1)
+        ]
 
-if laptop:
-    bottom_bar = bar.Bar([
-             separator(),
-             left_corner(**colorset7),
-             widget.CPU(format=' {load_percent}%', **colorset2),
-             right_corner(**colorset1),
-             widget.Memory(format=' {MemUsed: .1f}{mm}/{MemTotal: .1f}{mm}',
-                           measure_mem='G', measure_swap='G', **colorset1),
-             right_corner(**colorset2),
-             widget.DF(format = " {f} GB ({r:.0f}%)", visible_on_warn=False,
-                       partition='/home', **colorset2),
-             right_corner(**colorset7),
-             widget.Spacer(),
-             left_corner(**colorset5),
-             widget.TaskList(border=colors['cyan'], borderwidth=2, max_title_width=120, **colorset6),
-             right_corner(**colorset5),
-             widget.Spacer(),
-             ],
-            font_size,
-            background=colors['clear'],
-            border_color=colors['cyan'],
-            opacity=1,
-        )
-else:
-    bottom_bar = None
+    if laptop:
+        bottom_bar = bar.Bar([
+                 separator(),
+                 left_corner(**colorset7),
+                 widget.CPU(format=' {load_percent}%', **colorset2),
+                 right_corner(**colorset1),
+                 widget.Memory(format=' {MemUsed: .1f}{mm}/{MemTotal: .1f}{mm}',
+                               measure_mem='G', measure_swap='G', **colorset1),
+                 right_corner(**colorset2),
+                 widget.DF(format = " {f} GB ({r:.0f}%)", visible_on_warn=False,
+                           partition='/home', **colorset2),
+                 right_corner(**colorset7),
+                 widget.Spacer(),
+                 left_corner(**colorset5),
+                 widget.TaskList(border=colors['cyan'], borderwidth=2, max_title_width=120, **colorset6),
+                 right_corner(**colorset5),
+                 widget.Spacer(),
+                 ],
+                font_size,
+                background=colors['clear'],
+                border_color=colors['cyan'],
+                opacity=1,
+            )
+    else:
+        bottom_bar = None
+
+    return top_widgets, bottom_bar
+top_widgets, bottom_bar = make_widgets()
+top_widgets2, bottom_bar2 = make_widgets()
+
 screens = [
     Screen(
         top=bar.Bar(
@@ -737,20 +749,16 @@ screens = [
             background=colors['BGbase'],
             border_color=colors['cyan']
         ),
-            # border_width=[2, 0, 2, 0],  # Draw top and bottom borders
-            # border_color=['ff00ff', '000000', 'ff00ff', '000000']  # Borders are magenta
         bottom=bottom_bar
     ),
     Screen(
         top=bar.Bar(
-            top_widgets,
+            top_widgets2,
             font_size,
             background=colors['BGbase'],
             border_color=colors['cyan']
-            # border_width=[2, 0, 2, 0],  # Draw top and bottom borders
-            # border_color=['ff00ff', '000000', 'ff00ff', '000000']  # Borders are magenta
         ),
-        bottom=bottom_bar
+        bottom=bottom_bar2
     ),
 ]
 
@@ -760,7 +768,6 @@ mouse = [
          start=lazy.window.get_position()),
     Drag([mod, 'shift'], 'Button1', lazy.window.set_size_floating(),
          start=lazy.window.get_size()),
-    # Click([mod], 'Button2', lazy.window.bring_to_front())
 ]
 
 dgroups_key_binder = None
