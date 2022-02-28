@@ -3,6 +3,7 @@ from pathlib import Path
 import subprocess
 import asyncio
 import time
+import os
 
 from libqtile import bar, layout, widget, hook
 from libqtile.config import Click, Drag, Group, Key, KeyChord, Match, Screen
@@ -11,6 +12,8 @@ from libqtile.utils import guess_terminal
 from libqtile.log_utils import logger
 from libqtile.core.manager import Qtile
 from libqtile import qtile
+
+laptop = 'sumi-zephyrus' == os.uname()[1]
 
 colors = {
         'BGbase': '#222d32', 'FGbase': '#475359',
@@ -42,25 +45,26 @@ num_screen = 2
 pinp_window = None
 monitor_pos = 'delete'
 
-# monitor1=0
-# monitor2=0
-
-# @hook.subscribe.setgroup
-# def change_wallpaper():
-#     global monitor1
-#     global monitor2
-#     group = qtile.current_screen.group
-#     gidx = qtile.groups.index(group)
-#     if qtile.current_screen in qtile.screens:
-#         idx = qtile.screens.index(qtile.current_screen)
-#         n_groups = len(qtile.groups) // len(qtile.screens)
-#         if gidx >= n_groups:
-#             gidx -= n_groups
-#         if idx == 0:
-#             monitor1 = gidx
-#         else:
-#             monitor2 = gidx
-#         subprocess.run('feh --bg-fill {} --bg-fill {}'.format(str(wallpapers[monitor1]), str(wallpapers[monitor2])), shell=True)
+if not laptop:
+    monitor1=0
+    monitor2=0
+    
+    @hook.subscribe.setgroup
+    def change_wallpaper():
+        global monitor1
+        global monitor2
+        group = qtile.current_screen.group
+        gidx = qtile.groups.index(group)
+        if qtile.current_screen in qtile.screens:
+            idx = qtile.screens.index(qtile.current_screen)
+            n_groups = len(qtile.groups) // len(qtile.screens)
+            if gidx >= n_groups:
+                gidx -= n_groups
+            if idx == 0:
+                monitor1 = gidx
+            else:
+                monitor2 = gidx
+            subprocess.run('feh --bg-fill {} --bg-fill {}'.format(str(wallpapers[monitor1]), str(wallpapers[monitor2])), shell=True)
         
 # 擬似的に各スクリーンにグループが割り当てられるようにするための初期化
 def init_screen_and_group():
@@ -77,8 +81,11 @@ def init_screen_and_group():
 # StartUp
 @hook.subscribe.startup_once
 def autostart():
-    subprocess.run('feh --bg-fill {} --bg-fill {}'.format(home.joinpath('Pictures', 'wallpapers', 'main01.jpg'),
-                                                          home.joinpath('Pictures', 'wallpapers', 'main02.jpg')), shell=True)
+    if laptop:
+        subprocess.run('feh --bg-fill {} --bg-fill {}'.format(home.joinpath('Pictures', 'wallpapers', 'main01.jpg'),
+                                                              home.joinpath('Pictures', 'wallpapers', 'main02.jpg')), shell=True)
+    else:
+        subprocess.run('feh --bg-fill {} --bg-fill {}'.format(str(wallpapers[monitor1]), str(wallpapers[monitor2])), shell=True)
     init_screen_and_group()
 
 
@@ -451,9 +458,6 @@ keys = [
     Key([mod, 'control'], 'r', lazy.reload_config(), desc='Reload the config'),
     Key([mod, 'control'], 'e', lazy.shutdown(), desc='Shutdown Qtile'),
 
-    # Key([mod], 'm', lazy.spawn('rofi -modi combi -show combi -combi-modi window,drun -show-icons'), desc='show rofi'),
-    # Key([mod, 'shift'], 'm', lazy.spawn('rofi -show run'), desc='run rofi script mode'),
-    # Key([mod, 'control'], 'm', lazy.spawn('rofi -show power-menu -modi power-menu:rofi-power-menu -show-icons'), desc='run rofi script mode'),
     Key([mod], 'p', lazy.spawn('rofi -modi combi -show combi -combi-modi window,drun -show-icons'), desc='show rofi'),
     Key([mod, 'shift'], 'p', lazy.spawn('rofi -show run'), desc='run rofi script mode'),
     Key([mod, 'control'], 'p', lazy.spawn('rofi -show power-menu -modi power-menu:rofi-power-menu -show-icons'), desc='run rofi script mode'),
@@ -628,166 +632,125 @@ def separator():
     )
 
 gaps = 15
+top_widgets = [
+    left_corner(**colorset1),
+    widget.CurrentScreen(active_color=colors['magenta'],
+                         inactive_color=colors['BGbase'],
+                         inactive_text='N', **colorset2),
+    right_corner(**colorset1),
+    separator(),
+    left_corner(**colorset1),
+    widget.CurrentLayout(fmt='{:.3}', **colorset2),
+    right_corner(**colorset1),
+    separator(),
+    left_corner(**colorset4),
+    widget.GroupBox(this_current_screen_border=colors['cyan'], borderwidth=2, **colorset3,
+                    active=colors['white']),
+    right_corner(**colorset4),
+    separator(),
+    widget.Chord(**colorset6)
+    ]
+if not laptop:
+    top_widgets += [
+        separator(),
+        left_corner(**colorset7),
+        widget.CPU(format=' {load_percent}%', **colorset2),
+        right_corner(**colorset1),
+        widget.Memory(format=' {MemUsed: .1f}{mm}/{MemTotal: .1f}{mm}',
+                      measure_mem='G', measure_swap='G', **colorset1),
+        right_corner(**colorset2),
+        widget.DF(format = " {f} GB ({r:.0f}%)", visible_on_warn=False,
+                  partition='/home', **colorset2),
+        right_corner(**colorset7),
+    ]
+top_widgets += [
+    widget.Spacer(),
+    left_corner(**colorset1),
+    widget.Clock(format='%Y-%m-%d %a %I:%M:%S %p', **colorset2),
+    right_corner(**colorset1),
+    widget.Spacer()
+    ]
+if not laptop:
+    top_widgets += [
+        left_corner(**colorset4),
+        widget.TaskList(border=colors['BGbase'], borderwidth=2, max_title_width=120, **colorset3),
+        right_corner(**colorset4),
+        separator()
+    ]
+top_widgets += [
+    left_corner(**colorset1),
+    widget.Net(format='{down} ↓↑ {up}', **colorset2),
+    right_corner(**colorset1),
+    widget.PulseVolume(fmt=' {}', limit_max_volume=True, volume_app='pavucontrol',
+                       update_interval=0.1, **colorset1),
+    right_corner(**colorset2),
+    ]
+if laptop:
+    top_widgets += [
+        widget.Backlight(fmt=' {}', backlight_name='amdgpu_bl0', **colorset2),
+        right_corner(**colorset1),
+        widget.Battery(format='{char} {percent:2.0%}', charge_char='', discharge_char='', empty_char='', **colorset1),
+        right_corner(**colorset2),
+    ]
+top_widgets += [ widget.CheckUpdates(display_format=' {updates}', distro='Arch_paru',
+                        colour_have_updates=colors['magenta'], colour_no_updates=colors['BGbase'],
+                        update_interval=60*60, no_update_string='  0', **colorset2),
+    right_corner(**colorset1)
+    ]
+
+if laptop:
+    bottom_bar = bar.Bar([
+             separator(),
+             left_corner(**colorset7),
+             widget.CPU(format=' {load_percent}%', **colorset2),
+             right_corner(**colorset1),
+             widget.Memory(format=' {MemUsed: .1f}{mm}/{MemTotal: .1f}{mm}',
+                           measure_mem='G', measure_swap='G', **colorset1),
+             right_corner(**colorset2),
+             widget.DF(format = " {f} GB ({r:.0f}%)", visible_on_warn=False,
+                       partition='/home', **colorset2),
+             right_corner(**colorset7),
+             widget.Spacer(),
+             left_corner(**colorset5),
+             widget.TaskList(border=colors['cyan'], borderwidth=2, max_title_width=120, **colorset6),
+             right_corner(**colorset5),
+             widget.Spacer(),
+             ],
+            font_size,
+            background=colors['clear'],
+            border_color=colors['cyan'],
+            opacity=1,
+        )
+else:
+    bottom_bar = None
 screens = [
     Screen(
         top=bar.Bar(
-            [
-                # widget.Wallpaper(random_selection=True),
-                left_corner(**colorset1),
-                widget.CurrentScreen(active_color=colors['magenta'],
-                                     inactive_color=colors['BGbase'],
-                                     inactive_text='N', **colorset2),
-                right_corner(**colorset1),
-                separator(),
-                left_corner(**colorset1),
-                widget.CurrentLayout(fmt='{:.3}', **colorset2),
-                right_corner(**colorset1),
-                separator(),
-                left_corner(**colorset4),
-                widget.GroupBox(this_current_screen_border=colors['cyan'], borderwidth=2, **colorset3,
-                                active=colors['white']),
-                right_corner(**colorset4),
-                separator(),
-                widget.Chord(**colorset6),
-                widget.Spacer(),
-                left_corner(**colorset1),
-                widget.Clock(format='%Y-%m-%d %a %I:%M:%S %p', **colorset2),
-                right_corner(**colorset1),
-                widget.Spacer(),
-                # separator(),
-                # left_corner(**colorset4),
-                # widget.TaskList(border=colors['BGbase'], borderwidth=2, max_title_width=120, **colorset3),
-                # right_corner(**colorset4),
-                # separator(),
-                left_corner(**colorset1),
-                widget.Net(format='{down} ↓↑ {up}', **colorset2),
-                right_corner(**colorset1),
-                widget.PulseVolume(fmt=' {}', limit_max_volume=True, volume_app='pavucontrol',
-                                   update_interval=0.1, **colorset1),
-                right_corner(**colorset2),
-                widget.Backlight(fmt=' {}', backlight_name='amdgpu_bl0', **colorset2),
-                right_corner(**colorset1),
-                widget.Battery(format='{char} {percent:2.0%}', charge_char='', discharge_char='', empty_char='', **colorset1),
-                right_corner(**colorset2),
-                widget.CheckUpdates(display_format=' {updates}', distro='Arch_paru',
-                                    colour_have_updates=colors['magenta'], colour_no_updates=colors['BGbase'],
-                                    update_interval=60*60, no_update_string='  0', **colorset2),
-                right_corner(**colorset1),
+            top_widgets + [
                 separator(),
                 left_corner(**colorset4),
                 widget.Systray(**colorset3),
                 right_corner(**colorset4),
                 separator(),
-                     
             ],
             font_size,
             background=colors['BGbase'],
             border_color=colors['cyan']
+        ),
             # border_width=[2, 0, 2, 0],  # Draw top and bottom borders
             # border_color=['ff00ff', '000000', 'ff00ff', '000000']  # Borders are magenta
-        ),
-        # right=bar.Gap(gaps),
-        # left=bar.Gap(gaps)
-        bottom=bar.Bar(
-            [
-             separator(),
-             left_corner(**colorset7),
-             widget.CPU(format=' {load_percent}%', **colorset2),
-             right_corner(**colorset1),
-             widget.Memory(format=' {MemUsed: .1f}{mm}/{MemTotal: .1f}{mm}',
-                           measure_mem='G', measure_swap='G', **colorset1),
-             right_corner(**colorset2),
-             widget.DF(format = " {f} GB ({r:.0f}%)", visible_on_warn=False,
-                       partition='/home', **colorset2),
-             right_corner(**colorset7),
-             widget.Spacer(),
-             left_corner(**colorset5),
-             widget.TaskList(border=colors['cyan'], borderwidth=2, max_title_width=120, **colorset6),
-             right_corner(**colorset5),
-             widget.Spacer(),
-             ],
-            font_size,
-            background=colors['clear'],
-            border_color=colors['cyan'],
-            opacity=1,
-        )
+        bottom=bottom_bar
     ),
     Screen(
         top=bar.Bar(
-            [
-                # widget.Wallpaper(random_selection=True),
-                left_corner(**colorset1),
-                widget.CurrentScreen(active_color=colors['magenta'],
-                                     inactive_color=colors['BGbase'],
-                                     inactive_text='N', **colorset2),
-                right_corner(**colorset1),
-                separator(),
-                left_corner(**colorset1),
-                widget.CurrentLayout(fmt='{:.3}', **colorset2),
-                right_corner(**colorset1),
-                separator(),
-                left_corner(**colorset4),
-                widget.GroupBox(this_current_screen_border=colors['cyan'], borderwidth=2, **colorset3,
-                                active=colors['white']),
-                right_corner(**colorset4),
-                widget.Chord(**colorset6),
-                widget.Spacer(),
-                left_corner(**colorset1),
-                widget.Clock(format='%Y-%m-%d %a %I:%M:%S %p', **colorset2),
-                right_corner(**colorset1),
-                widget.Spacer(),
-                # separator(),
-                # left_corner(**colorset4),
-                # widget.TaskList(border=colors['BGbase'], borderwidth=2, max_title_width=120, **colorset3),
-                # right_corner(**colorset4),
-                # separator(),
-                left_corner(**colorset1),
-                widget.Net(format='{down} ↓↑ {up}', **colorset2),
-                right_corner(**colorset1),
-                widget.PulseVolume(fmt=' {}', limit_max_volume=True, volume_app='pavucontrol',
-                                   update_interval=0.1, **colorset1),
-                right_corner(**colorset2),
-                widget.Backlight(fmt=' {}', backlight_name='amdgpu_bl0', **colorset2),
-                right_corner(**colorset1),
-                widget.Battery(format=' {percent:2.0%}', **colorset1),
-                right_corner(**colorset2),
-                widget.CheckUpdates(display_format=' {updates}', distro='Arch_paru',
-                                    colour_have_updates=colors['magenta'], colour_no_updates=colors['BGbase'],
-                                    update_interval=60*60, no_update_string='  0', **colorset2),
-                right_corner(**colorset1),
-                     
-            ],
+            top_widgets,
             font_size,
             background=colors['BGbase'],
             border_color=colors['cyan']
             # border_width=[2, 0, 2, 0],  # Draw top and bottom borders
             # border_color=['ff00ff', '000000', 'ff00ff', '000000']  # Borders are magenta
         ),
-        # right=bar.Gap(gaps),
-        # left=bar.Gap(gaps)
-        bottom=bar.Bar(
-            [
-             separator(),
-             left_corner(**colorset7),
-             widget.CPU(format=' {load_percent}%', **colorset2),
-             right_corner(**colorset1),
-             widget.Memory(format=' {MemUsed: .1f}{mm}/{MemTotal: .1f}{mm}',
-                           measure_mem='G', measure_swap='G', **colorset1),
-             right_corner(**colorset2),
-             widget.DF(format = " {f} GB ({r:.0f}%)", visible_on_warn=False,
-                       partition='/home', **colorset2),
-             right_corner(**colorset7),
-             widget.Spacer(),
-             left_corner(**colorset5),
-             widget.TaskList(border=colors['cyan'], borderwidth=2, max_title_width=120, **colorset6),
-             right_corner(**colorset5),
-             widget.Spacer(),
-             ],
-            font_size,
-            background=colors['clear'],
-            border_color=colors['cyan'],
-            opacity=1,
-        )
+        bottom=bottom_bar
     ),
 ]
 
