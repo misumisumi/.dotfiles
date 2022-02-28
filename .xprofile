@@ -20,3 +20,4 @@ xmodmap $HOME $HOME.Xmodmap
 source /etc/profile.d/vte.sh
 xss-lock -- i3lock -n -i ./Pictures/archlinux_resize.png -t &
 blueman-applet &
+asusctltray &
