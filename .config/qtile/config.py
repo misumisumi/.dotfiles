@@ -26,10 +26,8 @@ colors2 = {
         'bblue': "#c9c30e", 'bmagenta': "#9c0082",
         'bcyan': "#02b7c7", 'bwhite': "#a7b0b5"
         }
-pinp_margin = 5
-screan_size = [1920-pinp_margin, 1080]
-pinp_size = [640, 360]
-pinp_pos = [s-p for s, p in zip(screan_size, pinp_size)]
+pinp_margin = 3
+pinp_scale = 3
 
 mod = 'mod4' # super key
 terminal = 'kitty'
@@ -39,12 +37,13 @@ capture_path = home.joinpath('Pictures', 'screenshot')
 wallpapers = list(home.joinpath('Pictures', 'wallpapers').glob('*.jpg'))
 wallpapers.sort()
 
-num_screen = 1
+num_screen = 2
 
 pinp_window = None
+monitor_pos = 'delete'
 
-monitor1=0
-monitor2=0
+# monitor1=0
+# monitor2=0
 
 # @hook.subscribe.setgroup
 # def change_wallpaper():
@@ -69,13 +68,17 @@ def init_screen_and_group():
     qtile.cmd_to_screen(0)
     qtile.current_screen.set_group(qtile.groups[0])
     time.sleep(0.05)
-    qtile.cmd_to_screen(1)
-    qtile.current_screen.set_group(qtile.groups[7])
+    try:
+        qtile.cmd_to_screen(1)
+        qtile.current_screen.set_group(qtile.groups[7])
+    except:
+        pass
 
 # StartUp
 @hook.subscribe.startup_once
 def autostart():
-    subprocess.run('feh --bg-fill {}'.format(home.joinpath('Pictures', 'wallpapers', 'main01.jpg')), shell=True)
+    subprocess.run('feh --bg-fill {} --bg-fill {}'.format(home.joinpath('Pictures', 'wallpapers', 'main01.jpg'),
+                                                          home.joinpath('Pictures', 'wallpapers', 'main02.jpg')), shell=True)
     init_screen_and_group()
 
 
@@ -86,13 +89,21 @@ async def move_spotify(window):
     if window.name == 'Spotify':
         window.togroup('0-media')
     elif window.name == 'ピクチャー イン ピクチャー':
-        _pinp_pos = pinp_pos.copy()
+        # 画面サイズに合わせて自動的にPinPのサイズとポジションを決定する
+        screen_size = (qtile.current_screen.width, qtile.current_screen.height)
+        pinp_size = [s//pinp_scale for s in screen_size]
+        pinp_size[0] = pinp_size[0] - margin
+        pinp_pos = [s-p for s, p in zip(screen_size, pinp_size)]
         global pinp_window
         pinp_window = window
         idx = qtile.screens.index(qtile.current_screen)
-        if idx == 1:
-            _pinp_pos[0] += screan_size[0]
-        window.cmd_place(*_pinp_pos, *pinp_size, borderwidth=2,
+        if (monitor_pos == 'right-of' and idx == 1) or (monitor_pos == 'left-of' and idx == 0):
+            pinp_pos[0] += screen_size[0]
+        elif (monitor_pos == 'below' and idx == 1) or (monitor_pos == 'above' and idx == 0):
+            pinp_pos[1] += screen_size[1]
+        else:
+            pass
+        window.cmd_place(*pinp_pos, *pinp_size, borderwidth=2,
                          bordercolor=colors['cyan'], above=False, margin=None)
     elif window.name == 'WaveSurfer 1.8.8p5':
         window.togroup('0-analyze')
@@ -168,19 +179,25 @@ def move_pinp(qtile, pos):
     n_screen = len(qtile.screens)
     now_pinp_screen = qtile.groups.index(pinp_window.group) // (len(qtile.groups) // n_screen)
     if pinp_window is not None and idx == now_pinp_screen:
-        # logger.warning('move')
-        _pinp_pos = [pinp_window.float_x, pinp_window.float_y]
-        if idx == 1:
-            _pinp_pos[0] += screan_size[0]
+        screen_size = (qtile.current_screen.width, qtile.current_screen.height)
+        pinp_size = [s//pinp_scale for s in screen_size]
+        pinp_size[0] = pinp_size[0] - margin
+        pinp_pos = [pinp_window.float_x, pinp_window.float_y]
         if pos == 'up':
-            _pinp_pos[1] = 0
+            pinp_pos[1] = 0
         elif pos == 'down':
-            _pinp_pos[1] = pinp_pos[1]
+            pinp_pos[1] = screen_size[1] - pinp_size[1]
         elif pos == 'left':
-            _pinp_pos[0] = pinp_margin
+            pinp_pos[0] = pinp_margin
         else:
-            _pinp_pos[0] = pinp_pos[0]
-        pinp_window.cmd_place(*_pinp_pos, *pinp_size, borderwidth=2,
+            pinp_pos[0] = screen_size[0] - pinp_size[0] - margin
+        if (monitor_pos == 'right-of' and idx == 1) or (monitor_pos == 'left-of' and idx == 0):
+            pinp_pos[0] += screen_size[0]
+        elif (monitor_pos == 'above' and idx == 0) or (monitor_pos == 'below' and idx == 1):
+            pinp_pos[1] += screen_size[1]
+        else:
+            pass
+        pinp_window.cmd_place(*pinp_pos, *pinp_size, borderwidth=2,
                          bordercolor=colors['cyan'], above=False, margin=None)
 
 
@@ -335,21 +352,22 @@ def window_to_next_screen(qtile):
 
 
 @lazy.function
-def attach_screen(notify):
+def attach_screen(qtile, pos):
     global num_screen
-    if num_screen == 1:
-        subprocess.run('xrandr --output eDP --auto --output HDMI-A-0 --auto --right-of eDP', shell=True)
-        for k, (label, layouts, matches) in _groups.items():
-            qtile.add_group('{}-{}'.format(1, k), layouts=layouts, label=label)
+    if pos=='delete':
+        subprocess.run('xrandr --output HDMI-A-0 --off', shell=True)
+        # for k, (label, layouts, matches) in _groups.items():
+        #     qtile.delete_group('{}-{}'.format(1, k))
+        subprocess.run('feh --bg-fill {}'.format(home.joinpath('Pictures', 'wallpapers', 'main01.jpg')), shell=True)
+    else:
+        subprocess.run('xrandr --output eDP --auto --output HDMI-A-0 --auto --{} eDP'.format(pos), shell=True)
+        # for k, (label, layouts, matches) in _groups.items():
+        #     qtile.add_group('{}-{}'.format(1, k), layouts=layouts, matches=matches, label=label)
         subprocess.run('feh --bg-fill {} --bg-fill {}'.format(home.joinpath('Pictures', 'wallpapers', 'main01.jpg'),
                                                               home.joinpath('Pictures', 'wallpapers', 'main02.jpg')), shell=True)
-        num_screen = 2
-    else:
-        subprocess.run('xrandr --output HDMI-A-0 --off', shell=True)
-        for k, (label, layouts, matches) in _groups.items():
-            qtile.delete_group('{}-{}'.format(1, k))
-        num_screen = 1
-        # qtile.cmd_reload_config()
+    global monitor_pos
+    monitor_pos = '{}'.format(pos)
+
 
 keys = [
     # Switch between windows
@@ -408,7 +426,16 @@ keys = [
     Key([mod, 'shift'], 'f', lazy.window.toggle_floating()),
 
     # Attach Screen
-    Key([mod, 'control'], 'a', attach_screen()),
+    # Key([mod], 'a', attach_screen()),
+    KeyChord([mod], 'a', [
+        Key([], 'k', attach_screen('above')),
+        Key([], 'j', attach_screen('below')),
+        Key([], 'l', attach_screen('right-of')),
+        Key([], 'h', attach_screen('left-of')),
+        Key([], 'd', attach_screen('delete')),
+        ],
+        mode='attach'
+    ),
 
     # Change other layout
     Key([mod], 'Tab', lazy.next_layout(),
@@ -620,6 +647,8 @@ screens = [
                 widget.GroupBox(this_current_screen_border=colors['cyan'], borderwidth=2, **colorset3,
                                 active=colors['white']),
                 right_corner(**colorset4),
+                separator(),
+                widget.Chord(**colorset6),
                 widget.Spacer(),
                 left_corner(**colorset1),
                 widget.Clock(format='%Y-%m-%d %a %I:%M:%S %p', **colorset2),
@@ -675,7 +704,8 @@ screens = [
              left_corner(**colorset5),
              widget.TaskList(border=colors['cyan'], borderwidth=2, max_title_width=120, **colorset6),
              right_corner(**colorset5),
-             widget.Spacer()],
+             widget.Spacer(),
+             ],
             font_size,
             background=colors['clear'],
             border_color=colors['cyan'],
@@ -700,6 +730,7 @@ screens = [
                 widget.GroupBox(this_current_screen_border=colors['cyan'], borderwidth=2, **colorset3,
                                 active=colors['white']),
                 right_corner(**colorset4),
+                widget.Chord(**colorset6),
                 widget.Spacer(),
                 left_corner(**colorset1),
                 widget.Clock(format='%Y-%m-%d %a %I:%M:%S %p', **colorset2),
@@ -750,7 +781,8 @@ screens = [
              left_corner(**colorset5),
              widget.TaskList(border=colors['cyan'], borderwidth=2, max_title_width=120, **colorset6),
              right_corner(**colorset5),
-             widget.Spacer()],
+             widget.Spacer(),
+             ],
             font_size,
             background=colors['clear'],
             border_color=colors['cyan'],
