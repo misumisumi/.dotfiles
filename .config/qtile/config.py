@@ -669,7 +669,7 @@ def make_widgets():
         widget.Chord(**colorset6),
         widget.Spacer(),
         left_corner(**colorset1),
-        widget.Clock(format='%Y-%m-%d %a %I:%M:%S %p', **colorset2),
+        widget.Clock(format='%Y-%m-%d %a %H:%M:%S', **colorset2),
         right_corner(**colorset1),
         ]
     if laptop:
