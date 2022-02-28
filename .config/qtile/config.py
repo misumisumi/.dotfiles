@@ -66,6 +66,7 @@ if not laptop:
             else:
                 monitor2 = gidx
             subprocess.run('feh --bg-fill {} --bg-fill {}'.format(str(wallpapers[monitor1]), str(wallpapers[monitor2])), shell=True)
+    monitor_pos = 'right-of'
         
 # 擬似的に各スクリーンにグループが割り当てられるようにするための初期化
 def init_screen_and_group():
@@ -362,19 +363,20 @@ def window_to_next_screen(qtile):
 @lazy.function
 def attach_screen(qtile, pos):
     global num_screen
-    if pos=='delete':
-        subprocess.run('xrandr --output HDMI-A-0 --off', shell=True)
-        # for k, (label, layouts, matches) in _groups.items():
-        #     qtile.delete_group('{}-{}'.format(1, k))
-        subprocess.run('feh --bg-fill {}'.format(home.joinpath('Pictures', 'wallpapers', 'main01.jpg')), shell=True)
-    else:
-        subprocess.run('xrandr --output eDP --auto --output HDMI-A-0 --auto --{} eDP'.format(pos), shell=True)
-        # for k, (label, layouts, matches) in _groups.items():
-        #     qtile.add_group('{}-{}'.format(1, k), layouts=layouts, matches=matches, label=label)
-        subprocess.run('feh --bg-fill {} --bg-fill {}'.format(home.joinpath('Pictures', 'wallpapers', 'main01.jpg'),
-                                                              home.joinpath('Pictures', 'wallpapers', 'main02.jpg')), shell=True)
-    global monitor_pos
-    monitor_pos = '{}'.format(pos)
+    if laptop:
+        if pos=='delete':
+            subprocess.run('xrandr --output HDMI-A-0 --off', shell=True)
+            # for k, (label, layouts, matches) in _groups.items():
+            #     qtile.delete_group('{}-{}'.format(1, k))
+            subprocess.run('feh --bg-fill {}'.format(home.joinpath('Pictures', 'wallpapers', 'main01.jpg')), shell=True)
+        else:
+            subprocess.run('xrandr --output eDP --auto --output HDMI-A-0 --auto --{} eDP'.format(pos), shell=True)
+            # for k, (label, layouts, matches) in _groups.items():
+            #     qtile.add_group('{}-{}'.format(1, k), layouts=layouts, matches=matches, label=label)
+            subprocess.run('feh --bg-fill {} --bg-fill {}'.format(home.joinpath('Pictures', 'wallpapers', 'main01.jpg'),
+                                                                  home.joinpath('Pictures', 'wallpapers', 'main02.jpg')), shell=True)
+        global monitor_pos
+        monitor_pos = '{}'.format(pos)
 
 
 keys = [
