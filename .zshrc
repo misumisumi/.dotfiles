@@ -80,6 +80,11 @@ zinit ice silent; zinit snippet PZT::modules/completion
 
 # Connect libvirt root system
 alias ls="ls --color=auto"
+alias tp="trash-put"
+alias tls="trash-list"
+alias tre="trash-restore"
+alias temp="trash-empty"
+alias trm="trash-rm"
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
