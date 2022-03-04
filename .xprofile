@@ -18,7 +18,7 @@ picom --experimental-backends -b &
 alias termite='termite -e /usr/bin/zsh'
 /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
 thunar --daemon &
-xmodmap $HOME $HOME.Xmodmap
+# xmodmap $HOME $HOME.Xmodmap
 source /etc/profile.d/vte.sh
 xss-lock -- i3lock -n -i ./Pictures/archlinux_resize.png -t &
 blueman-applet &
