@@ -4,7 +4,12 @@ repo = 'Shougo/dein.vim'
 [[plugins]]
 repo = 'joshdick/onedark.vim'
 hook_add = '''
-    colorscheme onedark
+colorscheme onedark
+"$B%3%a%s%HEy$r$_$d$9$/$9$k(B
+let g:onedark_color_overrides={
+\ "comment_grey": { "gui": "#696969", "cterm": "41", "cterm16": "6" },
+\ "special_grey": { "gui": "#696969", "cterm": "41", "cterm16": "6" },
+\}
 '''
 
 [[plugins]]
@@ -20,17 +25,16 @@ repo = 'lambdalisue/suda.vim'
 [[plugins]]
 repo = 'easymotion/vim-easymotion'
 hook_add = '''
-    " <Leader>f{char} to move to {char}
-    nmap <Leader>f <Plug>(easymotion-overwin-f)
-    
-    " ss{char}{char} to move to {char}{char}
-    nmap ss <Plug>(easymotion-overwin-f2)
-    
-    " Move to line
-    nmap <Leader>L <Plug>(easymotion-overwin-line)
-    
-    " Move to word
-    nmap <Leader>w <Plug>(easymotion-overwin-w)
+nmap <Leader>f <Plug>(easymotion-overwin-f)
+
+" s{char}{char} to move to {char}{char}
+nmap s <Plug>(easymotion-overwin-f2)
+
+" Move to line
+nmap <Leader>l <Plug>(easymotion-overwin-line)
+
+" Move to word
+nmap <Leader>w <Plug>(easymotion-overwin-w)Plug>(easymotion-overwin-w)
 '''
 
 [[plugins]]
@@ -39,7 +43,7 @@ repo = 'tpope/vim-surround'
 [[plugins]]
 repo = 'lambdalisue/fern.vim'
 hook_add = '''
-    let g:fern#renderer = 'nerdfont'
+let g:fern#renderer = 'nerdfont'
 '''
 
 [[plugins]]
@@ -51,11 +55,11 @@ repo= 'lambdalisue/nerdfont.vim'
 [[plugins]] # Fern$B$N?'JQ$((B
 repo = 'lambdalisue/glyph-palette.vim'
 hook_add = '''
-    augroup my-glyph-palette
-        autocmd! *
-        autocmd FileType fern call glyph_palette#apply()
-        autocmd FileType nerdtree,startify call glyph_palette#apply()
-    augroup END
+augroup my-glyph-palette
+    autocmd! *
+    autocmd FileType fern call glyph_palette#apply()
+    autocmd FileType nerdtree,startify call glyph_palette#apply()
+augroup END
 '''
 
 [[plugins]] # Fern$B$K(Bgit status$B$rI=<((B
@@ -68,25 +72,46 @@ repo = 'lambdalisue/fern-hijack.vim'
 repo = 'yuki-yano/fern-preview.vim'
 hook_add = '''
 function! s:fern_settings() abort
-  nmap <silent> <buffer> p     <Plug>(fern-action-preview:toggle)
-  nmap <silent> <buffer> <C-p> <Plug>(fern-action-preview:auto:toggle)
-  nmap <silent> <buffer> <C-d> <Plug>(fern-action-preview:scroll:down:half)
-  nmap <silent> <buffer> <C-u> <Plug>(fern-action-preview:scroll:up:half)
+nmap <silent> <buffer> p     <Plug>(fern-action-preview:toggle)
+nmap <silent> <buffer> <C-p> <Plug>(fern-action-preview:auto:toggle)
+nmap <silent> <buffer> <C-d> <Plug>(fern-action-preview:scroll:down:half)
+nmap <silent> <buffer> <C-u> <Plug>(fern-action-preview:scroll:up:half)
 endfunction
 
 augroup fern-settings
-  autocmd!
-  autocmd FileType fern call s:fern_settings()
+autocmd!
+autocmd FileType fern call s:fern_settings()
 augroup END
 '''
 
 [[plugins]]
 repo = 'junegunn/fzf.vim'
 hook_add = '''
-    " Preview window on the upper side of the window with 40% height,
-    " hidden by default, ctrl-/ to toggle
-    let g:fzf_preview_window = ['up:40%:hidden', 'ctrl-/']
+" Preview window on the upper side of the window with 40% height,
+" hidden by default, ctrl-/ to toggle
+let g:fzf_preview_window = ['up:40%', 'ctrl-/']
+" [Buffers] Jump to the existing window if possible
+let g:fzf_buffers_jump = 1
 '''
+
+[[plugins]]
+repo = 'vim-airline/vim-airline'
+hook_add = '''
+let g:airline_theme = 'deus'
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_powerline_fonts = 1 
+let g:airline#extensions#whitespace#enabled = 0
+let g:airline_section_c = '%t %M'
+let g:airline_section_z = get(g:, 'airline_linecolumn_prefix', '').'%3l:%-2v'
+" 変更がなければdiffの行数を表示しない
+let g:airline#extensions#hunks#non_zero_only = 1 
+let g:airline#extensions#default#layout = [
+    \ [ 'a', 'b', 'c'],
+    \ [ 'y', 'z' ],
+    \] 
+'''
+[[plugins]]
+repo = 'vim-airline/vim-airline-themes'
 
 [[plugins]]
 repo = 'neoclide/coc.nvim'
