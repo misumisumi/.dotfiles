@@ -70,13 +70,12 @@ if not laptop:
         
 # 擬似的に各スクリーンにグループが割り当てられるようにするための初期化
 def init_screen_and_group():
-    time.sleep(0.05)
     qtile.cmd_to_screen(0)
     qtile.current_screen.set_group(qtile.groups[0])
-    time.sleep(0.05)
     try:
         qtile.cmd_to_screen(1)
         qtile.current_screen.set_group(qtile.groups[7])
+        qtile.cmd_to_screen(0)
     except:
         pass
 
@@ -310,15 +309,6 @@ def focus_prev_screen(qtile,):
 
 
 @lazy.function
-def focus_next_screen(qtile,):
-    n_screen = len(qtile.screens)
-    idx = qtile.screens.index(qtile.current_screen)
-    next_idx = idx + 1
-    if next_idx < n_screen:
-        qtile.cmd_to_screen(next_idx)
-
-
-@lazy.function
 def focus_cycle_screen(qtile, backward=False):
     n_screen = len(qtile.screens)
     idx = qtile.screens.index(qtile.current_screen)
@@ -421,8 +411,6 @@ keys = [
     Key([mod, 'shift', 'control'], 'l',
         window_to_next_group(), keep_pinp(), desc='win to next group'),
 
-    # Key([mod], 'p', focus_prev_screen(),  desc='focus prev screen'),
-    # Key([mod], 'n', focus_next_screen(),  desc='focus next screen'),
     Key([mod], 'n', focus_cycle_screen(),  desc='focus next screen'),
     Key([mod], 'm', focus_cycle_screen(backward=True),  desc='focus next screen'),
     # Key([mod, 'shift'], 'p', window_to_previous_screen(), keep_pinp()),
@@ -543,8 +531,12 @@ layouts3 = [
                    ),
     ]
 # For media
+if laptop:
+    pa_width=350
+else:
+    pa_width=500
 layouts4 = [
-    layout.Slice(match=Match(wm_class='pavucontrol'), width=350, side='bottom',
+    layout.Slice(match=Match(wm_class='pavucontrol'), width=pa_width, side='bottom',
                  fallback=layouts[0]),
     ]
 
