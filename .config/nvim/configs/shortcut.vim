@@ -11,6 +11,11 @@ au FileType quickrun,fzf nmap <silent><buffer>q :q<CR>
 au FileType fern nmap <silent><buffer>E <Plug>(fern-action-open:vsplit)
 imap <silent> jj <C-\><C-n>
 
+" easy-align
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
 
 nmap <Leader>qq :q<CR>
 nmap <Leader>wq :wq<CR>
@@ -35,7 +40,9 @@ nmap <Leader>a :<C-u>Ag<CR>
 nmap <Leader>r :<C-u>Rg<CR>
 nmap <Leader>c :<C-u>Command<CR>
 nmap <Leader>gf :<C-u>GFiles<CR>
+" command History
 nmap <Leader>ch :<C-u>History:<CR>
+" Search History
 nmap <Leader>sh :<C-u>History/<CR>
 nmap <Leader>map :<C-u>Maps<CR>
 nmap <Leader>com :<C-u>Commit<CR>
@@ -47,6 +54,8 @@ au FileType nmap <expr><silent> <C-c> quickrun#is_running() ? quickrun#sweep_ses
 
 " For Markdown Preview
 au FileType markdown nmap <Leader>p <Plug>MarkdownPreviewToggle
+au FileType markdown nmap <Leader>ms <Plug>:MarpStart
+au FileType markdown nmap <Leader>mq <Plug>:MarpStop
 
 " when terminal
 " Terminal起動時ESC or jjでcmd modeに戻れるようにする
@@ -67,3 +76,6 @@ nmap <Leader>gp :Git push<CR>
 " For vim-gitgutter
 nmap <Leader>ha <Plug>GitGutterStageHunk
 nmap <Leader>hu <Plug>GitGutterRevertHunk
+
+" For open-browser
+nmap <Leader>o <Plug>(openbrowser-smart-search)

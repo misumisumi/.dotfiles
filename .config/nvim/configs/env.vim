@@ -53,6 +53,7 @@ set fileformats=unix,dos,mac "改行コードの自動判別
 set mouse=a
 set list "制御文字の表示
 set splitbelow
+set pumblend=10 "透過率10%
 
 "Fern
 let g:fern#default_hidden=1
