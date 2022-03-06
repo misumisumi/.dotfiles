@@ -59,13 +59,11 @@ nmap <C-n> <Plug>AirlineSelectNextTab
 
 " For fugitive
 nmap <Leader>ga :Gwrite<CR>
-nmap <Leader>gc :Git commit -m 
+nmap <Leader>gc :Git commit<CR>
 nmap <Leader>gs :Git<CR>
 nmap <Leader>gd :Git diff<CR>
 
 
 " For vim-gitgutter
-nmap <Leader>hn <Plug>GitGutterNextHunk
-nmap <Leader>hp <Plug>GitGutterPrevHunk
 nmap <Leader>ha <Plug>GitGutterStageHunk
 nmap <Leader>hu <Plug>GitGutterRevertHunk
