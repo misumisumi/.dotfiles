@@ -7,7 +7,7 @@
 "    let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 "  endif
 "endif
-"
+
 execute 'source' "~/.config/nvim/configs/env.vim"
 let splt = split(glob("~/.config/nvim/configs/" . "*.vim"))
 
