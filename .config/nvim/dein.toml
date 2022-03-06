@@ -21,6 +21,9 @@ repo = 'vimlab/split-term.vim'
 repo = 'tpope/vim-fugitive'
 
 [[plugins]]
+repo = 'airblade/vim-gitgutter'
+
+[[plugins]]
 repo = 'easymotion/vim-easymotion'
 hook_add = '''
 nmap <Leader>f <Plug>(easymotion-overwin-f)

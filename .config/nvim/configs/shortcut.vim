@@ -56,3 +56,8 @@ tmap <silent> jj <C-\><C-n>
 " Airline
 nmap <C-p> <Plug>AirlineSelectPrevTab
 nmap <C-n> <Plug>AirlineSelectNextTab
+
+" For fugitive
+nmap <Leader>ga :Git add %:p<CR><CR>
+nmap <Leader>gc :Git commit<CR><CR>
+nmap <Leader>gs :Git<CR>
