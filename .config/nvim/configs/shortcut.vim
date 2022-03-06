@@ -62,6 +62,7 @@ nmap <Leader>ga :Gwrite<CR>
 nmap <Leader>gc :Git commit<CR>
 nmap <Leader>gs :Git<CR>
 nmap <Leader>gd :Gdiffsplit<CR>
+nmap <Leader>gp :Git push<CR>
 
 " For vim-gitgutter
 nmap <Leader>ha <Plug>GitGutterStageHunk
