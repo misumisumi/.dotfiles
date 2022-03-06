@@ -97,6 +97,7 @@ export FrameworkPathOverride=/lib/mono/4.8-api/
 export PYENV_ROOT="$HOME/.pyenv"
 export CUDA_DEVICE_ORDER=PCI_BUS_ID
 export PATH="$PYENV_ROOT/bin:/opt/Ryzen Controller:$PATH"
+export CHROME_PATH=$(which vivaldi-stable)
 eval "$(pyenv init --path)"
 eval "$(pyenv init -)"
 
