@@ -20,10 +20,6 @@ repo = 'junegunn/vim-easy-align'
 repo = 'tyru/open-browser.vim'
 
 [[plugins]]
-repo = 'chrisbra/csv.vim'
-on_ft = ['csv']
-
-[[plugins]]
 repo = 'tpope/vim-fugitive'
 
 [[plugins]]
@@ -38,6 +34,10 @@ let g:fzf_preview_window = ['up:40%', 'ctrl-/']
 " [Buffers] Jump to the existing window if possible
 let g:fzf_buffers_jump = 1
 '''
+
+[[plugins]]
+repo = 'chrisbra/csv.vim'
+on_ft = ['csv']
 
 [[plugins]]
 repo = 'neoclide/coc.nvim'
