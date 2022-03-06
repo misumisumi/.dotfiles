@@ -93,7 +93,7 @@ def autostart():
 # spotifyは起動直後はwindow nameを出さないため数msのdelayを設ける
 @hook.subscribe.client_new
 async def move_spotify(window):
-    await asyncio.sleep(0.005)
+    await asyncio.sleep(0.01)
     if window.name == 'Spotify':
         window.togroup('0-media')
     elif window.name == 'ピクチャー イン ピクチャー':
