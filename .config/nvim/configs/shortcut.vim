@@ -61,8 +61,7 @@ nmap <C-n> <Plug>AirlineSelectNextTab
 nmap <Leader>ga :Gwrite<CR>
 nmap <Leader>gc :Git commit<CR>
 nmap <Leader>gs :Git<CR>
-nmap <Leader>gd :Git diff<CR>
-
+nmap <Leader>gd :Gdiffsplit<CR>
 
 " For vim-gitgutter
 nmap <Leader>ha <Plug>GitGutterStageHunk
