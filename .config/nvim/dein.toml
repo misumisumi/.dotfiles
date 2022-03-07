@@ -120,6 +120,11 @@ build = 'make'
 repo = 'machakann/vim-sandwich'
 
 [[plugins]]
+repo = 'junegunn/fzf'
+build = './install --bin'
+merged = '0'
+
+[[plugins]]
 repo = 'junegunn/fzf.vim'
 hook_add = '''
 " Preview window on the upper side of the window with 40% height,
