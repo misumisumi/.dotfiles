@@ -26,7 +26,12 @@
     }
   },
   "diagnostic-languageserver.filetypes": {
-    "python": "pylint"
+    "python": "pylint",
+    "vim": "vint",
+    "markdown": "markdownlint",
+    "sh": "shellcheck",
+    "yaml": "yamllint",
+    "systemd": "systemd-analyze"
   },
   "diagnostic-languageserver.linters": {
     "pylint": {
