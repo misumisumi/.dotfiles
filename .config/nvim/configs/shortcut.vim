@@ -2,8 +2,6 @@
 " リーダーをspaceに
 let mapleader = "\<Space>"
 
-" when normal mode
-nmap <silent> <C-l> :<C-u>nohlsearch<CR><C-l>
 nmap <Leader>n :Fern . -reveal=% -drawer -toggle<CR>
 nmap <Leader>ss :source "~/.config/nvim/init.vim"<CR>
 nmap <Leader><Enter> :25Term<CR>
@@ -38,8 +36,22 @@ nmap <Leader>m :<C-u>Marks<CR>
 nmap <Leader>h :<C-u>History<CR>
 nmap <Leader>a :<C-u>Ag<CR>
 nmap <Leader>r :<C-u>Rg<CR>
-nmap <Leader>c :<C-u>Command<CR>
+nmap <Leader>cm :<C-u>Command<CR>
 nmap <Leader>gf :<C-u>GFiles<CR>
+
+" For coc-fzf
+nmap <Leader><space> :<C-u>CocFzfList<CR>
+nmap <Leader>cda :<C-u>CocFzfList diagnostics<CR>
+nmap <Leader>cdc :<C-u>CocFzfList diagnostics --current-buf<CR>
+nmap <Leader>cc :<C-u>CocFzfList commands<CR>
+nmap <Leader>cl :<C-u>CocFzfList location<CR>
+nmap <Leader>co :<C-u>CocFzfList outline<CR>
+nmap <Leader>cs :<C-u>CocFzfList symbols<CR>
+nmap <Leader>cr :<C-u>CocFzfListResume<CR>
+
+tmap <expr> <Esc> (&filetype == "fzf") ? "<Esc>" : "<c-\><c-n>"
+tmap <expr> jj (&filetype == "fzf") ? "<Esc>" : "<c-\><c-n>"
+
 " command History
 nmap <Leader>ch :<C-u>History:<CR>
 " Search History
@@ -50,6 +62,7 @@ nmap <Leader>com :<C-u>Commit<CR>
 " For quickrun
 let g:quickrun_no_default_key_mappings = 1
 au FileType python nmap <Leader>p :write<CR>:QuickRun -mode n<CR>      
+" au FileType tex vmap <Leader>p :QuickRun -mode v -type tmptex<CR>
 au FileType nmap <expr><silent> <C-c> quickrun#is_running() ? quickrun#sweep_sessions() : "\<C-c>"
 
 " For Markdown Preview
@@ -79,3 +92,8 @@ nmap <Leader>hu <Plug>GitGutterRevertHunk
 
 " For open-browser
 nmap <Leader>o <Plug>(openbrowser-smart-search)
+
+" pydocsting
+nmap <Leader>da <Plug>(coc-codeaction-line)
+xmap <Leader>da <Plug>(coc-codeaction-selected)
+nmap <Leader>dA <Plug>(coc-codeaction)
