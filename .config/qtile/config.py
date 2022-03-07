@@ -6,13 +6,12 @@ import time
 import os
 import copy
 
-from libqtile import bar, layout, widget, hook
+from libqtile import qtile, bar, layout, widget, hook
 from libqtile.config import Click, Drag, Group, Key, KeyChord, Match, Screen
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
 from libqtile.log_utils import logger
 from libqtile.core.manager import Qtile
-from libqtile import qtile
 
 laptop = 'sumi-zephyrus' == os.uname()[1]
 
