@@ -7,18 +7,18 @@
 "\ 'exec': '%c, -gg -pdfxe %s',
 "\}
 
-let g:quickrun_config = {
-\   'tex': {
-\       'runner' : 'vimproc',
-\       'runner/vimproc/updatetime' : 30,
-\       'outputter/error/success': 'buffer',
-\       'outputter/error/error': 'quickfix',
-\       'outputter/buffer/opener': '20new',
-\       'outputter/buffer/close_on_empty': 1,
-\       'command': 'latexmk',
-\       'exec': ['%c -gg -pdfxe %s']
-\   },
-\}
+"let g:quickrun_config = {
+"\   'tex': {
+"\       'runner' : 'vimproc',
+"\       'runner/vimproc/updatetime' : 30,
+"\       'outputter/error/success': 'buffer',
+"\       'outputter/error/error': 'quickfix',
+"\       'outputter/buffer/opener': '20new',
+"\       'outputter/buffer/close_on_empty': 1,
+"\       'command': 'latexmk',
+"\       'exec': ['%c -gg -pdfxe %s']
+"\   },
+"\}
 
 " 部分的に選択してコンパイル
 " http://auewe.hatenablog.com/entry/2013/12/25/033416 を参考に

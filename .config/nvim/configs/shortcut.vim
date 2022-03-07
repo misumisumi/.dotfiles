@@ -61,7 +61,7 @@ nmap <Leader>com :<C-u>Commit<CR>
 
 " For quickrun
 let g:quickrun_no_default_key_mappings = 1
-au FileType python nmap <Leader>p :write<CR>:QuickRun -mode n<CR>      
+au FileType python,sh nmap <Leader>p :write<CR>:QuickRun -mode n<CR>      
 " au FileType tex vmap <Leader>p :QuickRun -mode v -type tmptex<CR>
 au FileType nmap <expr><silent> <C-c> quickrun#is_running() ? quickrun#sweep_sessions() : "\<C-c>"
 
