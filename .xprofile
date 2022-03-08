@@ -13,7 +13,6 @@ devmon &
 fcitx5 &
 xhost si:localuser:$USER &
 flameshot &
-copyq &
 picom --experimental-backends -b &
 alias termite='termite -e /usr/bin/zsh'
 /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
