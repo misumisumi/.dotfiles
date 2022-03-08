@@ -28,8 +28,9 @@ colors2 = {
         'bcyan': "#02b7c7", 'bwhite': "#a7b0b5"
         }
 
-pinp_margin = 3
 pinp_scale = 3
+borderwidth = 2
+pinp_margin = 3 + borderwidth
 
 mod = 'mod4' # super key
 terminal = 'kitty'
@@ -99,8 +100,9 @@ async def move_spotify(window):
         # 画面サイズに合わせて自動的にPinPのサイズとポジションを決定する
         screen_size = (qtile.current_screen.width, qtile.current_screen.height)
         pinp_size = [s//pinp_scale for s in screen_size]
-        pinp_size[0] = pinp_size[0] - margin
         pinp_pos = [s-p for s, p in zip(screen_size, pinp_size)]
+        pinp_pos[0] = pinp_pos[0] - pinp_margin
+
         global pinp_window
         pinp_window = window
         idx = qtile.screens.index(qtile.current_screen)
@@ -110,7 +112,7 @@ async def move_spotify(window):
             pinp_pos[1] += screen_size[1]
         else:
             pass
-        window.cmd_place(*pinp_pos, *pinp_size, borderwidth=2,
+        window.cmd_place(*pinp_pos, *pinp_size, borderwidth=borderwidth,
                          bordercolor=colors['cyan'], above=False, margin=None)
     elif window.name == 'WaveSurfer 1.8.8p5':
         window.togroup('0-analyze')
@@ -188,23 +190,23 @@ def move_pinp(qtile, pos):
     if pinp_window is not None and idx == now_pinp_screen:
         screen_size = (qtile.current_screen.width, qtile.current_screen.height)
         pinp_size = [s//pinp_scale for s in screen_size]
-        pinp_size[0] = pinp_size[0] - margin
+        pinp_size[0] = pinp_size[0]
         pinp_pos = [pinp_window.float_x, pinp_window.float_y]
         if pos == 'up':
             pinp_pos[1] = 0
         elif pos == 'down':
-            pinp_pos[1] = screen_size[1] - pinp_size[1]
+            pinp_pos[1] = screen_size[1] - pinp_size[1] - pinp_margin
         elif pos == 'left':
             pinp_pos[0] = pinp_margin
         else:
-            pinp_pos[0] = screen_size[0] - pinp_size[0] - margin
+            pinp_pos[0] = screen_size[0] - pinp_size[0] - pinp_margin
         if (monitor_pos == 'right-of' and idx == 1) or (monitor_pos == 'left-of' and idx == 0):
             pinp_pos[0] += screen_size[0]
         elif (monitor_pos == 'above' and idx == 0) or (monitor_pos == 'below' and idx == 1):
             pinp_pos[1] += screen_size[1]
         else:
             pass
-        pinp_window.cmd_place(*pinp_pos, *pinp_size, borderwidth=2,
+        pinp_window.cmd_place(*pinp_pos, *pinp_size, borderwidth=borderwidth,
                          bordercolor=colors['cyan'], above=False, margin=None)
 
 
@@ -487,7 +489,7 @@ keys = [
 
 ]
 
-default_settings = {'border_width': 2,
+default_settings = {'border_width': borderwidth,
                   'border_focus': colors['blue'],
                   'border_normal': colors['BGbase']}
 margin = 10
@@ -514,7 +516,7 @@ layouts2 = [
     layout.MonadWide(**default_settings,
                      ratio=0.6,
                      new_client_position='bottom',
-                     single_border_width=2,
+                     single_border_width=borderwidth,
                      margin=margin, single_margin=margin
                      ),
         ]
@@ -640,7 +642,7 @@ def make_widgets():
         right_corner(**colorset1),
         separator(),
         left_corner(**colorset4),
-        widget.GroupBox(this_current_screen_border=colors['cyan'], borderwidth=2, **colorset3,
+        widget.GroupBox(this_current_screen_border=colors['cyan'], borderwidth=borderwidth, **colorset3,
                         active=colors['white']),
         right_corner(**colorset4),
         ]
@@ -673,7 +675,7 @@ def make_widgets():
         top_widgets += [
             separator(),
             left_corner(**colorset4),
-            widget.TaskList(border=colors['BGbase'], borderwidth=2, max_title_width=80, **colorset3),
+            widget.TaskList(border=colors['BGbase'], borderwidth=borderwidth, max_title_width=80, **colorset3),
             right_corner(**colorset4),
             separator()
         ]
@@ -712,7 +714,7 @@ def make_widgets():
                  right_corner(**colorset7),
                  widget.Spacer(),
                  left_corner(**colorset5),
-                 widget.TaskList(border=colors['cyan'], borderwidth=2, max_title_width=120, **colorset6),
+                 widget.TaskList(border=colors['cyan'], borderwidth=borderwidth, max_title_width=120, **colorset6),
                  right_corner(**colorset5),
                  widget.Spacer(),
                  ],
