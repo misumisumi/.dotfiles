@@ -2,16 +2,14 @@ from typing import List  # noqa: F401
 from pathlib import Path
 import subprocess
 import asyncio
-import time
 import os
-import copy
 
+from libqtile.core.manager import Qtile
 from libqtile import qtile, bar, layout, widget, hook
 from libqtile.config import Click, Drag, Group, Key, KeyChord, Match, Screen
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
 from libqtile.log_utils import logger
-from libqtile.core.manager import Qtile
 
 laptop = 'sumi-zephyrus' == os.uname()[1]
 
@@ -29,6 +27,7 @@ colors2 = {
         'bblue': "#c9c30e", 'bmagenta': "#9c0082",
         'bcyan': "#02b7c7", 'bwhite': "#a7b0b5"
         }
+
 pinp_margin = 3
 pinp_scale = 3
 
@@ -81,6 +80,7 @@ def init_screen_and_group():
 # StartUp
 @hook.subscribe.startup_once
 def autostart():
+    subprocess.run('copyq', shell=True)
     if laptop:
         subprocess.run('feh --bg-fill {} --bg-fill {}'.format(home.joinpath('Pictures', 'wallpapers', 'main01.jpg'),
                                                               home.joinpath('Pictures', 'wallpapers', 'main02.jpg')), shell=True)
