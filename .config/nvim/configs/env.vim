@@ -54,6 +54,10 @@ set mouse=a
 set list "制御文字の表示
 set splitbelow
 set pumblend=10 "透過率10%
+set nowrap
+set colorcolumn=80,100
+"highlight ColorColumn guibg=#696969 ctermbg=41
+highlight ColorColumn guibg=#3B4048 ctermbg=238
 
 "Fern
 let g:fern#default_hidden=1
