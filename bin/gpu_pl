@@ -1,0 +1,9 @@
+#! /bin/bash
+
+nvidia-smi -L | while read line
+do
+    gpuid=$(echo $line | awk -F':' '{print $1}' | sed -e 's/GPU //g')
+    default_pl=$(echo $(nvidia-smi -i $gpuid -q -d POWER | grep 'Default Power Limit' | awk -F':' '{print $2}' | sed -e 's/ W//g'))
+    lower_pl=$(echo $default_pl*0.8 | bc)
+    nvidia-smi -i $gpuid -pl $lower_pl
+done

@@ -1,0 +1,9 @@
+DIR=${1:-./}
+
+for file in $(ls -F $DIR | grep -v /); do
+    DATE=$(echo $file | awk -F "_" '{print $3}')
+    if [ ! -d $DATE ]; then
+        mkdir -P $DIR/$DATE
+    fi
+    mv $file $DIR/$DATE
+done

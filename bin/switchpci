@@ -1,0 +1,33 @@
+#! /usr/bin/env bash
+GPU=${1:-2070}
+ENTRYFILES=/boot/loader/entries/*
+if [ ! $USER = root ]; then
+    echo "Please run under root user"
+    exit 1
+fi
+
+for ENTRYFILE in $ENTRYFILES; do
+    if [ "$(cat $ENTRYFILE | tail -n1 )" = "options" ]; then
+        echo -e "$(basename $ENTRYFILE): \033[0;31mLinux only to Shared VM\033[0;39m"
+        if [ $GPU -eq 3090 ]; then
+            echo "Attach RTX3090 to vfio"
+            sed -i -e "$ s/options/options vfio-pci.ids=10de:2204,10de:1aef/g" $ENTRYFILE
+        elif [ $GPU -eq 2070 ]; then
+            echo "Attach RTX2070S to vfio"
+            sed -i -e "$ s/options/options vfio-pci.ids=10de:1e84,10de:10f8,10de:1ad8,10de:1ad9/g" $ENTRYFILE
+        else
+            echo -e "\033[0;31mGPU is only 0 or 2\033[0;39m"
+        fi
+    else
+        echo -e "$(basename $ENTRYFILE): \033[0;31mShared VM to Linux only\033[0;39m"
+        if [ $GPU -eq 3090 ]; then
+            echo "Dettach RTX3090 from vfio"
+            sed -i -e "$ s/options vfio-pci.ids=10de:2204,10de:1aef/options/g" $ENTRYFILE
+        elif [ $GPU -eq 2070 ]; then
+            echo "Dettach RTX2070S from vfio"
+            sed -i -e "$ s/options vfio-pci.ids=10de:1e84,10de:10f8,10de:1ad8,10de:1ad9/options/g" $ENTRYFILE
+        else
+            echo -e "\033[0;31mGPU is only 0 or 2\033[0;39m"
+        fi
+    fi
+done

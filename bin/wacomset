@@ -1,0 +1,5 @@
+xsetwacom --set $(xsetwacom --list devices | grep STYLUS | awk '{print $9}') MapToOutput "2560x1440+0+0"
+xsetwacom --set $(xsetwacom --list devices | grep "Pad pad" | awk '{print $9}') Button 8 5
+xsetwacom --set $(xsetwacom --list devices | grep "Pad pad" | awk '{print $9}') Button 9 4
+xsetwacom --set $(xsetwacom --list devices | grep "Pad pad" | awk '{print $9}') Button 3 "key +ctrl z -ctrl"
+xsetwacom --set $(xsetwacom --list devices | grep "Pad pad" | awk '{print $9}') Button 1 "key +ctrl +shift z -ctrl -shift"

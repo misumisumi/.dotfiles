@@ -1,0 +1,1 @@
+sox -M $owavA $owavB -c 2 $owav2ch

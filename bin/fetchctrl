@@ -1,0 +1,15 @@
+#!/usr/bin/env bash 
+LINE=$(cat '/proc/bus/input/devices' | grep -n Microsoft | awk -F':' '{print $1}')
+if [ $LINE = ""]; then
+    echo "No contloller!"
+    lxc profile apply steam default,gui,pulse4lxc
+else
+    LINE=$(($LINE+2))
+    EVENT=$(cat '/proc/bus/input/devices' | sed -n '313,313p' | awk -F'=' '{print $2}' | awk '{print $1}')
+    JS=$(cat '/proc/bus/input/devices' | sed -n '313,313p' | awk -F'=' '{print $2}' | awk '{print $2}')
+    lxc profile device set ctrl js_event source=/dev/input/$EVENT
+    lxc profile device set ctrl js source=/dev/input/$JS
+    lxc profile show ctrl
+    lxc profile apply steam default,gui,pulse4lxc,ctrl
+fi
+echo 'Done'
