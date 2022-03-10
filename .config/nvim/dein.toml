@@ -33,6 +33,9 @@ nmap <Leader>w <Plug>(easymotion-overwin-w)Plug>(easymotion-overwin-w)
 repo = 'tpope/vim-surround'
 
 [[plugins]]
+repo = 'cohama/lexima.vim'
+
+[[plugins]]
 repo = 'lambdalisue/fern.vim'
 hook_add = '''
 let g:fern#renderer = 'nerdfont'
