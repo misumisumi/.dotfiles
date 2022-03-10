@@ -53,7 +53,9 @@ set fileformats=unix,dos,mac "改行コードの自動判別
 set mouse=a
 set list "制御文字の表示
 set splitbelow
-set pumblend=10 "透過率10%
+"透過率20%
+set winblend=20 
+set pumblend=20 
 set nowrap
 set colorcolumn=80,100
 "highlight ColorColumn guibg=#696969 ctermbg=41
