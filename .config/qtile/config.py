@@ -306,15 +306,6 @@ def move_n_screen_group(qtile, idx, g_per_s):
 
 
 @lazy.function
-def focus_prev_screen(qtile,):
-    n_screen = len(qtile.screens)
-    idx = qtile.screens.index(qtile.current_screen)
-    prev_idx = idx - 1
-    if prev_idx >= 0:
-        qtile.cmd_to_screen(prev_idx)
-
-
-@lazy.function
 def focus_cycle_screen(qtile, backward=False):
     n_screen = len(qtile.screens)
     idx = qtile.screens.index(qtile.current_screen)
@@ -551,7 +542,7 @@ layouts4 = [
 match_code = [Match(wm_class='code')]
 match_browse = [Match(wm_class='vivaldi-stable'), Match(wm_class='firefox'),
                 Match(wm_class='virt-manager')]
-match_paper = [Match(wm_class='zathura')]
+match_paper = [Match(wm_class='org.pwmt.zathura')]
 match_analyze = [Match(title='WaveSurfer 1.8.8p5'), Match(wm_class='thunar'),
                  Match(wm_class='mpv')]
 match_full = [Match(wm_class='Steam'), Match(wm_class='krita'),
