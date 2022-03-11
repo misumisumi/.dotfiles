@@ -19,15 +19,6 @@ repo = 'vimlab/split-term.vim'
 
 [[plugins]]
 repo = 'easymotion/vim-easymotion'
-hook_add = '''
-nmap <Leader>f <Plug>(easymotion-overwin-f)
-" s{char}{char} to move to {char}{char}
-nmap s <Plug>(easymotion-overwin-f2)
-" Move to line
-nmap <Leader>l <Plug>(easymotion-overwin-line)
-" Move to word
-nmap <Leader>w <Plug>(easymotion-overwin-w)Plug>(easymotion-overwin-w)
-'''
 
 [[plugins]]
 repo = 'tpope/vim-surround'
