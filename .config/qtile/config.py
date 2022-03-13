@@ -648,9 +648,9 @@ def make_widgets():
         top_widgets += [
             separator(),
             left_corner(**colorset1),
-            widget.CPU(format=' {load_percent}%', **colorset2),
+            widget.CPU(format=' {load_percent:0=4.1f}%', **colorset2),
             right_corner(**colorset1),
-            widget.Memory(format=' {MemUsed: .1f}{mm}/{MemTotal: .1f}{mm}',
+            widget.Memory(format=' {MemUsed:0=4.1f}{mm}/{MemTotal: .1f}{mm}',
                           measure_mem='G', measure_swap='G', **colorset1),
             right_corner(**colorset2),
             widget.DF(format = " {uf}{m}/{s}{m} ({r:.0f}%)", visible_on_warn=False,
@@ -702,9 +702,9 @@ def make_widgets():
         bottom_bar = bar.Bar([
                  separator(),
                  left_corner(**colorset7),
-                 widget.CPU(format=' {load_percent}%', **colorset2),
+                 widget.CPU(format=' {load_percent:0=4.1f}%', **colorset2),
                  right_corner(**colorset1),
-                 widget.Memory(format=' {MemUsed: .1f}{mm}/{MemTotal: .1f}{mm}',
+                 widget.Memory(format=' {MemUsed:0=4.1f}{mm}/{MemTotal: .1f}{mm}',
                                measure_mem='G', measure_swap='G', **colorset1),
                  right_corner(**colorset2),
                  widget.DF(format = " {uf}{m}/{s}{m} ({r:.0f}%)", visible_on_warn=False,
