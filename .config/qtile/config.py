@@ -458,7 +458,7 @@ keys = [
     Key([mod], "comma", float_cycle_backward()),
 
     Key([mod], 'q', lazy.spawn('copyq toggle')),
-    Key([mod], 'b', lazy.spawn(browser)),
+    # Key([mod], 'b', lazy.spawn(browser)),
 
     Key([], 'XF86AudioRaiseVolume', lazy.spawn('pactl set-sink-volume @DEFAULT_SINK@ +5%')),
     Key([], 'XF86AudioLowerVolume', lazy.spawn('pactl set-sink-volume @DEFAULT_SINK@ -5%')),
