@@ -653,7 +653,7 @@ def make_widgets():
             widget.Memory(format=' {MemUsed: .1f}{mm}/{MemTotal: .1f}{mm}',
                           measure_mem='G', measure_swap='G', **colorset1),
             right_corner(**colorset2),
-            widget.DF(format = " {f} GB ({r:.0f}%)", visible_on_warn=False,
+            widget.DF(format = " {uf}{m}/{s}{m} ({r:.0f}%)", visible_on_warn=False,
                       partition='/home', **colorset2),
             right_corner(**colorset1),
         ]
@@ -707,7 +707,7 @@ def make_widgets():
                  widget.Memory(format=' {MemUsed: .1f}{mm}/{MemTotal: .1f}{mm}',
                                measure_mem='G', measure_swap='G', **colorset1),
                  right_corner(**colorset2),
-                 widget.DF(format = " {f} GB ({r:.0f}%)", visible_on_warn=False,
+                 widget.DF(format = " {uf}{m}/{s}{m} ({r:.0f}%)", visible_on_warn=False,
                            partition='/home', **colorset2),
                  right_corner(**colorset7),
                  widget.Spacer(),
