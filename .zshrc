@@ -65,7 +65,6 @@ alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
 alias gpus='NVIDIA_VISIBLE_DEVICE'
-alias ssh='kitty +kitten ssh'
 alias tty-clock='tty-clock -s -c -C 6'
 
 export LIBVIRT_DEFAULT_URI="qemu:///system"
@@ -76,6 +75,7 @@ export PATH="$PYENV_ROOT/bin:/opt/Ryzen Controller:$PATH":$HOME/bin
 export CHROME_PATH=$(which vivaldi-stable)
 
 if [ ! $USER = 'pt_kobayashi' ]; then
+    alias ssh='kitty +kitten ssh'
     eval "$(pyenv init --path)"
     eval "$(pyenv init -)"
 fi
