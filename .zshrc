@@ -5,15 +5,6 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-#
-# Executes commands at the start of an interactive session.
-#
-# Authors:
-#   Sorin Ionescu <sorin.ionescu@gmail.com>
-#
-# Customize to your needs...
-
-
 autoload -Uz promptinit
 promptinit
 prompt off
@@ -29,26 +20,6 @@ fi
 if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
 fi
-
-### Added by Zinit's installer
-# if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
-#     print -P "%F{33}▓▒░ %F{220}Installing %F{33}DHARMA%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
-#     command mkdir -p "$HOME/.zinit" && command chmod g-rwX "$HOME/.zinit"
-#     command git clone https://github.com/zdharma-continuum/zinit "$HOME/.zinit/bin" && \
-#         print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
-#         print -P "%F{160}▓▒░ The clone has failed.%f%b"
-# fi
-# 
-# source "$HOME/.zinit/bin/zinit.zsh"
-# autoload -Uz _zinit
-# (( ${+_comps} )) && _comps[zinit]=_zinit
-# 
-# # Load a few important annexes, without Turbo
-# # (this is currently required for annexes)
-# zinit light-mode for \
-#     zinit-zsh/z-a-as-monitor \
-#     zinit-zsh/z-a-patch-dl \
-#     zinit-zsh/z-a-bin-gem-node
 
 if [[ ! -f $HOME/.zi/bin/zi.zsh ]]; then
     sh -c "$(curl -fsSL https://git.io/get-zi)" --
@@ -103,8 +74,11 @@ export PYENV_ROOT="$HOME/.pyenv"
 export CUDA_DEVICE_ORDER=PCI_BUS_ID
 export PATH="$PYENV_ROOT/bin:/opt/Ryzen Controller:$PATH":$HOME/bin
 export CHROME_PATH=$(which vivaldi-stable)
-eval "$(pyenv init --path)"
-eval "$(pyenv init -)"
+
+if [ ! $USER = 'pt_kobayashi' ]; then
+    eval "$(pyenv init --path)"
+    eval "$(pyenv init -)"
+fi
 
 # if [ -n "${SSH_CLIENT}" ]; then
 #     export PULSE_SERVER=$SSH_CLIENT
@@ -120,3 +94,28 @@ setopt inc_append_history    # 履歴をインクリメンタルに追加
 setopt hist_no_store         # historyコマンドは履歴に登録しない
 setopt hist_reduce_blanks    # 余分な空白は詰めて記録
 typeset -g POWERLEVEL9k_INSTANT_PROMPT=quiet
+
+if [ $USER = 'pt_kobayashi' ]; then
+    # >>> conda initialize >>>
+    # !! Contents within this block are managed by 'conda init' !!
+    __conda_setup="$('/home/usrs/pt_kobayashi/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+    if [ $? -eq 0 ]; then
+        eval "$__conda_setup"
+    else
+        if [ -f "/home/usrs/pt_kobayashi/miniconda3/etc/profile.d/conda.sh" ]; then
+            . "/home/usrs/pt_kobayashi/miniconda3/etc/profile.d/conda.sh"
+        else
+            export PATH="/home/usrs/pt_kobayashi/miniconda3/bin:$PATH"
+        fi
+    fi
+    unset __conda_setup
+    # <<< conda initialize <<<
+
+    export LD_LIBRARY_PATH=/disk/fs1/soft/cuda/cuda-10.1/lib64:/disk/fs1/soft/cuda/cuda-11.1_cudnn_8.2.1/lib64:/disk/fs1/soft/cuda/cuda-11.2_cudnn_8.1.0/lib64:/usr/local/lib:/usr/local/cuda-8.0/lib64:/disk/fs1/soft/OpenFace.20171201/opencv-3.1.0/lib:$HOME/usr/lib
+    export CUDA_HOME=/disk/fs1/soft/cuda/cuda-11.1_cudnn8.2.1
+    # alias nvim=vim
+    export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+
+    [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+fi
