@@ -31,47 +31,52 @@ if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
 fi
 
 ### Added by Zinit's installer
-if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
-    print -P "%F{33}▓▒░ %F{220}Installing %F{33}DHARMA%F{220} Initiative Plugin Manager (%F{33}zdharma/zinit%F{220})…%f"
-    command mkdir -p "$HOME/.zinit" && command chmod g-rwX "$HOME/.zinit"
-    command git clone https://github.com/zdharma/zinit "$HOME/.zinit/bin" && \
-        print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
-        print -P "%F{160}▓▒░ The clone has failed.%f%b"
+# if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
+#     print -P "%F{33}▓▒░ %F{220}Installing %F{33}DHARMA%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
+#     command mkdir -p "$HOME/.zinit" && command chmod g-rwX "$HOME/.zinit"
+#     command git clone https://github.com/zdharma-continuum/zinit "$HOME/.zinit/bin" && \
+#         print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
+#         print -P "%F{160}▓▒░ The clone has failed.%f%b"
+# fi
+# 
+# source "$HOME/.zinit/bin/zinit.zsh"
+# autoload -Uz _zinit
+# (( ${+_comps} )) && _comps[zinit]=_zinit
+# 
+# # Load a few important annexes, without Turbo
+# # (this is currently required for annexes)
+# zinit light-mode for \
+#     zinit-zsh/z-a-as-monitor \
+#     zinit-zsh/z-a-patch-dl \
+#     zinit-zsh/z-a-bin-gem-node
+
+if [[ ! -f $HOME/.zi/bin/zi.zsh ]]; then
+    sh -c "$(curl -fsSL https://git.io/get-zi)" --
 fi
 
-source "$HOME/.zinit/bin/zinit.zsh"
-autoload -Uz _zinit
-(( ${+_comps} )) && _comps[zinit]=_zinit
-
-# Load a few important annexes, without Turbo
-# (this is currently required for annexes)
-zinit light-mode for \
-    zinit-zsh/z-a-as-monitor \
-    zinit-zsh/z-a-patch-dl \
-    zinit-zsh/z-a-bin-gem-node
-
-### End of Zinit's installer chunk
+source "$HOME/.zi/bin/zi.zsh"
+### End of Zi's installer chunk
 # Basic plugin
-zinit ice wait"0"; zinit load zdharma/history-search-multi-word
-zinit ice wait"!0"; zinit light zsh-users/zsh-autosuggestions
-zinit ice wait"!0"; zinit light zdharma/fast-syntax-highlighting
-zinit ice wait"!0"; zinit load momo-lab/zsh-abbrev-alias
+zi ice wait"0"; zi load zdharma-continuum/history-search-multi-word
+zi ice wait"!0"; zi light zsh-users/zsh-autosuggestions
+zi ice wait"!0"; zi light zdharma-continuum/fast-syntax-highlighting
+zi ice wait"!0"; zi load momo-lab/zsh-abbrev-alias
 
-zinit snippet PZT::modules/helper/init.zsh
-zinit ice depth=1; zinit light romkatv/powerlevel10k
+zi snippet PZT::modules/helper/init.zsh
+zi ice depth=1; zi light romkatv/powerlevel10k
 
-zinit ice silent; zinit snippet PZT::modules/history
-zinit ice silent; zinit snippet PZT::modules/pacman
-zinit ice silent; zinit snippet PZT::modules/environment
-zinit ice silent; zinit snippet PZT::modules/terminal
-zinit ice silent; zinit snippet PZT::modules/editor
-zinit ice silent; zinit snippet PZT::modules/directory
-zinit ice silent; zinit snippet PZT::modules/spectrum
-zinit ice silent; zinit snippet PZT::modules/utility
-zinit ice silent; zinit snippet PZT::modules/completion
-# zinit snippet PZT::modules/prompt
-#zinit ice svn pick"init.zsh"
-# zinit snippet PZT::modules/git
+zi ice silent; zi snippet PZT::modules/history
+zi ice silent; zi snippet PZT::modules/pacman
+zi ice silent; zi snippet PZT::modules/environment
+zi ice silent; zi snippet PZT::modules/terminal
+zi ice silent; zi snippet PZT::modules/editor
+zi ice silent; zi snippet PZT::modules/directory
+zi ice silent; zi snippet PZT::modules/spectrum
+zi ice silent; zi snippet PZT::modules/utility
+zi ice silent; zi snippet PZT::modules/completion
+# zi snippet PZT::modules/prompt
+#zi ice svn pick"init.zsh"
+# zi snippet PZT::modules/git
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
