@@ -692,7 +692,7 @@ def make_widgets():
             widget.Battery(format='{char} {percent:2.0%}', charge_char='', discharge_char='', empty_char='', **colorset1),
             right_corner(**colorset2),
         ]
-    top_widgets += [widget.CheckUpdates(display_format=' {updates}', distro='Arch_paru',
+    top_widgets += [widget.CheckUpdates(display_format=' {updates}', distro='Arch_checkupdates',
                         colour_have_updates=colors['magenta'], colour_no_updates=colors['BGbase'],
                         update_interval=60*60, no_update_string='  0', **colorset2),
         right_corner(**colorset1)

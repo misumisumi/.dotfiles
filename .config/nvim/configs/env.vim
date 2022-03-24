@@ -14,15 +14,19 @@
 if &compatible
   set nocompatible
   filetype plugin on
+  filetype plugin indent on
   runtime macros/matchit.vim
 endif
 
+if has("autocmd")
+  autocmd FileType markdown setlocal sw=2 sts=2 ts=2 et
+  autocmd FileType vim setlocal sw=2 sts=2 ts=2 et
+endif
 
 if has("clipboard")
   set clipboard=unnamed
 endif
 
-filetype plugin indent on
 syntax enable
 set termguicolors
 set helplang=ja,en
@@ -60,6 +64,7 @@ set nowrap
 set colorcolumn=80,100
 "highlight ColorColumn guibg=#696969 ctermbg=41
 highlight ColorColumn guibg=#3B4048 ctermbg=238
+
 
 "Fern
 let g:fern#default_hidden=1
