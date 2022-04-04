@@ -451,6 +451,8 @@ keys = [
     Key([mod, 'shift'], 'p', lazy.spawn('rofi -show run'), desc='run rofi script mode'),
     Key([mod, 'control'], 'p', lazy.spawn('rofi -show power-menu -modi power-menu:rofi-power-menu -show-icons'), desc='run rofi script mode'),
 
+    Key([mod, 'control'], 'b', lazy.spawn('i3lock -n -i ./Pictures/archlinux_resize.png -t'), desc='lock PC'),
+
     Key([], 'Print', lazy.spawn('flameshot full -p {}'.format(str(capture_path)))),
     Key([mod], 'Print', lazy.spawn('flameshot screen -p {}'.format(str(capture_path)))),
     Key([mod, 'shift'], 'Print', lazy.spawn('flameshot screen -c')),
