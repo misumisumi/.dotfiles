@@ -70,14 +70,12 @@ if not laptop:
         
 # 擬似的に各スクリーンにグループが割り当てられるようにするための初期化
 def init_screen_and_group():
-    qtile.cmd_to_screen(0)
+    qtile.focus_screen(0)
     qtile.current_screen.set_group(qtile.groups[0])
-    try:
-        qtile.cmd_to_screen(1)
+    if not laptop:
+        qtile.focus_screen(1)
         qtile.current_screen.set_group(qtile.groups[7])
-        qtile.cmd_to_screen(0)
-    except:
-        pass
+    qtile.focus_screen(0)
 
 # StartUp
 @hook.subscribe.startup_once
@@ -93,7 +91,7 @@ def autostart():
 @hook.subscribe.startup_complete
 def afterstart():
     subprocess.run('copyq &', shell=True)
-
+    qtile.focus_screen(0)
 
 # spotifyは起動直後はwindow nameを出さないため数msのdelayを設ける
 @hook.subscribe.client_new
@@ -349,7 +347,6 @@ def window_to_next_screen(qtile):
 
 @lazy.function
 def attach_screen(qtile, pos):
-    global num_screen
     if laptop:
         if pos=='delete':
             subprocess.run('xrandr --output HDMI-A-0 --off', shell=True)
