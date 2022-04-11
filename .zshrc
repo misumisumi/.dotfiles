@@ -6,6 +6,8 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
 fi
 
 autoload -Uz promptinit
+autoload -Uz zmv
+autoload -Uz zargs
 promptinit
 prompt off
 if [ -n "${DOCKER_CONTAINER}" ]; then
@@ -73,6 +75,7 @@ export PYENV_ROOT="$HOME/.pyenv"
 export CUDA_DEVICE_ORDER=PCI_BUS_ID
 export PATH="$PYENV_ROOT/bin:/opt/Ryzen Controller:$PATH":$HOME/bin
 export CHROME_PATH=$(which vivaldi-stable)
+export EDITOR=nvim
 
 if [ ! $USER = 'pt_kobayashi' ]; then
     alias ssh='kitty +kitten ssh'
