@@ -15,6 +15,11 @@ xmap ga <Plug>(EasyAlign)
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
 
+" pydoqstring
+nmap <silent> ca <Plug>(coc-codeaction-line)
+xmap <silent> ca <Plug>(coc-codeaction-selected)
+nmap <silent> cA <Plug>(coc-codeaction)
+
 nmap <Leader>qq :q<CR>
 nmap <Leader>wq :wq<CR>
 
@@ -35,7 +40,6 @@ nmap <Leader>w <Plug>(easymotion-overwin-w)
 nmap <Tab> gt
 nmap <S-Tab> gT
 nmap <Leader><Tab> :tabnew<CR>
-
 
 " For fzf.vim
 nmap <Leader>f :<C-u>Files<CR>
@@ -102,7 +106,3 @@ nmap <Leader>hu <Plug>GitGutterRevertHunk
 " For open-browser
 nmap <Leader>o <Plug>(openbrowser-smart-search)
 
-" pydocsting
-nmap <Leader>da <Plug>(coc-codeaction-line)
-xmap <Leader>da <Plug>(coc-codeaction-selected)
-nmap <Leader>dA <Plug>(coc-codeaction)
