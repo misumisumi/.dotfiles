@@ -4,7 +4,7 @@ let mapleader = "\<Space>"
 
 nmap <Leader>n :Fern . -reveal=% -drawer -toggle<CR>
 nmap <Leader>ss :source "~/.config/nvim/init.vim"<CR>
-nmap <Leader><Enter> :10Term<CR>
+nmap <Leader><Enter> :15Term<CR>
 au FileType quickrun,fzf nmap <silent><buffer>q :q<CR>
 au FileType fern nmap <silent><buffer>E <Plug>(fern-action-open:vsplit)
 imap <silent> jj <C-\><C-n>
