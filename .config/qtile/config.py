@@ -77,6 +77,15 @@ def init_screen_and_group():
         qtile.current_screen.set_group(qtile.groups[7])
     qtile.focus_screen(0)
 
+
+def keep_focus_win_in_group(window=None):
+    if window is None:
+        for window in qtile.current_group.windows:
+            if not window.floating:
+                break
+    qtile.current_group.focus(window, True)
+    
+
 # StartUp
 @hook.subscribe.startup_once
 def autostart():
@@ -117,10 +126,19 @@ async def move_spotify(window):
             pass
         window.cmd_place(*pinp_pos, *pinp_size, borderwidth=BORDERWIDTH,
                          bordercolor=colors['cyan'], above=False, margin=None)
+        keep_focus_win_in_group()
     elif window.name == 'WaveSurfer 1.8.8p5':
         window.togroup('0-analyze')
     else:
         pass
+
+
+# @hook.subscribe.client_focus
+# def check_window_id(window):
+#     info = window.info()
+#     logger.warning('{}: {}'.format(info['name'], info['id']))
+#     logger.warning('wid: {}'.format(window.window.wid))
+#     logger.warning(window.window.get_wm_protocols())
 
 
 @hook.subscribe.client_killed
@@ -177,12 +195,10 @@ def keep_pinp(qtile):
         n_screen = len(qtile.screens)
         now_pinp_screen = qtile.groups.index(pinp_window.group) // (len(qtile.groups) // n_screen)
         idx = qtile.screens.index(qtile.current_screen)
+        win = qtile.current_window
         if now_pinp_screen == idx:
             pinp_window.togroup(qtile.current_screen.group.name)
-            for window in qtile.current_group.windows:
-                if not window.floating:
-                    break
-            window.cmd_focus(warp=True)
+            keep_focus_win_in_group(win)
 
 
 @lazy.function
@@ -209,8 +225,10 @@ def move_pinp(qtile, pos):
             pinp_pos[1] += screen_size[1]
         else:
             pass
+        win = qtile.current_window
         pinp_window.cmd_place(*pinp_pos, *pinp_size, borderwidth=BORDERWIDTH,
                          bordercolor=colors['cyan'], above=False, margin=None)
+        keep_focus_win_in_group(win)
 
 
 def check_screen(idx, min_idx, max_idx):
