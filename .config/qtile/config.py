@@ -690,7 +690,7 @@ def make_widgets():
         top_widgets += [
             separator(),
             left_corner(**colorset4),
-            widget.TaskList(border=colors['BGbase'], borderwidth=BORDERWIDTH, max_title_width=80, **colorset3),
+            widget.TaskList(border=colors['BGbase'], borderwidth=BORDERWIDTH, max_title_width=120, **colorset3),
             right_corner(**colorset4),
             separator()
         ]
