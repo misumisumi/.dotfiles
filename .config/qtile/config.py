@@ -46,10 +46,12 @@ num_screen = 2
 pinp_window = None
 monitor_pos = 'delete'
 
+
+# 壁紙の割当
 if not laptop:
     monitor1=0
     monitor2=0
-    
+
     @hook.subscribe.setgroup
     def change_wallpaper():
         global monitor1
@@ -67,24 +69,7 @@ if not laptop:
                 monitor2 = gidx
             subprocess.run('feh --bg-fill {} --bg-fill {}'.format(str(wallpapers[monitor1]), str(wallpapers[monitor2])), shell=True)
     monitor_pos = 'right-of'
-        
-# 擬似的に各スクリーンにグループが割り当てられるようにするための初期化
-def init_screen_and_group():
-    qtile.focus_screen(0)
-    qtile.current_screen.set_group(qtile.groups[0])
-    if not laptop:
-        qtile.focus_screen(1)
-        qtile.current_screen.set_group(qtile.groups[7])
-    qtile.focus_screen(0)
 
-
-def keep_focus_win_in_group(window=None):
-    if window is None:
-        for window in qtile.current_group.windows:
-            if not window.floating:
-                break
-    qtile.current_group.focus(window, True)
-    
 
 # StartUp
 @hook.subscribe.startup_once
@@ -102,9 +87,29 @@ def afterstart():
     subprocess.run('copyq &', shell=True)
     qtile.focus_screen(0)
 
-# spotifyは起動直後はwindow nameを出さないため数msのdelayを設ける
+
+# 擬似的に各スクリーンにグループが割り当てられるようにするための初期化
+def init_screen_and_group():
+    qtile.focus_screen(0)
+    qtile.current_screen.set_group(qtile.groups[0])
+    if not laptop:
+        qtile.focus_screen(1)
+        qtile.current_screen.set_group(qtile.groups[7])
+    qtile.focus_screen(0)
+
+
+# PinPの生成時とWS切替時にフォーカスを当てないようにする
+def keep_focus_win_in_group(window=None):
+    if window is None:
+        for window in qtile.current_group.windows:
+            if not window.floating:
+                break
+    qtile.current_group.focus(window, True)
+
+
+# 一部のソフトは起動直後はwindow nameを出さないため数msのdelayを設ける
 @hook.subscribe.client_new
-async def move_spotify(window):
+async def move_speclific_apps(window):
     await asyncio.sleep(0.01)
     if window.name == 'Spotify':
         window.togroup('0-media')
@@ -148,47 +153,6 @@ def remove_pinp(window):
         pinp_window = None
 
 
-@hook.subscribe.focus_change
-def float_always_show_front_focus_change():
-    for window in qtile.current_group.windows:
-        if window.floating:
-            window.cmd_bring_to_front()
-
-
-# floating windowは次に生成されたwindowの下にいきfocusが当てられないことへの回避策
-floating_window_index = 0
-def float_cycle(qtile, forward: bool):
-    global floating_window_index
-    floating_windows = []
-    for window in qtile.current_group.windows:
-        if window.floating:
-            floating_windows.append(window)
-    if not floating_windows:
-        return
-    floating_window_index = min(floating_window_index, len(floating_windows) -1)
-    if forward:
-        floating_window_index += 1
-    else:
-        floating_window_index += 1
-    if floating_window_index >= len(floating_windows):
-        floating_window_index = 0
-    if floating_window_index < 0:
-        floating_window_index = len(floating_windows) - 1
-    win = floating_windows[floating_window_index]
-    win.cmd_bring_to_front()
-    win.cmd_focus()
-
-
-@lazy.function
-def float_cycle_backward(qtile):
-    float_cycle(qtile, False)
-
-
-@lazy.function
-def float_cycle_forward(qtile):
-    float_cycle(qtile, True)
-
-
 @lazy.function
 def keep_pinp(qtile):
     if pinp_window is not None:
@@ -229,6 +193,47 @@ def move_pinp(qtile, pos):
         pinp_window.cmd_place(*pinp_pos, *pinp_size, borderwidth=BORDERWIDTH,
                          bordercolor=colors['cyan'], above=False, margin=None)
         keep_focus_win_in_group(win)
+
+
+@hook.subscribe.focus_change
+def float_always_show_front_focus_change():
+    for window in qtile.current_group.windows:
+        if window.floating:
+            window.cmd_bring_to_front()
+
+
+# floating windowは次に生成されたwindowの下にいきfocusが当てられないことへの回避策
+floating_window_index = 0
+def float_cycle(qtile, forward: bool):
+    global floating_window_index
+    floating_windows = []
+    for window in qtile.current_group.windows:
+        if window.floating:
+            floating_windows.append(window)
+    if not floating_windows:
+        return
+    floating_window_index = min(floating_window_index, len(floating_windows) -1)
+    if forward:
+        floating_window_index += 1
+    else:
+        floating_window_index += 1
+    if floating_window_index >= len(floating_windows):
+        floating_window_index = 0
+    if floating_window_index < 0:
+        floating_window_index = len(floating_windows) - 1
+    win = floating_windows[floating_window_index]
+    win.cmd_bring_to_front()
+    win.cmd_focus()
+
+
+@lazy.function
+def float_cycle_backward(qtile):
+    float_cycle(qtile, False)
+
+
+@lazy.function
+def float_cycle_forward(qtile):
+    float_cycle(qtile, True)
 
 
 def check_screen(idx, min_idx, max_idx):
