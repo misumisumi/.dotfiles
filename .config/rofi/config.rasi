@@ -3,7 +3,7 @@ modi: "window,run,ssh,drun";
 /*	width: 50;*/
 /*	lines: 15;*/
 /*	columns: 1;*/
-font: "Ricty Diminished 18";
+font: "Ricty Nerd Font 22";
 /*	bw: 1;*/
 /*	location: 0;*/
 /*	padding: 5;*/
