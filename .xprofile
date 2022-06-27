@@ -8,6 +8,7 @@ export WWW_HOME="http://example.com/"
 export QT_STYLE_OVERRIDE=gtk2
 export XDG_CONFIG_HOME=~/.config
 export NEXTGRAPHICS=$(asusctl graphics -g | awk '{print $4}')
+export SDL_JOYSTICK_HIDAPI=0
 xhost si:localuser:$USER &
 libinput-gestures &
 devmon &

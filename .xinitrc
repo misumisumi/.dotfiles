@@ -3,3 +3,4 @@ xrandr --setprovideroutputsource modesetting NVIDIA-1
 xrandr --auto
 exec dbus-launch qtile
 
+
