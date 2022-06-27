@@ -494,6 +494,7 @@ keys = [
     Key([], 'XF86MonBrightnessDown', lazy.spawn('light -U 5')),
     Key([], 'XF86KbdBrightnessUp', lazy.spawn('light -Ars {} 1'.format('sysfs/leds/asus::kbd_backlight'))),
     Key([], 'XF86KbdBrightnessDown', lazy.spawn('light -Urs {} 1'.format('sysfs/leds/asus::kbd_backlight'))),
+    Key([], 'XF86Launch1', lazy.spawn('sh -c "/home/sumi/bin/swhich_gpu_mode"')),
     Key([], 'XF86Launch4', lazy.spawn('asusctl profile -n')),
 
     # PinP operationes
@@ -709,7 +710,7 @@ def make_widgets():
         ]
     if laptop:
         top_widgets += [
-            widget.Backlight(fmt=' {}', backlight_name='amdgpu_bl0', **colorset2),
+            widget.Backlight(fmt=' {}', backlight_name='amdgpu_bl1', **colorset2),
             right_corner(**colorset1),
             widget.Battery(format='{char} {percent:2.0%}', charge_char='', discharge_char='', empty_char='', **colorset1),
             right_corner(**colorset2),

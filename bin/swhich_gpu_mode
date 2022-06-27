@@ -1,0 +1,19 @@
+#! /usr/bin/env bash
+MODE_FILE=/home/sumi/bin/CURRENT_GPU_MODE
+GPU_MODE=$(cat $MODE_FILE)
+
+if [ $GPU_MODE = integrated ]; then
+    supergfxctl -m Hybrid
+    echo hybrid | tee $MODE_FILE
+    notify-send 'Switch to Hybrid'$'\n''Please logout'
+elif [ $GPU_MODE = hybrid ]; then
+    supergfxctl -m Compute
+    echo compute | tee $MODE_FILE
+    notify-send 'Switch to Compute'$'\n''Please logout'
+elif [ $GPU_MODE = compute ]; then
+    supergfxctl -m Integrated
+    echo integrated | tee $MODE_FILE
+    notify-send 'Switch to Integrated'$'\n''Please logout'
+else
+    notify-send 'Maybe VFIO mode'
+fi
