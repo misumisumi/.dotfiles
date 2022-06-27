@@ -709,8 +709,9 @@ def make_widgets():
         right_corner(**colorset2),
         ]
     if laptop:
+        backlight = list(Path('/sys/class/backlight/').glob('*'))
         top_widgets += [
-            widget.Backlight(fmt=' {}', backlight_name='amdgpu_bl1', **colorset2),
+            widget.Backlight(fmt=' {}', backlight_name=backlight[0], **colorset2),
             right_corner(**colorset1),
             widget.Battery(format='{char} {percent:2.0%}', charge_char='', discharge_char='', empty_char='', **colorset1),
             right_corner(**colorset2),
