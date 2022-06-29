@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+
+FILES=/dev/hidraw*
+for f in $FILES
+do
+    FILE=${f##*/}
+    DEVICE="$(cat /sys/class/hidraw/${FILE}/device/uevent | grep HID_NAME | cut -d '=' -f2)"
+    if $(echo $DEVICE | grep -q 'Xbox'); then
+        printf "%s \t %s\n" $FILE "$DEVICE"
+    fi
+done
+
+cat /proc/bus/input/devices | grep -A 4 Xbox | sed -e '2,4d' | tac | while true
+do
+    read line1
+    read line2
+    line1=$(echo $line1 | awk -F'=' '{print $2}')
+    line2=$(echo $line2 | awk -F'=' '{print $2}' | sed -e 's/\"//g')
+    echo -e "$line1 \t $line2"
+    if [ -z "$line1" ]; then
+        break
+    fi
+done
+cat /proc/bus/input/devices | grep -A 4 X-Box | sed -e '2,4d' | tac | while true
+do
+    read line1
+    read line2
+    line1=$(echo $line1 | awk -F'=' '{print $2}')
+    line2=$(echo $line2 | awk -F'=' '{print $2}' | sed -e 's/\"//g')
+    echo -e "$line1 \t $line2"
+    if [ -z "$line1" ]; then
+        break
+    fi
+done
