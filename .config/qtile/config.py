@@ -140,6 +140,7 @@ async def move_speclific_apps(window):
 
 # @hook.subscribe.client_focus
 # def check_window_id(window):
+#     logger.warning('idx: {}'.format(qtile.screens.index(qtile.current_screen)))
 #     info = window.info()
 #     logger.warning('{}: {}'.format(info['name'], info['id']))
 #     logger.warning('wid: {}'.format(window.window.wid))
@@ -385,6 +386,13 @@ def attach_screen(qtile, pos):
         global monitor_pos
         monitor_pos = '{}'.format(pos)
 
+@lazy.function
+def capture_screen(qtile, is_clipboard=False):
+    idx = qtile.screens.index(qtile.current_screen)
+    if is_clipboard:
+        Qtile.cmd_spawn(qtile, 'flameshot screen -n {} -c'.format(idx))
+    else:
+        Qtile.cmd_spawn(qtile, 'flameshot screen -n {} -p {}'.format(idx, capture_path))
 
 keys = [
     # Switch between windows
@@ -474,8 +482,8 @@ keys = [
     Key([mod, 'control'], 'b', lazy.spawn('i3lock -n -i ./Pictures/archlinux_resize.png -t'), desc='lock PC'),
 
     Key([], 'Print', lazy.spawn('flameshot full -p {}'.format(str(capture_path)))),
-    Key([mod], 'Print', lazy.spawn('flameshot screen -p {}'.format(str(capture_path)))),
-    Key([mod, 'shift'], 'Print', lazy.spawn('flameshot screen -c')),
+    Key([mod], 'Print', capture_screen(is_clipboard=False)),
+    Key([mod, 'shift'], 'Print', capture_screen(is_clipboard=True)),
     Key([mod], "period", float_cycle_forward()),
     Key([mod], "comma", float_cycle_backward()),
 
