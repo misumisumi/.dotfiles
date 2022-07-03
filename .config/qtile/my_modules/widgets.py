@@ -16,17 +16,6 @@ _colorset6 = {'background': PARAM.c_normal['BGbase'], 'foreground': PARAM.c_norm
 _colorset7 = {'background': PARAM.c_normal['clear'], 'foreground': PARAM.c_normal['cyan']}
 
 
-def default_settings():
-    widget_defaults = dict(
-            font=PARAM.font,
-            fontsize=PARAM.font_size,
-            padding=3
-            )
-    extension_defaults = widget_defaults.copy()
-
-    return widget_defaults, extension_defaults
-
-
 def _left_corner(background, foreground):
     return widget.TextBox(
         foreground = foreground,

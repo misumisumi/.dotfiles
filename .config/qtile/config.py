@@ -2,8 +2,8 @@
 from my_modules.param import PARAM
 
 from my_modules.groups import set_groups
-from my_modules.widgets import default_settings
 from my_modules.make_screens import make_screens
+# from my_modules.widgets import *
 from my_modules.shortcut import *
 from my_modules.set_wallpaper import *
 from my_modules.startup import *
@@ -11,8 +11,14 @@ from my_modules.startup import *
 
 from libqtile.log_utils import logger
 
+widget_defaults =  dict(
+                    font=PARAM.font,
+                    fontsize=PARAM.font_size,
+                    padding=3
+                )
+extension_defaults = widget_defaults.copy()
+
 groups = set_groups()
-widget_default, extension_defaults = default_settings()
 screens = make_screens(PARAM.num_screen)
 
 dgroups_key_binder = PARAM.dgroups_key_binder
