@@ -124,13 +124,13 @@ def make_widgets(is_tray=False):
         _rignt_corner(**_colorset1)
         ]
     if is_tray:
-        top_widgets + [
+        top_widgets += [
             _separator(),
             _left_corner(**_colorset4),
             widget.Systray(**_colorset3),
             _rignt_corner(**_colorset4),
             _separator(),
-        ],
+        ]
 
     if PARAM.laptop:
         bottom_widgets = [
