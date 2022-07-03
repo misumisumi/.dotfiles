@@ -1,12 +1,9 @@
 """custom function for qtile"""
-from typing import Optional
 import asyncio
 import subprocess
 
 from libqtile.core.manager import Qtile
-from libqtile import qtile, bar, layout, widget, hook
-from libqtile.backend.base import Window
-from libqtile.config import Click, Drag, Group, Key, KeyChord, Match, Screen
+from libqtile import qtile, hook
 from libqtile.lazy import lazy
 
 from my_modules.param import PARAM
