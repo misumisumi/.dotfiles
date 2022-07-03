@@ -3,7 +3,6 @@ from my_modules.param import PARAM
 
 from my_modules.groups import set_groups
 from my_modules.make_screens import make_screens
-# from my_modules.widgets import *
 from my_modules.shortcut import *
 from my_modules.set_wallpaper import *
 from my_modules.startup import *
