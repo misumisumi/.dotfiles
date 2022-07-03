@@ -145,3 +145,8 @@ kb-row-down: "Down,Control+j";
 /*	me-accept-custom: "Control+MouseDPrimary";*/
 }
 @theme "Adapta-Nokto"
+
+window {
+    border:           0;
+    padding:          5;
+}
