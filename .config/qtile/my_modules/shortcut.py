@@ -86,7 +86,7 @@ keys = [
     Key([PARAM.mod, 'control'], 'r', lazy.reload_config(), desc='Reload the config'),
     Key([PARAM.mod, 'control'], 'e', lazy.shutdown(), desc='Shutdown Qtile'),
 
-    Key([PARAM.mod], 'p', lazy.spawn('rofi -PARAM.modi combi -show combi -combi-PARAM.modi window,drun -show-icons'), desc='show rofi'),
+    Key([PARAM.mod], 'p', lazy.spawn('rofi -combi-modi window,drun -show combi -show-icons'), desc='show rofi'),
     Key([PARAM.mod, 'shift'], 'p', lazy.spawn('rofi -show run'), desc='run rofi script PARAM.mode'),
     Key([PARAM.mod, 'control'], 'p', lazy.spawn('rofi -show power-menu -PARAM.modi power-menu:rofi-power-menu -show-icons'), desc='run rofi script PARAM.mode'),
 
