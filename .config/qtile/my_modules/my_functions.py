@@ -254,10 +254,9 @@ def focus_cycle_screen(qtile, backward=False):
     idx = qtile.current_screen.index
     if backward:
         to_idx = n_screen - 1 if idx == 0 else idx - 1
-        qtile.cmd_to_screen(to_idx)
     else:
         to_idx = 0 if idx + 1 == n_screen else idx + 1
-        qtile.cmd_to_screen(to_idx)
+    qtile.cmd_to_screen(to_idx)
 
 
 @lazy.function
