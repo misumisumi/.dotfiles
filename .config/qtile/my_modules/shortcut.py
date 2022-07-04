@@ -96,7 +96,7 @@ keys = [
     Key([PARAM.mod], 'Print', capture_screen(is_clipboard=False)),
     Key([PARAM.mod, 'shift'], 'Print', capture_screen(is_clipboard=True)),
     Key([PARAM.mod], "period", float_cycle(forward=True)),
-    Key([PARAM.mod], "comma", float_cycle(forward=False)),
+    Key([PARAM.mod], "comma", float_cycle(forward=True, focus=True)),
 
     Key([PARAM.mod], 'q', lazy.spawn('copyq toggle')),
 

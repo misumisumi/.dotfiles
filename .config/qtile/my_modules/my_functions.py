@@ -59,6 +59,8 @@ async def move_speclific_apps(window):
         keep_focus_window_in_tiling()
     elif window.name == 'WaveSurfer 1.8.8p5':
         window.togroup('0-analyze')
+    elif PINP_WINDOW is not None:
+        PINP_WINDOW.cmd_bring_to_front()
     else:
         pass
 
@@ -120,7 +122,7 @@ def move_pinp(qtile, pos):
 
 # floating windowは次に生成されたwindowの下にいきfocusが当てられないことへの回避策
 @lazy.function
-def float_cycle(qtile, forward: bool):
+def float_cycle(qtile, forward: bool, focus=False):
     global FLOATING_WINDOW_IDX
     floating_windows = []
     for window in qtile.current_group.windows:
@@ -139,7 +141,8 @@ def float_cycle(qtile, forward: bool):
         FLOATING_WINDOW_IDX = len(floating_windows) - 1
     win = floating_windows[FLOATING_WINDOW_IDX]
     win.cmd_bring_to_front()
-    qtile.current_group.focus(win, True)
+    if focus:
+        qtile.current_group.focus(win, True)
 
 
 def check_screen(idx, min_idx, max_idx):
