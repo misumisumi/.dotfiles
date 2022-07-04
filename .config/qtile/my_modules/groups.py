@@ -46,6 +46,8 @@ _group_and_rule = {'code': ('', layout2, _match_code),
                    'sns': ('', layout1, _match_sns),
                    'media': ('', layout4, _match_media)}
 
+_display_tablet = {'creation': ('', layout3, _match_full)}
+
 GROUP_PER_SCREEN = len(_group_and_rule)
 
 def _set_groups():
