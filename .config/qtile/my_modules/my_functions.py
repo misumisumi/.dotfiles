@@ -38,7 +38,7 @@ async def move_speclific_apps(window):
     await asyncio.sleep(0.01)
     if window.name == 'Spotify':
         window.togroup('0-media')
-    elif window.name == 'ピクチャー イン ピクチャー':
+    elif window.name == 'ピクチャー イン ピクチャー' or window.name == 'Picture-in-Picture':
         # 画面サイズに合わせて自動的にPinPのサイズとポジションを決定する
         screen_size = (qtile.current_screen.width, qtile.current_screen.height)
         pinp_size = [s//PARAM.pinp_scale_down for s in screen_size]
@@ -139,6 +139,7 @@ def float_cycle(qtile, forward: bool):
         FLOATING_WINDOW_IDX = len(floating_windows) - 1
     win = floating_windows[FLOATING_WINDOW_IDX]
     win.cmd_bring_to_front()
+    qtile.current_group.focus(win, True)
 
 
 def check_screen(idx, min_idx, max_idx):
