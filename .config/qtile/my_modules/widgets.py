@@ -14,6 +14,7 @@ _colorset4 = {'background': PARAM.c_normal['BGbase'], 'foreground': PARAM.c_norm
 _colorset5 = {'background': PARAM.c_normal['clear'], 'foreground': PARAM.c_normal['BGbase']}
 _colorset6 = {'background': PARAM.c_normal['BGbase'], 'foreground': PARAM.c_normal['white']}
 _colorset7 = {'background': PARAM.c_normal['clear'], 'foreground': PARAM.c_normal['cyan']}
+_colorset8 = {'background': PARAM.c_normal['BGbase'], 'foreground': PARAM.c_normal['red']}
 
 
 def _left_corner(background, foreground):
@@ -73,7 +74,7 @@ def make_widgets(is_tray=False):
         ]
     top_widgets += [
         _separator(),
-        widget.Chord(**_colorset6),
+        widget.Chord(**_colorset8),
         widget.Spacer(),
         _left_corner(**_colorset1),
         widget.Clock(format='%Y-%m-%d %a %H:%M:%S', **_colorset2),
