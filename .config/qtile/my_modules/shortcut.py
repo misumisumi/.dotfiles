@@ -19,11 +19,11 @@ keys = [
     # Moving out of range in Columns layout will create new column.
     Key([PARAM.mod, 'shift'], 'h',
         lazy.layout.shuffle_left(),
-        lazy.layout.move_left(),
+        # lazy.layout.move_left(),
         desc='Move window to the left'),
     Key([PARAM.mod, 'shift'], 'l',
         lazy.layout.shuffle_right(),
-        lazy.layout.move_right(),
+        # lazy.layout.move_right(),
         desc='Move window to the right'),
     Key([PARAM.mod, 'shift'], 'j', 
         lazy.layout.shuffle_down(),
