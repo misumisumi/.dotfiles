@@ -22,15 +22,26 @@ layout1 = [
 ]
 # For code
 layout2 = [
-    layout.MonadWide(**_settings,
-                     ratio=0.6,
+    layout.MonadTall(**_settings,
+                     align=layout.MonadTall._right,
+                     ratio=0.65,
+                     new_client_position='bottom',
+                     single_border_width=PARAM.border,
+                     margin=PARAM.margin, single_margin=PARAM.margin
+                     ),
+        ]
+
+layout3 = [
+    layout.MonadTall(**_settings,
+                     align=layout.MonadTall._left,
+                     ratio=0.65,
                      new_client_position='bottom',
                      single_border_width=PARAM.border,
                      margin=PARAM.margin, single_margin=PARAM.margin
                      ),
         ]
 # For full
-layout3 = [
+layout4 = [
     layout.TreeTab(active_bg=PARAM.c_bright['bblack'],
                    bg_color=PARAM.c_normal['BGbase'],
                    font=PARAM.font,
@@ -39,16 +50,6 @@ layout3 = [
                    fontsize=PARAM.font_size-4,
                    section_fontsize=PARAM.font_size-2,
                    ),
-    ]
-# For media
-layout4 = [
-    layout.Columns(**_settings,
-                   border_focus_stack=PARAM.c_normal['cyan'],
-                   border_normal_stack=PARAM.c_normal['BGbase'],
-                   border_on_single=True, fair=False,
-                   num_columns=1, insert_position=1,
-                   margin=PARAM.margin, margin_on_single=PARAM.margin,
-                   split=True),
     ]
 
 floating_layout = layout.Floating(float_rules=[

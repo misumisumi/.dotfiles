@@ -16,18 +16,16 @@ _match_paper = [Match(wm_class='org.pwmt.zathura')]
 
 _match_analyze = [Match(title='WaveSurfer 1.8.8p5'),
                  Match(wm_class='thunar'),
-                 Match(wm_class='mpv')
                 ]
 
 _match_full = [Match(wm_class='Steam'),
-              Match(wm_class='krita'),
-              Match(wm_class='Gimp'),
-              Match(wm_class='Blender'),
-              Match(wm_class='unityhub'),
-              Match(wm_class='Unity'),
-              Match(wm_class='obs'),
-              Match(wm_class='audacity'),
-              Match(wm_class='looking-glass')
+               Match(wm_class='krita'),
+               Match(wm_class='Gimp'),
+               Match(wm_class='Blender'),
+               Match(wm_class='unityhub'),
+               Match(wm_class='Unity'),
+               Match(wm_class='obs'),
+               Match(wm_class='audacity'),
              ]
 
 _match_sns = [Match(wm_class='slack'),
@@ -38,13 +36,13 @@ _match_media = [Match(wm_class='pavucontrol'),
                 Match(wm_class='blueman-manager')
               ]
 
-_group_and_rule = {'code': ('', layout2, _match_code),
-                   'browse': ('', layout1, _match_browse),
-                   'paper': ('', layout1, _match_paper),
-                   'analyze': ('', layout1, _match_analyze),
-                   'full': ('', layout3, _match_full),
-                   'sns': ('', layout1, _match_sns),
-                   'media': ('', layout4, _match_media)}
+_group_and_rule = {'code': ('', (layout2, layout3), _match_code),
+                   'browse': ('', (layout1,), _match_browse),
+                   'paper': ('', (layout1,), _match_paper),
+                   'analyze': ('', (layout1,), _match_analyze),
+                   'full': ('', (layout4,), _match_full),
+                   'sns': ('', (layout1,), _match_sns),
+                   'media': ('', (layout2, layout3), _match_media)}
 
 _display_tablet = {'creation': ('', layout3, _match_full)}
 
@@ -55,6 +53,10 @@ def _set_groups():
 
     for n in range(PARAM.num_screen):
         for k, (label, layouts, matches) in _group_and_rule.items():
+            if n == 1 and len(layouts) > 1:
+                layouts = layouts[1]
+            else:
+                layouts = layouts[0]
             groups.append(Group('{}-{}'.format(n, k), layouts=layouts, matches=matches, label=label))
     
     return groups
