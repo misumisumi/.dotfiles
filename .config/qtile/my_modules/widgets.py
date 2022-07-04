@@ -14,7 +14,7 @@ _colorset4 = {'background': PARAM.c_normal['BGbase'], 'foreground': PARAM.c_norm
 _colorset5 = {'background': PARAM.c_normal['clear'], 'foreground': PARAM.c_normal['BGbase']}
 _colorset6 = {'background': PARAM.c_normal['BGbase'], 'foreground': PARAM.c_normal['white']}
 _colorset7 = {'background': PARAM.c_normal['clear'], 'foreground': PARAM.c_normal['cyan']}
-_colorset8 = {'background': PARAM.c_normal['BGbase'], 'foreground': PARAM.c_normal['red']}
+_colorset8 = {'background': PARAM.c_normal['BGbase'], 'foreground': PARAM.c_normal['magenta']}
 
 
 def _left_corner(background, foreground):
