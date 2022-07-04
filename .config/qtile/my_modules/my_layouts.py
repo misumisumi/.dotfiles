@@ -42,9 +42,13 @@ layout3 = [
     ]
 # For media
 layout4 = [
-    # layout.Slice(match=Match(wm_class='pavucontrol'), width=PARAM.slice_width, side='bottom',
-    #              fallback=layout1[0]),
-    layout.VerticalTile(**_settings, margin=PARAM.margin)
+    layout.Columns(**_settings,
+                   border_focus_stack=PARAM.c_normal['cyan'],
+                   border_normal_stack=PARAM.c_normal['BGbase'],
+                   border_on_single=True, fair=False,
+                   num_columns=1, insert_position=1,
+                   margin=PARAM.margin, margin_on_single=PARAM.margin,
+                   split=True),
     ]
 
 floating_layout = layout.Floating(float_rules=[
