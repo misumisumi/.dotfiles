@@ -87,7 +87,7 @@ def make_widgets(is_tray=False):
         top_widgets += [
             _separator(),
             _left_corner(**_colorset4),
-            widget.TaskList(border=PARAM.c_normal['BGbase'], borderwidth=PARAM.border, max_title_width=120, **_colorset3),
+            widget.TaskList(border=PARAM.c_normal['BGbase'], icon_size=PARAM.font_size, borderwidth=PARAM.border, max_title_width=120, **_colorset3),
             _rignt_corner(**_colorset4),
             _separator()
         ]
@@ -143,3 +143,11 @@ def make_widgets(is_tray=False):
         bottom_widgets = None
 
     return top_widgets, bottom_widgets
+
+
+widget_defaults =  dict(
+                    font=PARAM.font,
+                    fontsize=PARAM.font_size,
+                    padding=3
+                )
+extension_defaults = widget_defaults.copy()

@@ -8,7 +8,7 @@ from libqtile.log_utils import logger
 
 
 _settings = {'border_width': PARAM.border,
-             'border_focus': PARAM.c_normal['blue'],
+             'border_focus': PARAM.c_normal['cyan'],
              'border_normal': PARAM.c_normal['BGbase']}
 # for default
 layout1 = [

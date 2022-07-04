@@ -48,7 +48,7 @@ _group_and_rule = {'code': ('', layout2, _match_code),
 
 GROUP_PER_SCREEN = len(_group_and_rule)
 
-def set_groups():
+def _set_groups():
     groups = []
 
     for n in range(PARAM.num_screen):
@@ -57,3 +57,4 @@ def set_groups():
     
     return groups
 
+groups = _set_groups()

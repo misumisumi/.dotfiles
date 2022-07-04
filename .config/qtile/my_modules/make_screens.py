@@ -47,3 +47,5 @@ def make_screens(num_screen):
     return screens
 
 
+screens = make_screens(PARAM.num_screen)
+
