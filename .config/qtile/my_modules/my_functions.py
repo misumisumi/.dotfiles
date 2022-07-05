@@ -70,7 +70,8 @@ def remove_pinp(window):
     if window.name == 'ピクチャー イン ピクチャー':
         global PINP_WINDOW
         PINP_WINDOW = None
-    keep_focus_window_in_tiling()
+    else:
+        keep_focus_window_in_tiling()
 
 
 @lazy.function
