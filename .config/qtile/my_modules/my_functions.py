@@ -70,6 +70,7 @@ def remove_pinp(window):
     if window.name == 'ピクチャー イン ピクチャー':
         global PINP_WINDOW
         PINP_WINDOW = None
+    keep_focus_window_in_tiling()
 
 
 @lazy.function
@@ -84,6 +85,7 @@ def keep_pinp(qtile):
         win = qtile.current_window
         if now_pinp_screen == idx:
             PINP_WINDOW.togroup(qtile.current_screen.group.name)
+            PINP_WINDOW.cmd_bring_to_front()
             keep_focus_window_in_tiling(win)
 
 
@@ -115,7 +117,8 @@ def move_pinp(qtile, pos):
             pass
         win = qtile.current_window
         PINP_WINDOW.cmd_place(*pinp_pos, *pinp_size, borderwidth=PARAM.border,
-                         bordercolor=PARAM.c_normal['cyan'], above=False, margin=None)
+                              bordercolor=PARAM.c_normal['cyan'], above=False, margin=None)
+        PINP_WINDOW.cmd_bring_to_front()
         keep_focus_window_in_tiling(win)
 
 
