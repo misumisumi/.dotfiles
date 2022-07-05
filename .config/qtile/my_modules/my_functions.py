@@ -67,7 +67,7 @@ async def move_speclific_apps(window):
 
 @hook.subscribe.client_killed
 def remove_pinp(window):
-    if window.name == 'ピクチャー イン ピクチャー':
+    if window.name == 'ピクチャー イン ピクチャー' or window.name == 'Picture-in-Picture':
         global PINP_WINDOW
         PINP_WINDOW = None
     else:
