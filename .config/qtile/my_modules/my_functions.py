@@ -41,7 +41,7 @@ async def move_speclific_apps(window):
     elif window.name == 'ピクチャー イン ピクチャー' or window.name == 'Picture-in-Picture':
         # 画面サイズに合わせて自動的にPinPのサイズとポジションを決定する
         screen_size = (qtile.current_screen.width, qtile.current_screen.height)
-        pinp_size = [s//PARAM.pinp_scale_down for s in screen_size]
+        pinp_size = [int(s//PARAM.pinp_scale_down) for s in screen_size]
         pinp_pos = [s-p for s, p in zip(screen_size, pinp_size)]
         pinp_pos[0] = pinp_pos[0] - PARAM.pinp_margin
 
@@ -97,8 +97,7 @@ def move_pinp(qtile, pos):
     now_pinp_screen = qtile.groups.index(PINP_WINDOW.group) // (len(qtile.groups) // n_screen)
     if PINP_WINDOW is not None and idx == now_pinp_screen:
         screen_size = (qtile.current_screen.width, qtile.current_screen.height)
-        pinp_size = [s//PARAM.pinp_scale_down for s in screen_size]
-        pinp_size[0] = pinp_size[0]
+        pinp_size = [int(s//PARAM.pinp_scale_down) for s in screen_size]
         pinp_pos = [PINP_WINDOW.float_x, PINP_WINDOW.float_y]
         if pos == 'up':
             pinp_pos[1] = 0

@@ -22,7 +22,7 @@ class Param:
 
     border = 2
 
-    pinp_scale_down = 3
+    pinp_scale_down = 3.2
     pinp_margin = 3 + border
 
     margin = 10
