@@ -98,27 +98,3 @@ setopt hist_no_store         # historyコマンドは履歴に登録しない
 setopt hist_reduce_blanks    # 余分な空白は詰めて記録
 typeset -g POWERLEVEL9k_INSTANT_PROMPT=quiet
 
-if [ $USER = 'pt_kobayashi' ]; then
-    # >>> conda initialize >>>
-    # !! Contents within this block are managed by 'conda init' !!
-    __conda_setup="$('/home/usrs/pt_kobayashi/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
-    if [ $? -eq 0 ]; then
-        eval "$__conda_setup"
-    else
-        if [ -f "/home/usrs/pt_kobayashi/miniconda3/etc/profile.d/conda.sh" ]; then
-            . "/home/usrs/pt_kobayashi/miniconda3/etc/profile.d/conda.sh"
-        else
-            export PATH="/home/usrs/pt_kobayashi/miniconda3/bin:$PATH"
-        fi
-    fi
-    unset __conda_setup
-    # <<< conda initialize <<<
-
-    export LD_LIBRARY_PATH=/disk/fs1/soft/cuda/cuda-10.1/lib64:/disk/fs1/soft/cuda/cuda-11.1_cudnn_8.2.1/lib64:/disk/fs1/soft/cuda/cuda-11.2_cudnn_8.1.0/lib64:/usr/local/lib:/usr/local/cuda-8.0/lib64:/disk/fs1/soft/OpenFace.20171201/opencv-3.1.0/lib:$HOME/usr/lib
-    export CUDA_HOME=/disk/fs1/soft/cuda/cuda-11.1_cudnn8.2.1
-    # alias nvim=vim
-    export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
-
-    [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-fi
