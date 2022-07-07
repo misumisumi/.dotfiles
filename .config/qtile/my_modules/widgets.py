@@ -105,7 +105,8 @@ def make_widgets(is_tray=False):
         top_widgets += [
             widget.Backlight(fmt=' {}', backlight_name=backlight[0], **_colorset2),
             _rignt_corner(**_colorset1),
-            widget.Battery(format='{char} {percent:2.0%}', charge_char='', discharge_char='', empty_char='', **_colorset1),
+            widget.Battery(format='{char} {percent:2.0%}', charge_char='', discharge_char='',
+                           empty_char='', full_chal='', unknown_char='', **_colorset1),
             _rignt_corner(**_colorset2),
         ]
     top_widgets += [widget.CheckUpdates(display_format=' {updates}', distro='Arch_checkupdates',
