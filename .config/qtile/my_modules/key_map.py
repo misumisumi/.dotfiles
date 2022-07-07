@@ -88,7 +88,7 @@ keys = [
 
     Key([PARAM.mod], 'p', lazy.spawn('rofi -combi-modi window,drun -show combi -show-icons'), desc='show rofi'),
     Key([PARAM.mod, 'shift'], 'p', lazy.spawn('rofi -show run'), desc='run rofi script PARAM.mode'),
-    Key([PARAM.mod, 'control'], 'p', lazy.spawn('rofi -show power-menu -PARAM.modi power-menu:rofi-power-menu -show-icons'), desc='run rofi script PARAM.mode'),
+    Key([PARAM.mod, 'control'], 'p', lazy.spawn('rofi -show power-menu -modi power-menu:rofi-power-menu -show-icons'), desc='show power-menu'),
 
     Key([PARAM.mod, 'control'], 'b', lazy.spawn('i3lock -n -i ./Pictures/archlinux_resize.png -t'), desc='lock PC'),
 
