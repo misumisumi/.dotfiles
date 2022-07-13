@@ -55,6 +55,8 @@ keys = [
     Key([PARAM.mod, 'shift'], 'n', move_cycle_screen(), keep_pinp()),
     Key([PARAM.mod, 'shift'], 'm', move_cycle_screen(backward=True), keep_pinp()),
 
+    # Key([PARAM.mod, 'shift'], 't', move_display_tablet(), keep_pinp()),
+
     Key([PARAM.mod], 'space', lazy.window.toggle_maximize()),
     Key([PARAM.mod, 'shift'], 'space', lazy.window.toggle_minimize()),
 
@@ -112,7 +114,7 @@ keys = [
     Key([], 'XF86MonBrightnessDown', lazy.spawn('light -U 5')),
     Key([], 'XF86KbdBrightnessUp', lazy.spawn('light -Ars {} 1'.format('sysfs/leds/asus::kbd_backlight'))),
     Key([], 'XF86KbdBrightnessDown', lazy.spawn('light -Urs {} 1'.format('sysfs/leds/asus::kbd_backlight'))),
-    Key([], 'XF86Launch1', lazy.spawn('sh -c "/home/sumi/bin/swhich_gpu_PARAM.mode"')),
+    Key([], 'XF86Launch1', lazy.spawn('sh -c "/home/sumi/bin/swich_gpu_mode"')),
     Key([], 'XF86Launch4', lazy.spawn('asusctl profile -n')),
 
     # PinP operationes
