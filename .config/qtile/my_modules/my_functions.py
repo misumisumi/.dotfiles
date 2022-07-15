@@ -272,12 +272,13 @@ def move_cycle_screen(qtile, backward=False):
         if backward:
             to_idx = n_screen - 1 if idx == 0 else idx - 1
             to_group = qtile.groups.index(qtile.current_screen.group)-GROUP_PER_SCREEN
-            to_group = to_group if to_group > 0 else (GROUP_PER_SCREEN*PARAM.num_screen) - to_group
+            to_group = to_group if to_group >= 0 else to_group + (GROUP_PER_SCREEN*PARAM.num_screen)
 
         else:
             to_idx = 0 if idx + 1 == n_screen else idx + 1
             to_group = qtile.groups.index(qtile.current_screen.group)+GROUP_PER_SCREEN
-            to_group = to_group if to_group <= GROUP_PER_SCREEN else to_group - (GROUP_PER_SCREEN*PARAM.num_screen)
+            to_group = to_group if to_group < GROUP_PER_SCREEN*PARAM.num_screen else to_group - (GROUP_PER_SCREEN*PARAM.num_screen)
+        logger.warning('now: {}, next: {}'.format(idx, to_group))
         group = qtile.groups[to_group]
         qtile.current_window.togroup(group.name)
         qtile.cmd_to_screen(to_idx)
