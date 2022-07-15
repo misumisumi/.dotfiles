@@ -50,10 +50,10 @@ keys = [
         window_to_next_group(), keep_pinp(), desc='win to next group'),
 
     Key([PARAM.mod], 'n', focus_cycle_screen(),  desc='focus next screen'),
-    Key([PARAM.mod], 'm', focus_cycle_screen(backward=True),  desc='focus next screen'),
+    Key([PARAM.mod], 'p', focus_cycle_screen(backward=True),  desc='focus next screen'),
     # Key([PARAM.mod, 'shift'], 'p', window_to_previous_screen(), keep_pinp()),
     Key([PARAM.mod, 'shift'], 'n', move_cycle_screen(), keep_pinp(), update_pinp_screen_idx()),
-    Key([PARAM.mod, 'shift'], 'm', move_cycle_screen(backward=True), keep_pinp(), update_pinp_screen_idx()),
+    Key([PARAM.mod, 'shift'], 'p', move_cycle_screen(backward=True), keep_pinp(), update_pinp_screen_idx()),
 
     Key([PARAM.mod, 'shift'], 'd', to_from_display_tablet(), keep_pinp(), update_pinp_screen_idx()),
 
@@ -90,9 +90,9 @@ keys = [
     Key([PARAM.mod, 'control'], 'r', lazy.reload_config(), desc='Reload the config'),
     Key([PARAM.mod, 'control'], 'e', lazy.shutdown(), desc='Shutdown Qtile'),
 
-    Key([PARAM.mod], 'p', lazy.spawn('rofi -combi-modi window,drun -show combi'), desc='show rofi'),
-    Key([PARAM.mod, 'shift'], 'p', lazy.spawn('rofi -show run'), desc='run rofi script PARAM.mode'),
-    Key([PARAM.mod, 'control'], 'p', lazy.spawn('rofi -show power-menu -modi power-menu:rofi-power-menu'), desc='show power-menu'),
+    Key([PARAM.mod], 'm', lazy.spawn('rofi -combi-modi window,drun -show combi'), desc='show rofi'),
+    Key([PARAM.mod, 'shift'], 'm', lazy.spawn('rofi -show run'), desc='run rofi script PARAM.mode'),
+    Key([PARAM.mod, 'control'], 'm', lazy.spawn('rofi -show power-menu -modi power-menu:rofi-power-menu'), desc='show power-menu'),
 
     Key([PARAM.mod, 'control'], 'b', lazy.spawn('i3lock -n -i ./Pictures/archlinux_resize.png -t'), desc='lock PC'),
 
