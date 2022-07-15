@@ -297,6 +297,7 @@ def to_from_display_tablet(qtile):
             qtile.current_screen.set_group(group)
         else:
             qtile.current_window.togroup(qtile.groups[-1].name)
+            qtile.cmd_to_screen(PARAM.num_screen)
 
 
 @lazy.function
