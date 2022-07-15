@@ -52,8 +52,10 @@ keys = [
     Key([PARAM.mod], 'n', focus_cycle_screen(),  desc='focus next screen'),
     Key([PARAM.mod], 'm', focus_cycle_screen(backward=True),  desc='focus next screen'),
     # Key([PARAM.mod, 'shift'], 'p', window_to_previous_screen(), keep_pinp()),
-    Key([PARAM.mod, 'shift'], 'n', move_cycle_screen(), keep_pinp()),
-    Key([PARAM.mod, 'shift'], 'm', move_cycle_screen(backward=True), keep_pinp()),
+    Key([PARAM.mod, 'shift'], 'n', move_cycle_screen(), keep_pinp(), update_pinp_screen_idx()),
+    Key([PARAM.mod, 'shift'], 'm', move_cycle_screen(backward=True), keep_pinp(), update_pinp_screen_idx()),
+
+    Key([PARAM.mod, 'shift'], 'd', to_from_display_tablet(), keep_pinp(), update_pinp_screen_idx()),
 
     # Key([PARAM.mod, 'shift'], 't', move_display_tablet(), keep_pinp()),
 

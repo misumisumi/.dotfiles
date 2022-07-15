@@ -19,6 +19,8 @@ _match_analyze = [Match(title='WaveSurfer 1.8.8p5'),
                 ]
 
 _match_full = [Match(wm_class='Steam'),
+               Match(wm_class='lutris'),
+               Match(wm_class='resolve'),
                Match(wm_class='krita'),
                Match(wm_class='Gimp'),
                Match(wm_class='Blender'),
@@ -45,7 +47,7 @@ _group_and_rule = {'code': ('', (layout2, layout3), _match_code),
                    'sns': ('', (layout1,), _match_sns),
                    'media': ('', (layout2, layout3), _match_media)}
 
-_display_tablet = {'creation': ('', layout3, _match_full)}
+_display_tablet = {'creation': ('', layout4, _match_full)}
 
 GROUP_PER_SCREEN = len(_group_and_rule)
 
@@ -59,6 +61,9 @@ def _set_groups():
             else:
                 layouts = layouts[0]
             groups.append(Group('{}-{}'.format(n, k), layouts=layouts, matches=matches, label=label))
+    if PARAM.is_display_tablet:
+        name = list(_display_tablet.keys())[0]
+        groups.append(Group('{}'.format(name), layouts=_display_tablet[name][1], matches=_display_tablet[name][2], label=_display_tablet[name][0]))
     
     return groups
 

@@ -7,7 +7,7 @@ from libqtile import qtile, hook
 from libqtile.lazy import lazy
 
 from my_modules.param import PARAM
-from my_modules.groups import GROUP_PER_SCREEN
+from my_modules.groups import GROUP_PER_SCREEN, _group_and_rule
 
 from libqtile.log_utils import logger
 
@@ -17,10 +17,6 @@ FLOATING_WINDOW_IDX = 0
 monitor_pos = 'delete'
 if not PARAM.laptop:
     monitor_pos = 'right-of'
-
-# @hook.subscribe.client_focus
-# def check_window_id(window):
-#     logger.warning('idx: {}'.format(qtile.current_screen.index))
 
 
 # PinPの生成時とWS切替時にフォーカスを当てないようにする
@@ -32,6 +28,16 @@ def keep_focus_window_in_tiling(window=None):
     qtile.current_group.focus(window, True)
 
 
+def get_pinp_size_pos(init=True):
+    screen_size = (qtile.current_screen.width, qtile.current_screen.height)
+    screen_pos = (qtile.current_screen.x, qtile.current_screen.y)
+    pinp_size = [int(s//PARAM.pinp_scale_down) for s in screen_size]
+    pinp_pos = [ss+sp-p for ss, sp, p in zip(screen_size, screen_pos, pinp_size)]
+    pinp_pos[0] = pinp_pos[0] - PARAM.pinp_margin
+
+    return pinp_size, pinp_pos
+
+
 # 一部のソフトは起動直後はwindow nameを出さないため数msのdelayを設ける
 @hook.subscribe.client_new
 async def move_speclific_apps(window):
@@ -40,29 +46,19 @@ async def move_speclific_apps(window):
         window.togroup('0-media')
     elif window.name == 'ピクチャー イン ピクチャー' or window.name == 'Picture-in-Picture':
         # 画面サイズに合わせて自動的にPinPのサイズとポジションを決定する
-        screen_size = (qtile.current_screen.width, qtile.current_screen.height)
-        pinp_size = [int(s//PARAM.pinp_scale_down) for s in screen_size]
-        pinp_pos = [s-p for s, p in zip(screen_size, pinp_size)]
-        pinp_pos[0] = pinp_pos[0] - PARAM.pinp_margin
+        pinp_size, pinp_pos = get_pinp_size_pos()
 
         global PINP_WINDOW
-        PINP_WINDOW = window
         idx = qtile.current_screen.index
-        if (monitor_pos == 'right-of' and idx == 1) or (monitor_pos == 'left-of' and idx == 0):
-            pinp_pos[0] += screen_size[0]
-        elif (monitor_pos == 'below' and idx == 1) or (monitor_pos == 'above' and idx == 0):
-            pinp_pos[1] += screen_size[1]
-        else:
-            pass
+        PINP_WINDOW = {'idx': idx, 'window': window}
+
         window.cmd_place(*pinp_pos, *pinp_size, borderwidth=PARAM.border,
                          bordercolor=PARAM.c_normal['cyan'], above=False, margin=None)
         keep_focus_window_in_tiling()
     elif window.name == 'WaveSurfer 1.8.8p5':
         window.togroup('0-analyze')
     elif PINP_WINDOW is not None:
-        PINP_WINDOW.cmd_bring_to_front()
-    else:
-        pass
+        PINP_WINDOW['window'].cmd_bring_to_front()
 
 
 @hook.subscribe.client_killed
@@ -78,14 +74,22 @@ def keep_pinp(qtile):
     workspaceを跨いでもPinPが同じ位置に表示されるようにする
     """
     if PINP_WINDOW is not None:
-        n_screen = len(qtile.screens)
-        now_pinp_screen = qtile.groups.index(PINP_WINDOW.group) // (len(qtile.groups) // n_screen)
+        now_pinp_screen = PINP_WINDOW['idx']
         idx = qtile.current_screen.index
         win = qtile.current_window
         if now_pinp_screen == idx:
-            PINP_WINDOW.togroup(qtile.current_screen.group.name)
-            PINP_WINDOW.cmd_bring_to_front()
+            PINP_WINDOW['window'].togroup(qtile.current_screen.group.name)
+            PINP_WINDOW['window'].cmd_bring_to_front()
             keep_focus_window_in_tiling(win)
+
+@lazy.function
+def update_pinp_screen_idx(qtile):
+    global PINP_WINDOW
+    if PINP_WINDOW is not None:
+        idx = qtile.current_screen.index
+        win = qtile.current_window
+        if PINP_WINDOW['idx'] != idx and win == PINP_WINDOW['window']:
+            PINP_WINDOW['idx'] = idx
 
 
 @lazy.function
@@ -94,12 +98,13 @@ def move_pinp(qtile, pos):
     モニターの四隅にPinP windowを移動できるようにする
     """
     idx = qtile.current_screen.index
-    n_screen = len(qtile.screens)
-    now_pinp_screen = qtile.groups.index(PINP_WINDOW.group) // (len(qtile.groups) // n_screen)
-    if PINP_WINDOW is not None and idx == now_pinp_screen:
+    if PINP_WINDOW is not None and idx == PINP_WINDOW['idx']:
+        now_pinp_screen = PINP_WINDOW['idx']
         screen_size = (qtile.current_screen.width, qtile.current_screen.height)
+        screen_pos = (qtile.current_screen.x, qtile.current_screen.y)
         pinp_size = [int(s//PARAM.pinp_scale_down) for s in screen_size]
-        pinp_pos = [PINP_WINDOW.float_x, PINP_WINDOW.float_y]
+        pinp_pos = [PINP_WINDOW['window'].float_x, PINP_WINDOW['window'].float_y]
+
         if pos == 'up':
             pinp_pos[1] = 0
         elif pos == 'down':
@@ -108,16 +113,13 @@ def move_pinp(qtile, pos):
             pinp_pos[0] = PARAM.pinp_margin
         else:
             pinp_pos[0] = screen_size[0] - pinp_size[0] - PARAM.pinp_margin
-        if (monitor_pos == 'right-of' and idx == 1) or (monitor_pos == 'left-of' and idx == 0):
-            pinp_pos[0] += screen_size[0]
-        elif (monitor_pos == 'above' and idx == 0) or (monitor_pos == 'below' and idx == 1):
-            pinp_pos[1] += screen_size[1]
-        else:
-            pass
+        pinp_pos[0] += screen_pos[0]
+        pinp_pos[1] += screen_pos[1]
+
         win = qtile.current_window
-        PINP_WINDOW.cmd_place(*pinp_pos, *pinp_size, borderwidth=PARAM.border,
+        PINP_WINDOW['window'].cmd_place(*pinp_pos, *pinp_size, borderwidth=PARAM.border,
                               bordercolor=PARAM.c_normal['cyan'], above=False, margin=None)
-        PINP_WINDOW.cmd_bring_to_front()
+        PINP_WINDOW['window'].cmd_bring_to_front()
         keep_focus_window_in_tiling(win)
 
 
@@ -251,7 +253,7 @@ def move_n_screen_group(qtile, idx):
 
 @lazy.function
 def focus_cycle_screen(qtile, backward=False):
-    n_screen = len(qtile.screens)
+    n_screen = PARAM.num_screen + 1 if PARAM.is_display_tablet else PARAM.num_screen
     idx = qtile.current_screen.index
     if backward:
         to_idx = n_screen - 1 if idx == 0 else idx - 1
@@ -262,21 +264,39 @@ def focus_cycle_screen(qtile, backward=False):
 
 @lazy.function
 def move_cycle_screen(qtile, backward=False):
-    n_screen = len(qtile.screens)
     idx = qtile.current_screen.index
-    if backward:
-        to_idx = n_screen - 1 if idx == 0 else idx - 1
-        to_group = qtile.groups.index(qtile.current_screen.group)-GROUP_PER_SCREEN
-        to_group = to_group if to_group > 0 else (GROUP_PER_SCREEN*PARAM.num_screen) - to_group
-
+    if PARAM.is_display_tablet and idx == PARAM.num_screen:
+        pass
     else:
-        to_idx = 0 if idx + 1 == n_screen else idx + 1
-        to_group = qtile.groups.index(qtile.current_screen.group)+GROUP_PER_SCREEN
-        to_group = to_group if to_group < GROUP_PER_SCREEN else to_group - (GROUP_PER_SCREEN*PARAM.num_screen)
-    group = qtile.groups[to_group]
-    qtile.current_window.togroup(group.name)
-    qtile.cmd_to_screen(to_idx)
-    qtile.current_screen.set_group(group)
+        n_screen = PARAM.num_screen
+        if backward:
+            to_idx = n_screen - 1 if idx == 0 else idx - 1
+            to_group = qtile.groups.index(qtile.current_screen.group)-GROUP_PER_SCREEN
+            to_group = to_group if to_group > 0 else (GROUP_PER_SCREEN*PARAM.num_screen) - to_group
+
+        else:
+            to_idx = 0 if idx + 1 == n_screen else idx + 1
+            to_group = qtile.groups.index(qtile.current_screen.group)+GROUP_PER_SCREEN
+            to_group = to_group if to_group <= GROUP_PER_SCREEN else to_group - (GROUP_PER_SCREEN*PARAM.num_screen)
+        group = qtile.groups[to_group]
+        qtile.current_window.togroup(group.name)
+        qtile.cmd_to_screen(to_idx)
+        qtile.current_screen.set_group(group)
+
+
+@lazy.function
+def to_from_display_tablet(qtile):
+    idx = qtile.current_screen.index
+    if PARAM.is_display_tablet:
+        if idx == PARAM.num_screen:
+            to_idx = list(_group_and_rule.keys()).index('full')
+            logger.warning(to_idx)
+            group = qtile.groups[to_idx]
+            qtile.current_window.togroup(group.name)
+            qtile.cmd_to_screen(0)
+            qtile.current_screen.set_group(group)
+        else:
+            qtile.current_window.togroup(qtile.groups[-1].name)
 
 
 @lazy.function

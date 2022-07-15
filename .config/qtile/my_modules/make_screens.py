@@ -26,6 +26,12 @@ def make_screens(num_screen):
                     ),
                     )
                 )
+        elif PARAM.is_display_tablet and i>num_screen:
+            screens.append(
+                Screen(
+                    top=None
+                    )
+                )
         else:
             screens.append(
                 Screen(
