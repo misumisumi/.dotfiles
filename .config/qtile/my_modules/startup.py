@@ -34,5 +34,6 @@ def autostart():
 @hook.subscribe.startup_complete
 def afterstart():
     subprocess.run('copyq &', shell=True)
-    qtile.focus_screen(0)
+    if PARAM.is_display_tablet:
+        subprocess.run('/usr/lib/pentablet/pentablet /mini &', shell=True)
 
