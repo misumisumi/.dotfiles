@@ -307,7 +307,7 @@ def attach_screen(qtile, pos):
             subprocess.run('xrandr --output HDMI-A-0 --off', shell=True)
             subprocess.run('feh --bg-fill {}'.format(PARAM.home.joinpath('Pictures', 'wallpapers', 'main01.jpg')), shell=True)
         else:
-            subprocess.run('xrandr --output edp --auto --output hdmi-a-0 --auto --{} edp'.format(pos), shell=True)
+            subprocess.run('xrandr --output eDP --auto --output HDMI-A-0 --auto --{} eDP'.format(pos), shell=True)
             subprocess.run('feh --bg-fill {} --bg-fill {}'.format(PARAM.home.joinpath('Pictures', 'wallpapers', 'main01.jpg'),
                                                                   PARAM.home.joinpath('Pictures', 'wallpapers', 'main02.jpg')), shell=True)
         global monitor_pos
