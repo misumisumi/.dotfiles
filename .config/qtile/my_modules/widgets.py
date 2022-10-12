@@ -46,15 +46,6 @@ def _separator():
 
 def make_widgets(is_tray=False):
     top_widgets = [
-        _left_corner(**_colorset1),
-        widget.CurrentScreen(active_color=PARAM.c_normal['magenta'],
-                             inactive_color=PARAM.c_normal['BGbase'],
-                             inactive_text='N', **_colorset2),
-        _rignt_corner(**_colorset1),
-        _separator(),
-        # _left_corner(**_colorset1),
-        # widget.CurrentLayout(fmt='{:.3}', **_colorset2),
-        # _rignt_corner(**_colorset1),
         _separator(),
         _left_corner(**_colorset4),
         widget.GroupBox(this_current_screen_border=PARAM.c_normal['cyan'], borderwidth=PARAM.border, **_colorset3,
