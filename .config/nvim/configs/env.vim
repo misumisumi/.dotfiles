@@ -28,8 +28,6 @@ if has("clipboard")
   set clipboard=unnamed
 endif
 
-<<<<<<< HEAD
-=======
 function! s:check_back_space() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~ '\s'
