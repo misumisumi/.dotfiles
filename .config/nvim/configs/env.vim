@@ -34,7 +34,6 @@ function! s:check_back_space() abort
 endfunction
 
 syntax enable
->>>>>>> 3c46be7 (trash)
 set termguicolors
 set helplang=ja,en
 set pastetoggle=<f5>;
