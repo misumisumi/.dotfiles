@@ -59,6 +59,7 @@ keys = [
 
     # Key([PARAM.mod, 'shift'], 't', move_display_tablet(), keep_pinp()),
 
+    # Key([PARAM.mod], 'space', lazy.window.toggle_maximize()),
     Key([PARAM.mod], 'space', lazy.window.toggle_maximize()),
     Key([PARAM.mod, 'shift'], 'space', lazy.window.toggle_minimize()),
 

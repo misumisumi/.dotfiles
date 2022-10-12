@@ -1,20 +1,20 @@
 font:
     normal:
-      # family: Ricty Diminished
-        family: Noto Font CJK JP
+        family: Ricty Diminished
+        #family: Source Code Pro
+        # family: Noto Font CJK JP
         style: Regular
     
     bold:
-          # family: Ricty Diminished
-        family: Noto Font CJK JP
+        family: Ricty Diminished
         style: bold
     
     italic:
-      # family: Ricty Diminished
-        family: Noto Font CJK JP
+        family: Ricty Diminished
+        #family: Ricty Diminished
         style: Oblique
     
-    size: 13.0
+    size: 14.0
 
 colors:
   primary:
@@ -41,5 +41,6 @@ colors:
     magenta: '0x9c0082'
     cyan: '0x02b7c7'
     white: '0xa7b0b5'
+  transparent_background_colors: true
 
-window.opacity: 0.75
+window.opacity: 0.8

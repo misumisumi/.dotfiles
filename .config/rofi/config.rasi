@@ -89,7 +89,7 @@ kb-accept-entry: "Control+n,Control+m,Return,KP_Enter";
 /*	kb-accept-alt: "Shift+Return";*/
 /*	kb-delete-entry: "Shift+Delete";*/
 /*	kb-mode-next: "Shift+Right,Control+Tab";*/
-/*	kb-mode-previous: "Shift+Left,Control+ISO_Left_Tab";*/
+/*	kb-mode-previous: "Shift+Left,";*/
 kb-mode-complete: "Control+c";
 kb-row-left: "Control+Page_Up,Control+h";
 kb-row-right: "Control+l";

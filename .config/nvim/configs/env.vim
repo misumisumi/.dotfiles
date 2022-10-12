@@ -28,6 +28,15 @@ if has("clipboard")
   set clipboard=unnamed
 endif
 
+<<<<<<< HEAD
+=======
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~ '\s'
+endfunction
+
+syntax enable
+>>>>>>> 3c46be7 (trash)
 set termguicolors
 set helplang=ja,en
 set pastetoggle=<f5>;
