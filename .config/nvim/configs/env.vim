@@ -21,13 +21,13 @@ endif
 if has("autocmd")
   autocmd FileType markdown setlocal sw=2 sts=2 ts=2 et
   autocmd FileType vim setlocal sw=2 sts=2 ts=2 et
+  autocmd FileType nix setlocal sw=2 sts=2 ts=2 et
 endif
 
 if has("clipboard")
   set clipboard=unnamed
 endif
 
-syntax enable
 set termguicolors
 set helplang=ja,en
 set pastetoggle=<f5>;

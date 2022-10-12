@@ -35,7 +35,7 @@ class Param:
 
     bar_font_size = 28
 
-    is_display_tablet = True
+    is_display_tablet = False
 
     c_normal = {
         'BGbase': '#222d32', 'FGbase': '#475359',

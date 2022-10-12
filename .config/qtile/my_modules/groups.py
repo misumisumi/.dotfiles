@@ -42,7 +42,7 @@ _match_media = [Match(wm_class='pavucontrol'),
 _group_and_rule = {'code': ('', (layout2, layout3), _match_code),
                    'browse': ('', (layout1,), _match_browse),
                    'paper': ('', (layout1,), _match_paper),
-                   'analyze': ('', (layout1,), _match_analyze),
+                   'analyze': ('ﲋ', (layout1,), _match_analyze),
                    'full': ('', (layout4,), _match_full),
                    'sns': ('', (layout1,), _match_sns),
                    'media': ('', (layout2, layout3), _match_media)}

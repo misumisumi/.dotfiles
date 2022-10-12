@@ -21,24 +21,26 @@ def _left_corner(background, foreground):
     return widget.TextBox(
         foreground = foreground,
         background = background,
-        text = "\ue0b6",
-        fontsize = PARAM.bar_font_size+3,
-        padding=0
+        text = " ◖",
+        font=PARAM.font,
+        fontsize = PARAM.bar_font_size+24,
+        padding=-5
     )
 
 def _rignt_corner(background, foreground):
     return widget.TextBox(
         foreground = foreground,
         background = background,
-        text = "\ue0b4",
-        fontsize = PARAM.bar_font_size+3,
-        padding=0
+        text = "◗ ",
+        font=PARAM.font,
+        fontsize = PARAM.bar_font_size+24,
+        padding=-5
     )
 
 def _separator():
     return widget.Sep(
         linewidth = 0,
-        padding = 10
+        padding = 2
     )
 
 
@@ -56,6 +58,7 @@ def make_widgets(is_tray=False):
         _separator(),
         _left_corner(**_colorset4),
         widget.GroupBox(this_current_screen_border=PARAM.c_normal['cyan'], borderwidth=PARAM.border, **_colorset3,
+                        font='Hack Nerd Font', fontsize=PARAM.font_size+2,
                         active=PARAM.c_normal['white']),
         _rignt_corner(**_colorset4),
         ]
@@ -77,43 +80,36 @@ def make_widgets(is_tray=False):
         widget.Chord(**_colorset8),
         widget.Spacer(),
         _left_corner(**_colorset1),
-        widget.Clock(format='%Y-%m-%d %a %H:%M:%S', **_colorset2),
+        widget.Wttr(format='%c%t/%p|', location={'Himeji':'Himeji'}, **_colorset2),
+        widget.Clock(format='%y-%m-%d %a %H:%M:%S', **_colorset2),
         _rignt_corner(**_colorset1),
         ]
-    if PARAM.laptop:
-        top_widgets += [
-            widget.Spacer()
-        ]
-    else:
-        top_widgets += [
-            _separator(),
-            _left_corner(**_colorset4),
-            widget.TaskList(border=PARAM.c_normal['BGbase'], icon_size=PARAM.font_size, borderwidth=PARAM.border, max_title_width=120, **_colorset3),
-            _rignt_corner(**_colorset4),
-            _separator()
-        ]
+    # if PARAM.laptop:
+    #     top_widgets += [
+    #         widget.Spacer()
+    #     ]
+    # else:
     top_widgets += [
-        _left_corner(**_colorset1),
-        widget.Net(format='{down} ↓↑ {up}', **_colorset2),
-        _rignt_corner(**_colorset1),
-        widget.PulseVolume(fmt=' {}', limit_max_volume=True, volume_app='pavucontrol',
-                           update_interval=0.1, **_colorset1),
-        _rignt_corner(**_colorset2),
-        ]
-    if PARAM.laptop:
-        backlight = list(Path('/sys/class/backlight/').glob('*'))
+        _separator(),
+        _left_corner(**_colorset4),
+        widget.TaskList(border=PARAM.c_normal['BGbase'], icon_size=PARAM.font_size, borderwidth=PARAM.border, max_title_width=120, **_colorset3),
+        _rignt_corner(**_colorset4),
+        _separator()
+    ]
+    if not PARAM.laptop:
         top_widgets += [
-            widget.Backlight(fmt=' {}', backlight_name=backlight[0], **_colorset2),
+            _left_corner(**_colorset1),
+            widget.Net(format='{down} ↓↑ {up}', **_colorset2),
             _rignt_corner(**_colorset1),
-            widget.Battery(format='{char} {percent:2.0%}', charge_char='', discharge_char='',
-                           empty_char='', full_chal='', unknown_char='', **_colorset1),
+            widget.PulseVolume(fmt=' {}', limit_max_volume=True, volume_app='pavucontrol',
+                               update_interval=0.1, **_colorset1),
             _rignt_corner(**_colorset2),
-        ]
-    top_widgets += [widget.CheckUpdates(display_format=' {updates}', distro='Arch_checkupdates',
-                        colour_have_updates=PARAM.c_normal['magenta'], colour_no_updates=PARAM.c_normal['BGbase'],
-                        update_interval=60*60, no_update_string='  0', **_colorset2),
-        _rignt_corner(**_colorset1)
-        ]
+            widget.CurrentScreen(active_color=PARAM.c_normal['magenta'],
+                                 inactive_color=PARAM.c_normal['BGbase'],
+                                 inactive_text='N', **_colorset2),
+            _rignt_corner(**_colorset1)
+            ]
+
     if is_tray:
         top_widgets += [
             _separator(),
@@ -124,6 +120,7 @@ def make_widgets(is_tray=False):
         ]
 
     if PARAM.laptop:
+        backlight = list(Path('/sys/class/backlight/').glob('*'))
         bottom_widgets = [
             _separator(),
             _left_corner(**_colorset7),
@@ -136,10 +133,26 @@ def make_widgets(is_tray=False):
                       partition='/home', **_colorset2),
             _rignt_corner(**_colorset7),
             widget.Spacer(),
-            _left_corner(**_colorset5),
-            widget.TaskList(border=PARAM.c_normal['cyan'], borderwidth=PARAM.border, max_title_width=120, **_colorset6),
-            _rignt_corner(**_colorset5),
-            widget.Spacer(),
+            # _left_corner(**_colorset5),
+            # widget.TaskList(border=PARAM.c_normal['cyan'], borderwidth=PARAM.border, max_title_width=120, **_colorset6),
+            # _rignt_corner(**_colorset5),
+            # widget.Spacer(),
+
+            _left_corner(**_colorset7),
+            widget.Net(format='{down} ↓↑ {up}', **_colorset2),
+            _rignt_corner(**_colorset1),
+            widget.PulseVolume(fmt=' {}', limit_max_volume=True, volume_app='pavucontrol',
+                               update_interval=0.1, **_colorset1),
+            _rignt_corner(**_colorset2),
+            widget.Backlight(fmt=' {}', backlight_name=backlight[0], **_colorset2),
+            _rignt_corner(**_colorset1),
+            widget.Battery(format='{char} {percent:2.0%}', charge_char='', discharge_char='',
+                           empty_char='', full_chal='', unknown_char='', **_colorset1),
+            _rignt_corner(**_colorset2),
+            widget.CurrentScreen(active_color=PARAM.c_normal['magenta'],
+                                 inactive_color=PARAM.c_normal['BGbase'],
+                                 inactive_text='N', **_colorset2),
+            _rignt_corner(**_colorset7)
             ]
     else:
         bottom_widgets = None

@@ -6,6 +6,7 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
 fi
 
 autoload -Uz promptinit
+autoload -Uz compinit && compinit
 autoload -Uz zmv
 autoload -Uz zargs
 promptinit
@@ -30,10 +31,11 @@ fi
 source "$HOME/.zi/bin/zi.zsh"
 ### End of Zi's installer chunk
 # Basic plugin
-zi ice wait"0"; zi load zdharma-continuum/history-search-multi-word
+zi ice wait"!1"; zi load zdharma-continuum/history-search-multi-word
 zi ice wait"!0"; zi light zsh-users/zsh-autosuggestions
 zi ice wait"!0"; zi light zdharma-continuum/fast-syntax-highlighting
-zi ice wait"!0"; zi load momo-lab/zsh-abbrev-alias
+zi ice wait"!1"; zi load momo-lab/zsh-abbrev-alias
+zi ice depth=1; zi light jeffreytse/zsh-vi-mode
 
 zi snippet PZT::modules/helper/init.zsh
 zi ice depth=1; zi light romkatv/powerlevel10k
@@ -86,9 +88,12 @@ fi
 # if [ -n "${SSH_CLIENT}" ]; then
 #     export PULSE_SERVER=$SSH_CLIENT
 # fi
-HISTFILE=~/.zsh_history      # ヒストリファイルを指定
 HISTSIZE=10000               # ヒストリに保存するコマンド数
 SAVEHIST=10000               # ヒストリファイルに保存するコマンド数
+ZVM_VI_INSERT_ESCAPE_BINDKEY=jj
+ZVM_VI_VISUAL_ESCAPE_BINDKEY=jj
+ZVM_VI_OPPEND_ESCAPE_BINDKEY=jj
+ZVM_LINE_INIT_MODE=$ZVM_MODE_LAST
 setopt hist_ignore_all_dups  # 重複するコマンド行は古い方を削除
 setopt hist_ignore_dups      # 直前と同じコマンドラインはヒストリに追加しない
 setopt share_history         # コマンド履歴ファイルを共有する

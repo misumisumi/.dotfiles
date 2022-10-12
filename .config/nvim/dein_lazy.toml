@@ -1,9 +1,11 @@
 [[plugins]]
 repo = 'nvim-treesitter/nvim-treesitter'
-merged = 0
-on_event = 'BufRead'
+if = 'has("nvim")'
 hook_post_update = 'TSUpdate'
-hook_source = 'source ~/.config/nvim/configs/nvim-treesitter.lua'
+on_event = 'BufRead'
+hook_source= '''
+source ~/.config/nvim/configs/nvim-treesitter.lua
+'''
 
 [[plugins]]
 repo = 'iamcco/markdown-preview.nvim'
@@ -28,7 +30,7 @@ repo = 'airblade/vim-gitgutter'
 [[plugins]]
 repo = 'lervag/vimtex'
 on_ft = ['tex']
-hook_add='''
+hook_source='''
 let g:vimtex_fold_envs=0
 let g:vimtex_view_general_viewer='zathura'
 augroup filetype
