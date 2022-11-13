@@ -83,7 +83,8 @@ def make_widgets(is_tray=False):
     top_widgets += [
         _separator(),
         _left_corner(**_colorset4),
-        widget.TaskList(border=PARAM.c_normal['BGbase'], icon_size=PARAM.font_size, borderwidth=PARAM.border, max_title_width=120, **_colorset3),
+        widget.TaskList(border=PARAM.c_normal['BGbase'], theme_path="Papirus-Dark", theme_mode="preferred",
+                        icon_size=PARAM.font_size, borderwidth=PARAM.border, max_title_width=120, **_colorset3),
         _rignt_corner(**_colorset4),
         _separator()
     ]
@@ -92,8 +93,15 @@ def make_widgets(is_tray=False):
             _left_corner(**_colorset1),
             widget.Net(format='{down} ↓↑ {up}', **_colorset2),
             _rignt_corner(**_colorset1),
-            widget.PulseVolume(fmt=' {}', limit_max_volume=True, volume_app='pavucontrol',
-                               update_interval=0.1, **_colorset1),
+            # widget.PulseVolume(fmt=' {}', limit_max_volume=True, volume_app='pavucontrol',
+            #                    update_interval=0.1, **_colorset1),
+            widget.Volume(fmt=' {}',   
+                          # get_volume_command = ["sh", "-c echo [$(pacmd list-sinks | grep -A 15 '* index' | awk '/volume: front/ {print $5}')]"],
+                          get_volume_command = ["sh", "-c", "if [ -z \"$(pacmd list-sinks | grep -A 15 '* index' | grep muted | grep yes)\" ]; then echo [$(pacmd list-sinks | grep -A 15 '* index' | awk '/volume: front/ {print $5}')]; else echo M; fi"],
+                          mute_command = ["pactl set-source-mute @DEFAULT_SOURCE@ toggle"],
+                          volume_up_command = ["pactl set-sink-volume @DEFAULT_SINK@ +5%"],
+                          volume_down_command = ["pactl set-sink-volume @DEFAULT_SINK@ -5%"],
+                          **_colorset1),
             _rignt_corner(**_colorset2),
             widget.CurrentScreen(active_color=PARAM.c_normal['magenta'],
                                  inactive_color=PARAM.c_normal['BGbase'],
