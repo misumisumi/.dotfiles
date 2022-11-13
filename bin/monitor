@@ -1,0 +1,18 @@
+#! /usr/bin/env bash
+MODE=${1:-expand}
+SAMEAS=${2:-"DP-0"}
+
+if [ "$MODE" = ex ]; then
+    echo "$MODE"
+    xrandr --output DP-0 --auto --output HDMI-0 --auto --right-of DP-0 --output DVI-D-0 --auto --left-of DP-0 --scale 1.0
+
+elif [ "$MODE" = mi ]; then
+    echo "$MODE" 
+    xrandr --output DP-0 --auto --output HDMI-0 --auto --right-of DP-0 --output DVI-D-0 --same-as "$SAMEAS" --scale 1.333
+elif [ "$MODE" = mi_fhd ]; then
+    echo "$MODE" 
+    xrandr --output DP-0 --mode 1920x1080 --output HDMI-0 --auto --right-of DP-0 --output DVI-D-0 --same-as "$SAMEAS" --scale 1.333
+else
+    echo "MODE is only 'ex': expand or 'mi': mirroring, or 'mi_fhd': mirroring_fhd"
+fi
+
